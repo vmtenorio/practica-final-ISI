@@ -1,4 +1,4 @@
-package urjc.isi.practica_final;
+package urjc.isi.practicaFinal;
 
 import static spark.Spark.*;
 
