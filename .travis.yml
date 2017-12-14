@@ -1,5 +1,7 @@
 language: java
 deploy:
-	skip_cleanup: true
-	provider: heroku
-	app: practica-final-isi-dg
+  skip_cleanup: true
+  provider: heroku
+  app: practica-final-isi-dg
+  api_key:
+    secure: DPY5xyJEnetsfndjy4lbOBlaa3C1IwrP6CUu5dmYZ/uCFh5TEorvb6aHlxAVOBn8Fkl0eJtfLE9YvIYtPOoD49DtR/CuQrVWUtclivcdlB2im8xRWoIL1GPbiQMv2Ly/6DGvZMhlrRXufAXYQtvB2EXYTKZkAPgsyfGM8vrcSXmTYtxf2CCv0uWgIcfQTwL06aHgbWFesb/5htVf+qofQnDVsNbyrkkCIARoj7Ma/CckIdYUsJ8M0cdrZzTes74LUsPLg01/ZCd4MP/6Hofv+jWeeA9Vu5b0fl4Rqvg/kD18gK+/Xg7jymZ5eJPIBM3LywsjKI01H2Mb+5rFDXERRJ4xlsxZy+QiEBpKZDI4KiTHOthJRNPaW3hQfkr315dtLMIW1RqAtuib3wcPJiPkzLyltvnYFuCOfjh1NlaPxjZJSwZbRaa5QDuQNJG3+FxfFovKiAjURKhL6Tva4lKpFRqikwodnworbQqTvEiVgGn+JHiefCDJYrS+GEICzb55/MUmLvqy1Er+2dOg/9qALDVnlnfilIQDacFy2jcq1l/OJhcT4bAJQzRQbYQzv42JI12aP/jv1Xl5//wN26rwbadQUvY/E/+zgiQ9X2HHaPpryj/k319Lxu2Lp09Tis/3I342dNl2zW1pY4cRG8nv4ZYDe8nZBfbp23uQWj3/Mkc=
