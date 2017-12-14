@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>urjc.isi</groupId>
-  <artifactId>practica-final</artifactId>
+  <artifactId>practicaFinal</artifactId>
   <version>0.0.1</version>
   <packaging>jar</packaging>
 
-  <name>practica-final</name>
+  <name>practicaFinal</name>
   <url>http://maven.apache.org</url>
 
   <properties>
@@ -64,7 +64,7 @@
           </descriptorRefs>
           <archive>
             <manifest>
-              <mainClass>urjc.isi.practica-final.Main</mainClass>
+              <mainClass>urjc.isi.practicaFinal.Main</mainClass>
             </manifest>
           </archive>
         </configuration>
@@ -78,7 +78,7 @@
           <appName>practica-final-isi-dg</appName>
           <processTypes>
             <!-- Tell Heroku how to launch your application -->
-            <web>java -jar ./target/practica-final-0.0.1-jar-with-dependencies.jar</web>
+            <web>java -jar ./target/practicaFinal-0.0.1-jar-with-dependencies.jar</web>
           </processTypes>
         </configuration>
       </plugin>
