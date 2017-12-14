@@ -1,0 +1,9 @@
+- Test para programa aportado por empresa contratadora
+- Integrar programa aportado, en spark y subir a heroku
+- Parsear ficheros para completar base de datos
+- Test parseo de ficheros
+- Interfaz API-REST
+- Test aplicacion API-REST, incluyendo formulario para peticiones
+- Creacion de querys sobre la base de datos usando JDBC
+- Test para las querys de la base de datos
+- Comprobar querys que mas tardan y gestionar la memoria con esos datos
