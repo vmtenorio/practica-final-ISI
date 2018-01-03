@@ -25,7 +25,6 @@ public class Main {
     //connection = DriverManager.getConnection("jdbc:sqlite:sample_graph.db");
     //connection.setAutoCommit(false);
     
-    get("/:table/:film", Graph::doSelect);
     get("/upload_films", (req, res) -> 
     	"<form action='/upload' method='post' enctype='multipart/form-data'>" 
     	+ "    <input type='file' name='uploaded_films_file' accept='.txt'>"
@@ -33,6 +32,7 @@ public class Main {
 
     // Retrieves the file uploaded through the /upload_films HTML form
  	// Creates table and stores uploaded file in a two-columns table
+    Graph graph = new Graph();
  	post("/upload", (req, res) -> {
  		req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/tmp"));
  		String result = "File uploaded!";
@@ -43,9 +43,7 @@ public class Main {
  			// Read contents of input stream that holds the uploaded file
  			InputStreamReader isr = new InputStreamReader(input);
  			BufferedReader br = new BufferedReader(isr);
- 			
- 			// create graph
- 			Graph graph = new Graph();
+
  			String s;
  			while ((s = br.readLine()) != null) {
  				System.out.println(s);
@@ -77,8 +75,10 @@ public class Main {
 	        input.close();
  		}
 		return result;
-	    }); 
-        
+	    });
+ 	
+ 		get("/film/:name", (req,res) -> Queries.filmQuery(graph, req.params(":name"))); 
+ 		get("/actor/:name", (req,res) -> Queries.actorQuery(graph, req.params(":name")));
 
     }
 	

@@ -2,29 +2,28 @@ package urjc.isi.practicaFinal;
 
 public class Queries {
 	
-	public String filmQuery (Graph g, String film) {
+	public static String filmQuery (Graph g, String film) {
 		String result = new String();
+		result = "Actors who appeared in the film " + film + ":\n";
 		if (!g.hasVertex(film)) {
 			result = "Film not found!";
 		} else {
-			Iterable<String> actor_list;
-			actor_list = g.adjacentTo(film);
-			for(String s: actor_list) {
-				result += s;
+			for(String s: g.adjacentTo(film)) {
+				result += s + "\n";
 			}
 		}
+		System.out.println(result);
 		return result;
 	}
 	
-	public String actorQuery (Graph g, String actor) {
+	public static String actorQuery (Graph g, String actor) {
 		String result = new String();
+		result = "Films where the actor " + actor + " appeared:\n";
 		if (!g.hasVertex(actor)) {
-			result = "Actor not found!";
+			result = "Actor no encontrado!";
 		} else {
-			Iterable<String> film_list;
-			film_list = g.adjacentTo(actor);
-			for(String s: film_list) {
-				result += s;
+			for(String s: g.adjacentTo(actor)) {
+				result += s + "\n";
 			}
 		}
 		return result;
