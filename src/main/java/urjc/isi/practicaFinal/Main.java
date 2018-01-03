@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 
+import java.util.Scanner;
 import java.util.StringTokenizer;
 
 import javax.servlet.MultipartConfigElement;
@@ -46,13 +47,6 @@ public class Main {
  		try (InputStream input = req.raw().getPart("uploaded_films_file").getInputStream()) { 
  			// getPart needs to use the same name "uploaded_films_file" used in the form
 
- 			/*// Prepare SQL to create table
- 			Statement statement = connection.createStatement();
- 			statement.setQueryTimeout(30); // set timeout to 30 sec.
- 			statement.executeUpdate("drop table if exists films");
- 			statement.executeUpdate("create table films (v string, w string)");
-			*/
-
  			
  			// Read contents of input stream that holds the uploaded file
  			InputStreamReader isr = new InputStreamReader(input);
@@ -62,30 +56,24 @@ public class Main {
  			
  			// create graph
  	        Graph graph = new Graph();
- 	        /*while (!StdIn.isEmpty()) {
- 	            String v = StdIn.readString();
- 	            String w = StdIn.readString();
- 	            graph.addEdge(v, w);
- 	        }*/
- 	       while (s.hasNext()) {
-	        	
-	            String v = s.next();
-	            System.out.println("1: |" + v +"|\n");
-	            if (s.hasNext()) {
-		            String w = s.next();
-		            System.out.println("2: |" + w +"|\n");
-		            graph.addEdge(v, w);
-		            
-		            //insert(connection, v, w);
-			    
-				    // Commit only once, after all the inserts are done
-				    // If done after each statement performance degrades
-				    //connection.commit();
-	            }else {
-	            	break;
-	            }
-	            
-	        }
+ 	        while ((s = br.readLine()) != null) {
+			    System.out.println(s);
+
+			    // Tokenize the film name and then the actors, separated by "/"
+			    StringTokenizer tokenizer = new StringTokenizer(s, "/");
+
+			    // First token is the film name(year)
+			    String film = tokenizer.nextToken();
+
+
+			    // Now get actors and insert them
+			    while (tokenizer.hasMoreTokens()) {
+			    	graph.addEdge(film, tokenizer.nextToken());
+			    }
+			    // Commit only once, after all the inserts are done
+			    // If done after each statement performance degrades
+			}
+ 	        graph.addEdge(v, w);
  	        s.close();
 
  	        // print out graph
@@ -145,4 +133,12 @@ public class Main {
         }*/
 
     }
+	
+	static int getHerokuAssignedPort() {
+	    ProcessBuilder processBuilder = new ProcessBuilder();
+	    if (processBuilder.environment().get("PORT") != null) {
+	    	return Integer.parseInt(processBuilder.environment().get("PORT"));
+	    }
+	    return 4567; // return default port if heroku-port isn't set (i.e. on localhost)
+	    }
 }
