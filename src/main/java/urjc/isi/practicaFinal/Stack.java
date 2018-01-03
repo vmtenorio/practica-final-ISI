@@ -1,3 +1,5 @@
+package urjc.isi.practicaFinal;
+
 /******************************************************************************
  *  Compilation:  javac Stack.java
  *  Execution:    java Stack < input.txt

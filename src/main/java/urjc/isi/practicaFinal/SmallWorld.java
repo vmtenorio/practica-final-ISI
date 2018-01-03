@@ -1,3 +1,5 @@
+package urjc.isi.practicaFinal;
+
 /******************************************************************************
  *  Compilation:  javac SmallWorld.java
  *  Execution:    java SmallWorld filename delimiter

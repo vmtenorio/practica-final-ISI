@@ -1,3 +1,5 @@
+package urjc.isi.practicaFinal;
+
 /******************************************************************************
  *  Compilation:  javac Queue.java
  *  Execution:    java Queue < input.txt
