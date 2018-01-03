@@ -25,7 +25,6 @@ public class Main {
     //connection = DriverManager.getConnection("jdbc:sqlite:sample_graph.db");
     //connection.setAutoCommit(false);
     
-    get("/:table/:film", Graph::doSelect);
     get("/upload_films", (req, res) -> 
     	"<form action='/upload' method='post' enctype='multipart/form-data'>" 
     	+ "    <input type='file' name='uploaded_films_file' accept='.txt'>"
