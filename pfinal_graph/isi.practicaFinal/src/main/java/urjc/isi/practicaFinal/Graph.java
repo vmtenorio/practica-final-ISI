@@ -301,8 +301,8 @@ public class Graph {
     	
     port(getHerokuAssignedPort());
     
-    connection = DriverManager.getConnection("jdbc:sqlite:sample_graph.db");
-    connection.setAutoCommit(false);
+    //connection = DriverManager.getConnection("jdbc:sqlite:sample_graph.db");
+    //connection.setAutoCommit(false);
     
     get("/:table/:film", Graph::doSelect);
     get("/upload_films", (req, res) -> 
@@ -318,12 +318,12 @@ public class Graph {
  		try (InputStream input = req.raw().getPart("uploaded_films_file").getInputStream()) { 
  			// getPart needs to use the same name "uploaded_films_file" used in the form
 
- 			// Prepare SQL to create table
+ 			/*// Prepare SQL to create table
  			Statement statement = connection.createStatement();
  			statement.setQueryTimeout(30); // set timeout to 30 sec.
  			statement.executeUpdate("drop table if exists films");
  			statement.executeUpdate("create table films (v string, w string)");
-
+			*/
 
  			
  			// Read contents of input stream that holds the uploaded file
@@ -332,8 +332,49 @@ public class Graph {
  			//String s;
  			Scanner s = new Scanner(br);
  			
+ 			// create graph
+ 	        Graph graph = new Graph();
+ 	        /*while (!StdIn.isEmpty()) {
+ 	            String v = StdIn.readString();
+ 	            String w = StdIn.readString();
+ 	            graph.addEdge(v, w);
+ 	        }*/
+ 	       while (s.hasNext()) {
+	        	
+	            String v = s.next();
+	            System.out.println("1: |" + v +"|\n");
+	            if (s.hasNext()) {
+		            String w = s.next();
+		            System.out.println("2: |" + w +"|\n");
+		            graph.addEdge(v, w);
+		            
+		            //insert(connection, v, w);
+			    
+				    // Commit only once, after all the inserts are done
+				    // If done after each statement performance degrades
+				    //connection.commit();
+	            }else {
+	            	break;
+	            }
+	            
+	        }
+ 	        s.close();
+
+ 	        // print out graph
+ 	        StdOut.println(graph);
+
+ 	        // print out graph again by iterating over vertices and edges
+ 	        for (String v : graph.vertices()) {
+ 	            StdOut.print(v + ": ");
+ 	            for (String w : graph.adjacentTo(v)) {
+ 	                StdOut.print(w + " ");
+ 	            }
+ 	            StdOut.println();
+ 	        }
  			
-	        // create graph
+ 			
+ 			
+	        /*// create graph
 	        Graph graph = new Graph();
 	        while (s.hasNext()) {
 	        	
@@ -353,7 +394,7 @@ public class Graph {
 	            	break;
 	            }
 	            
-	        }
+	        }*/
  			/*while (s.hasNext())
  			    System.out.println(s.next());*/
 	        input.close();
