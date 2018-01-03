@@ -4,14 +4,6 @@ import static spark.Spark.*;
 import spark.Request;
 import spark.Response;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.PreparedStatement;
-
-import java.util.Scanner;
 import java.util.StringTokenizer;
 
 import javax.servlet.MultipartConfigElement;
@@ -26,7 +18,7 @@ import java.io.InputStreamReader;
 public class Main {
     
 	public static void main(String[] args) throws 
-	ClassNotFoundException, SQLException {
+	ClassNotFoundException {
     	
     port(getHerokuAssignedPort());
     
@@ -51,13 +43,12 @@ public class Main {
  			// Read contents of input stream that holds the uploaded file
  			InputStreamReader isr = new InputStreamReader(input);
  			BufferedReader br = new BufferedReader(isr);
- 			//String s;
- 			Scanner s = new Scanner(br);
  			
  			// create graph
- 	        Graph graph = new Graph();
- 	        while ((s = br.readLine()) != null) {
-			    System.out.println(s);
+ 			Graph graph = new Graph();
+ 			String s;
+ 			while ((s = br.readLine()) != null) {
+ 				System.out.println(s);
 
 			    // Tokenize the film name and then the actors, separated by "/"
 			    StringTokenizer tokenizer = new StringTokenizer(s, "/");
@@ -70,11 +61,7 @@ public class Main {
 			    while (tokenizer.hasMoreTokens()) {
 			    	graph.addEdge(film, tokenizer.nextToken());
 			    }
-			    // Commit only once, after all the inserts are done
-			    // If done after each statement performance degrades
 			}
- 	        graph.addEdge(v, w);
- 	        s.close();
 
  	        // print out graph
  	        StdOut.println(graph);
@@ -87,50 +74,11 @@ public class Main {
  	            }
  	            StdOut.println();
  	        }
- 			
- 			
- 			
-	        /*// create graph
-	        Graph graph = new Graph();
-	        while (s.hasNext()) {
-	        	
-	            String v = s.next();
-	            System.out.println("1: |" + v +"|\n");
-	            if (s.hasNext()) {
-		            String w = s.next();
-		            System.out.println("2: |" + w +"|\n");
-		            //graph.addEdge(v, w);
-		            
-		            insert(connection, v, w);
-			    
-				    // Commit only once, after all the inserts are done
-				    // If done after each statement performance degrades
-				    connection.commit();
-	            }else {
-	            	break;
-	            }
-	            
-	        }*/
- 			/*while (s.hasNext())
- 			    System.out.println(s.next());*/
 	        input.close();
  		}
 		return result;
 	    }); 
         
-        
-        /*
-        // print out graph
-        StdOut.println(graph);
-
-        // print out graph again by iterating over vertices and edges
-        for (String v : graph.vertices()) {
-            StdOut.print(v + ": ");
-            for (String w : graph.adjacentTo(v)) {
-                StdOut.print(w + " ");
-            }
-            StdOut.println();
-        }*/
 
     }
 	
