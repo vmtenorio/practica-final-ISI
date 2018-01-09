@@ -19,7 +19,7 @@ import java.io.InputStreamReader;
 public class Main {
     
 	private static Route upload = (Request request, Response response) -> {
-        return "/upload_films.html";
+        return "/index.html";
     };
 	
 	public static void main(String[] args) throws 
@@ -29,9 +29,13 @@ public class Main {
     
     //connection = DriverManager.getConnection("jdbc:sqlite:sample_graph.db");
     //connection.setAutoCommit(false);
-    
-    get("/upload_films", upload);
-    	
+    staticFiles.location("/htmlCss");
+    get("/upload_films", upload);	
+//    
+//    get("/upload_films", (req, res) -> 
+//	"<form action='/upload' method='post' enctype='multipart/form-data'>" 
+//	+ "    <input type='file' name='uploaded_films_file' accept='.txt'>"
+//	+ "    <button>Upload file</button>" + "</form>");
 
     // Retrieves the file uploaded through the /upload_films HTML form
  	// Creates table and stores uploaded file in a two-columns table
