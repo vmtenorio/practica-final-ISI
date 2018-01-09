@@ -3,6 +3,7 @@ package urjc.isi.practicaFinal;
 import static spark.Spark.*;
 import spark.Request;
 import spark.Response;
+import spark.Route;
 
 import java.util.StringTokenizer;
 
@@ -17,6 +18,10 @@ import java.io.InputStreamReader;
 // it in a DB, and do a SQL SELECT query
 public class Main {
     
+	private static Route upload = (Request request, Response response) -> {
+        return "/upload_films.html";
+    };
+	
 	public static void main(String[] args) throws 
 	ClassNotFoundException {
     	
@@ -25,10 +30,8 @@ public class Main {
     //connection = DriverManager.getConnection("jdbc:sqlite:sample_graph.db");
     //connection.setAutoCommit(false);
     
-    get("/upload_films", (req, res) -> 
-    	"<form action='/upload' method='post' enctype='multipart/form-data'>" 
-    	+ "    <input type='file' name='uploaded_films_file' accept='.txt'>"
-    	+ "    <button>Upload file</button>" + "</form>");
+    get("/upload_films", upload);
+    	
 
     // Retrieves the file uploaded through the /upload_films HTML form
  	// Creates table and stores uploaded file in a two-columns table
@@ -76,7 +79,7 @@ public class Main {
  		}
 		return result;
 	    });
- 	
+ 		
  		get("/film/:name", (req,res) -> Queries.filmQuery(graph, req.params(":name"))); 
  		get("/actor/:name", (req,res) -> Queries.actorQuery(graph, req.params(":name")));
 
