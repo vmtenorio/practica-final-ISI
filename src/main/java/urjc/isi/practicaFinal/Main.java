@@ -113,7 +113,8 @@ public class Main {
     //connection = DriverManager.getConnection("jdbc:sqlite:sample_graph.db");
     //connection.setAutoCommit(false);
     staticFiles.location("htmlCss");
-    get("/upload_films2", upload);	
+    //get("/upload_films2", upload);
+    get("/:table/:film", Main::doSelect);
     
     get("/upload_films", (req, res) -> 
 	"<form action='/upload' method='post' enctype='multipart/form-data'>" 
@@ -166,7 +167,6 @@ public class Main {
 			    // If done after each statement performance degrades
 			    connection.commit();
 			    ////
-			    
 			}
 
  	        // print out graph
@@ -185,8 +185,8 @@ public class Main {
 		return result;
 	    });
  		
- 		get("/film/:name", (req,res) -> Queries.filmQuery(graph, req.params(":name"))); 
- 		get("/actor/:name", (req,res) -> Queries.actorQuery(graph, req.params(":name")));
+ 		//get("/film/:name", (req,res) -> Queries.filmQuery(graph, req.params(":name"))); 
+ 		//get("/actor/:name", (req,res) -> Queries.actorQuery(graph, req.params(":name")));
 
     }
 	
