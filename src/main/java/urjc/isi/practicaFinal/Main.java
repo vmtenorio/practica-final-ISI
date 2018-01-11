@@ -160,26 +160,27 @@ public class Main {
 			    	graph.addEdge(film, tokenizer.nextToken());
 			    	////
 			    	insert(connection, film, tokenizer.nextToken());
+			    	connection.commit();
 			    	////
 			    }
 			    ////
 			    // Commit only once, after all the inserts are done
 			    // If done after each statement performance degrades
-			    connection.commit();
+			    //connection.commit();
 			    ////
 			}
 
  	        // print out graph
- 	        StdOut.println(graph);
+ 	        //StdOut.println(graph);
 
  	        // print out graph again by iterating over vertices and edges
- 	        for (String v : graph.vertices()) {
+ 	        /*for (String v : graph.vertices()) {
  	            StdOut.print(v + ": ");
  	            for (String w : graph.adjacentTo(v)) {
  	                StdOut.print(w + " ");
  	            }
  	            StdOut.println();
- 	        }
+ 	        }*/
 	        input.close();
  		}
 		return result;
