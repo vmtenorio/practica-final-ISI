@@ -160,13 +160,12 @@ public class Main {
 			    	graph.addEdge(film, tokenizer.nextToken());
 			    	////
 			    	insert(connection, film, tokenizer.nextToken());
-			    	connection.commit();
 			    	////
 			    }
 			    ////
 			    // Commit only once, after all the inserts are done
 			    // If done after each statement performance degrades
-			    //connection.commit();
+			    connection.commit();
 			    ////
 			}
 
@@ -181,8 +180,9 @@ public class Main {
  	            }
  	            StdOut.println();
  	        }*/
-	        input.close();
+	        //input.close();
  		}
+ 		System.out.println("File Uploaded!");
 		return result;
 	    });
  		
