@@ -30,7 +30,13 @@ public class GraphTest {
 	@Test
 	public void testEdges() {
 		assertEquals("Comprobamos numero de edges", g.E(), 3);
+		assertEquals("Grado del vertice", g.degree("B"), 3);
 		assertEquals("Comprobamos que devuelve bien los nexos del grafo", g.adjacentTo("B").toString(), "{ A, C, D }");
+	}
+	
+	@Test (expected=IllegalArgumentException.class)
+	public void testObjetoNoEncontrado () {
+		g.adjacentTo("E");
 	}
 
 }
