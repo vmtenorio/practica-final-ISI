@@ -38,5 +38,13 @@ public class GraphTest {
 	public void testObjetoNoEncontrado () {
 		g.adjacentTo("E");
 	}
+	
+	@Test
+	public void testGraphFromFile () {
+		g = new Graph("resources/routes.txt", " ");
+		assertEquals("Número de vértices del grafo", g.V(), 10);
+		assertEquals("Numero de edges del grafo", g.E(), 16);
+	}
 
 }
+
