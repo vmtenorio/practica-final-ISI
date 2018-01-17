@@ -32,6 +32,8 @@ public class GraphTest {
 		assertEquals("Comprobamos numero de edges", g.E(), 3);
 		assertEquals("Grado del vertice", g.degree("B"), 3);
 		assertEquals("Comprobamos que devuelve bien los nexos del grafo", g.adjacentTo("B").toString(), "{ A, C, D }");
+		assertTrue("hasEdge True", g.hasEdge("A", "B"));
+		assertFalse("hasEdge False", g.hasEdge("A", "C"));
 	}
 	
 	@Test (expected=IllegalArgumentException.class)
