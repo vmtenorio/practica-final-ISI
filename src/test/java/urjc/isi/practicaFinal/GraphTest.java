@@ -26,5 +26,11 @@ public class GraphTest {
 		assertEquals("Llamada a vertices", g.vertices().toString(), "[A, B, C, D]");
 		assertEquals("Comprobamos numero de vertices", g.V(), 4);
 	}
+	
+	@Test
+	public void testEdges() {
+		assertEquals("Comprobamos numero de edges", g.E(), 3);
+		assertEquals("Comprobamos que devuelve bien los nexos del grafo", g.adjacentTo("B").toString(), "{ A, C, D }");
+	}
 
 }
