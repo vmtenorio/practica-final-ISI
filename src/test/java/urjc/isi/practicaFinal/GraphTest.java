@@ -15,15 +15,16 @@ public class GraphTest {
 
 	@Before
 	public void setUp() {
-		g = new Graph("resources/routes.txt", " ");
+		g = new Graph();
 		g.addEdge("A", "B");
 		g.addEdge("B", "C");
 		g.addEdge("B", "D");
 	}
 	
 	@Test
-	public void test() {
-		fail("Not yet implemented");
+	public void testVertices() {
+		assertEquals("Llamada a vertices", g.vertices().toString(), "[A, B, C, D]");
+		assertEquals("Comprobamos numero de vertices", g.V(), 4);
 	}
 
 }
