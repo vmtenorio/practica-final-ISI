@@ -32,9 +32,6 @@ public class Main {
         response.redirect("index-1.html");
         return("Unread Code");
     };
-	
-    
-    
     
     //////////////////////////////////////////////////////////////////////////////
     
@@ -97,9 +94,6 @@ public class Main {
     	
     port(getHerokuAssignedPort());
     
-
-    get("/", (req, res) -> ServeHtml.serveHtml("index.html"));
-    get("/css.css", (req, res) -> ServeHtml.serveHtml("css.css"));
     // This code only works for PostgreSQL in Heroku
  	// Connect to PostgreSQL in Heroku
  	
@@ -118,11 +112,7 @@ public class Main {
     //connection.setAutoCommit(false);
     //get("/upload_films2", upload);
     
-    get("/upload_films", (req, res) -> 
-	"<form action='/upload' method='post' enctype='multipart/form-data'>" 
-	+ "    <input type='file' name='uploaded_films_file' accept='.txt'>"
-	+ "    <button>Upload file</button>" + "</form>");
-
+    
     // Retrieves the file uploaded through the /upload_films HTML form
  	// Creates table and stores uploaded file in a two-columns table
     Graph graph = new Graph();
@@ -187,13 +177,20 @@ public class Main {
  		System.out.println("File Uploaded!");
 		return result;
 	    });
- 		
+
+ 		get("/", (req, res) -> ServeHtml.serveHtml("index.html",""));
+    	get("/css.css", (req, res) -> ServeHtml.serveHtml("css.css",""));
+    	get("/upload_films", (req, res) -> ServeHtml.serveHtml("form.html", ""));
+
+  //	get("prueba", (req, resp) ->  {resp.type("text/html");
+  // 	ServeHtml.serveHtml("index.html");});	
+    	
  		//get("/film/:name", (req,res) -> Queries.filmQuery(graph, req.params(":name"))); 
  		//get("/actor/:name", (req,res) -> Queries.actorQuery(graph, req.params(":name")));
  		get("/:table/:film", Main::doSelect);
  	
     }
-	
+
 	static int getHerokuAssignedPort() {
 	    ProcessBuilder processBuilder = new ProcessBuilder();
 	    if (processBuilder.environment().get("PORT") != null) {

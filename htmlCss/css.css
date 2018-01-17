@@ -154,3 +154,9 @@ h3
 {
 	color: #FFF;
 }
+
+#insidecontent a
+{
+	font-size:       1.6em;
+	color: #000;
+}
