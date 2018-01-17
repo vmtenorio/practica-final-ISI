@@ -97,24 +97,28 @@ public class Main {
     	
     port(getHerokuAssignedPort());
     
+
+    get("/", (req, res) -> serveHtmlCss.serveHtml("index.html"));
     // This code only works for PostgreSQL in Heroku
  	// Connect to PostgreSQL in Heroku
- 	URI dbUri = new URI(System.getenv("DATABASE_URL"));
- 	String username = dbUri.getUserInfo().split(":")[0];
- 	String password = dbUri.getUserInfo().split(":")[1];
- 	String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + dbUri.getPath();
- 	connection = DriverManager.getConnection(dbUrl, username, password);
+ 	
+    //URI dbUri = new URI(System.getenv("DATABASE_URL"));
+ 	//String username = dbUri.getUserInfo().split(":")[0];
+ 	//String password = dbUri.getUserInfo().split(":")[1];
+ 	//String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + dbUri.getPath();
+ 	//connection = DriverManager.getConnection(dbUrl, username, password);
  	
  	// PostgreSQL default is to auto-commit (1 transaction / statement execution)
          // Set it to false to improve performance
- 	connection.setAutoCommit(false);
+ 	//connection.setAutoCommit(false);
     
     
     //connection = DriverManager.getConnection("jdbc:sqlite:sample_graph.db");
     //connection.setAutoCommit(false);
-    staticFiles.location("htmlCss");
     //get("/upload_films2", upload);
     get("/:table/:film", Main::doSelect);
+    
+    get("/:", (req, res) -> serveHtmlCss.serveHtml(req));
     
     get("/upload_films", (req, res) -> 
 	"<form action='/upload' method='post' enctype='multipart/form-data'>" 
