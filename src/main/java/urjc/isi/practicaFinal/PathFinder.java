@@ -38,8 +38,11 @@ public class PathFinder {
     private ST<String, Integer> dist = new ST<String, Integer>();
 
     // run BFS in graph G from given source vertex s
-    public PathFinder(Graph G, String s) {
-
+    public PathFinder(Graph G, String s) throws NullPointerException {
+    	
+    	if (G == null || s == null)
+    		throw new NullPointerException();
+    	
         // put source on the queue
         Queue<String> queue = new Queue<String>();
         queue.enqueue(s);

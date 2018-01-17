@@ -28,5 +28,10 @@ public class PathFinderTest {
 		assertEquals("Distancia a un objeto que no esta en el grafo", pf.distanceTo("ASDF"), Integer.MAX_VALUE);
 		assertEquals("Camino a un obejeto que no esta en el grafo", pf.pathTo("ASDF").toString(), "");
 	}
+	
+	@Test (expected=NullPointerException.class)
+	public void testPathFinderNull () {
+		pf = new PathFinder(g, null);
+	}
 
 }
