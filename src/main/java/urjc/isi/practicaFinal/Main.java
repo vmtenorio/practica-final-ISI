@@ -98,7 +98,8 @@ public class Main {
     port(getHerokuAssignedPort());
     
 
-    get("/", (req, res) -> serveHtmlCss.serveHtml("index.html"));
+    get("/", (req, res) -> ServeHtml.serveHtml("index.html"));
+    get("/css.css", (req, res) -> ServeHtml.serveHtml("css.css"));
     // This code only works for PostgreSQL in Heroku
  	// Connect to PostgreSQL in Heroku
  	
@@ -116,9 +117,6 @@ public class Main {
     //connection = DriverManager.getConnection("jdbc:sqlite:sample_graph.db");
     //connection.setAutoCommit(false);
     //get("/upload_films2", upload);
-    get("/:table/:film", Main::doSelect);
-    
-    get("/:", (req, res) -> serveHtmlCss.serveHtml(req));
     
     get("/upload_films", (req, res) -> 
 	"<form action='/upload' method='post' enctype='multipart/form-data'>" 
@@ -192,7 +190,8 @@ public class Main {
  		
  		//get("/film/:name", (req,res) -> Queries.filmQuery(graph, req.params(":name"))); 
  		//get("/actor/:name", (req,res) -> Queries.actorQuery(graph, req.params(":name")));
-
+ 		get("/:table/:film", Main::doSelect);
+ 	
     }
 	
 	static int getHerokuAssignedPort() {
