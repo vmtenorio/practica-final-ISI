@@ -74,15 +74,15 @@ public class Main {
     
     
     public static void insert(Connection conn, String film, String actor) {
-	String sql = "INSERT INTO films(film, actor) VALUES(?,?)";
-
-	try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-		pstmt.setString(1, film);
-		pstmt.setString(2, actor);
-		pstmt.executeUpdate();
-	    } catch (SQLException e) {
-	    System.out.println(e.getMessage());
-	}
+		String sql = "INSERT INTO films(film, actor) VALUES(?,?)";
+	
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setString(1, film);
+			pstmt.setString(2, actor);
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+		    System.out.println(e.getMessage());
+		}
     }
     
     
@@ -157,9 +157,10 @@ public class Main {
 
 			    // Now get actors and insert them
 			    while (tokenizer.hasMoreTokens()) {
-			    	graph.addEdge(film, tokenizer.nextToken());
+			    	String actor = tokenizer.nextToken();
+			    	graph.addEdge(film, actor);
 			    	////
-			    	insert(connection, film, tokenizer.nextToken());
+			    	insert(connection, film, actor);
 			    	////
 			    }
 			    ////
