@@ -32,9 +32,6 @@ public class Main {
         response.redirect("index-1.html");
         return("Unread Code");
     };
-	
-    
-    
     
     //////////////////////////////////////////////////////////////////////////////
     
@@ -99,28 +96,23 @@ public class Main {
     
     // This code only works for PostgreSQL in Heroku
  	// Connect to PostgreSQL in Heroku
- 	URI dbUri = new URI(System.getenv("DATABASE_URL"));
- 	String username = dbUri.getUserInfo().split(":")[0];
- 	String password = dbUri.getUserInfo().split(":")[1];
- 	String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + dbUri.getPath();
- 	connection = DriverManager.getConnection(dbUrl, username, password);
+ 	
+    //URI dbUri = new URI(System.getenv("DATABASE_URL"));
+ 	//String username = dbUri.getUserInfo().split(":")[0];
+ 	//String password = dbUri.getUserInfo().split(":")[1];
+ 	//String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + dbUri.getPath();
+ 	//connection = DriverManager.getConnection(dbUrl, username, password);
  	
  	// PostgreSQL default is to auto-commit (1 transaction / statement execution)
          // Set it to false to improve performance
- 	connection.setAutoCommit(false);
+ 	//connection.setAutoCommit(false);
     
     
     //connection = DriverManager.getConnection("jdbc:sqlite:sample_graph.db");
     //connection.setAutoCommit(false);
-    staticFiles.location("htmlCss");
     //get("/upload_films2", upload);
-    get("/:table/:film", Main::doSelect);
     
-    get("/upload_films", (req, res) -> 
-	"<form action='/upload' method='post' enctype='multipart/form-data'>" 
-	+ "    <input type='file' name='uploaded_films_file' accept='.txt'>"
-	+ "    <button>Upload file</button>" + "</form>");
-
+    
     // Retrieves the file uploaded through the /upload_films HTML form
  	// Creates table and stores uploaded file in a two-columns table
     Graph graph = new Graph();
@@ -186,12 +178,20 @@ public class Main {
  		System.out.println("File Uploaded!");
 		return result;
 	    });
- 		
+
+ 		get("/", (req, res) -> ServeHtml.serveHtml("index.html",""));
+    	get("/css.css", (req, res) -> ServeHtml.serveHtml("css.css",""));
+    	get("/upload_films", (req, res) -> ServeHtml.serveHtml("form.html", ""));
+
+  //	get("prueba", (req, resp) ->  {resp.type("text/html");
+  // 	ServeHtml.serveHtml("index.html");});	
+    	
  		//get("/film/:name", (req,res) -> Queries.filmQuery(graph, req.params(":name"))); 
  		//get("/actor/:name", (req,res) -> Queries.actorQuery(graph, req.params(":name")));
-
+ 		get("/:table/:film", Main::doSelect);
+ 	
     }
-	
+
 	static int getHerokuAssignedPort() {
 	    ProcessBuilder processBuilder = new ProcessBuilder();
 	    if (processBuilder.environment().get("PORT") != null) {

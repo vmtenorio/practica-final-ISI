@@ -34,12 +34,17 @@
   <div id="content">
 
     <div id="insidecontent"> <br>
-      <h1>Bienvenido</h1>
+      <h1>Seleccione archivo para subir</h1>
 
-      <p>
-	       En esta página podrás encontrar información sobre películas, actores y distancia entre actores según las películas en las que hayan participado.
-	       <br><br>
-	   </p>
+      </br></br>
+
+      <form action='/upload' method='post' enctype='multipart/form-data'>
+  	     <input type='file' name='uploaded_films_file' accept='.txt'>
+       </br></br>
+         <button>Upload file</button>
+      </form>
+
+      </br></br>
     </div>
 
 
