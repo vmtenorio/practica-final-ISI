@@ -8,8 +8,12 @@ import java.io.IOException;
 
 public class ServeHtml {
 	
-	public static String serveHtml(String nameFile, String toInsert){
-		File file = new File("htmlCss/" + nameFile);
+	static File makeFile(String fileName) {
+    	return new File("htmlCss/" + fileName);
+    }
+	
+	public static String serveHtml(File file, String toInsert){
+		
 		String toReturn = "";
 		
 		try(BufferedReader br = new BufferedReader(new FileReader(file))) {
@@ -20,7 +24,7 @@ public class ServeHtml {
 		        }
 		    }
 		}catch (FileNotFoundException e){
-			toReturn += "File: " + "/htmlCss/" + nameFile + " NotFound";
+			toReturn += "File: " + "/htmlCss/" + file.getName() + " NotFound";
 			System.out.println(toReturn);
 		}catch (IOException e){
 			System.out.println("IO");
