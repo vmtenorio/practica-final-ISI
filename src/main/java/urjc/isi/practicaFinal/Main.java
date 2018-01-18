@@ -76,7 +76,7 @@ public class Main {
 		int yearIndex = film.lastIndexOf(' ');
 		String title = film.substring(0, yearIndex);
 		String yearStr = film.substring(yearIndex+2);	//Nos quitamos el primer paréntesis
-		int year = (int)yearStr.substring(0, yearStr.length()-1);
+		int year = Integer.parseInt(yearStr.substring(0, yearStr.length()-1));
 		
 		
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -88,7 +88,7 @@ public class Main {
 		}
     }
     
-    public static void insert(Connection conn, String actor) {
+    public static void insertActor(Connection conn, String actor) {
 		String sql = "INSERT INTO films(name, surname) VALUES(?,?)";
 	
 		String name = actor.split(",")[1];
