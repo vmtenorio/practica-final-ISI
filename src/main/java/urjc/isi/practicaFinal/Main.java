@@ -70,19 +70,38 @@ public class Main {
     }
     
     
-    public static void insert(Connection conn, String film, String actor) {
-		String sql = "INSERT INTO films(film, actor) VALUES(?,?)";
-	
+    public static void insertFilm(Connection conn, String film) {
+		String sql = "INSERT INTO films(title, year) VALUES(?,?)";
+		
+		int yearIndex = film.lastIndexOf(' ');
+		String title = film.substring(0, yearIndex);
+		String yearStr = film.substring(yearIndex+2);	//Nos quitamos el primer paréntesis
+		int year = (int)yearStr.substring(0, yearStr.length()-1);
+		
+		
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setString(1, film);
-			pstmt.setString(2, actor);
+			pstmt.setString(1, title);
+			pstmt.setInt(2, year);
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
 		    System.out.println(e.getMessage());
 		}
     }
     
-    
+    public static void insert(Connection conn, String actor) {
+		String sql = "INSERT INTO films(name, surname) VALUES(?,?)";
+	
+		String name = actor.split(",")[1];
+		String surname = actor.split(",")[0];
+		
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setString(1, name);
+			pstmt.setString(2, surname);
+			pstmt.executeUpdate();
+		} catch (SQLException e) {
+		    System.out.println(e.getMessage());
+		}
+    }
     //////////////////////////////////////////////////////////////////////////////
     
     
@@ -129,7 +148,10 @@ public class Main {
 
  			// This code only works for PostgreSQL
  			statement.executeUpdate("drop table if exists films");
- 			statement.executeUpdate("create table films (film text, actor text)");
+ 			statement.executeUpdate("create table films (title text, year int)");
+ 			
+ 			statement.executeUpdate("drop table if exists actors");
+ 			statement.executeUpdate("create table actors (name text, surname text)");
  			/////
  			
  			// Read contents of input stream that holds the uploaded file
@@ -145,6 +167,7 @@ public class Main {
 
 			    // First token is the film name(year)
 			    String film = tokenizer.nextToken();
+			    insertFilm(connection, film);
 
 
 			    // Now get actors and insert them
@@ -152,7 +175,9 @@ public class Main {
 			    	String actor = tokenizer.nextToken();
 			    	graph.addEdge(film, actor);
 			    	////
-			    	insert(connection, film, actor);
+			    	if (!graph.hasVertex(actor)) {
+			    		insertActor(connection, actor);
+			    	}
 			    	////
 			    }
 			    ////
