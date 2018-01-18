@@ -13,6 +13,8 @@ import java.sql.Statement;
 import java.sql.PreparedStatement;
 
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.MultipartConfigElement;
 
@@ -72,12 +74,21 @@ public class Main {
     
     public static void insertFilm(Connection conn, String film) {
 		String sql = "INSERT INTO films(title, year) VALUES(?,?)";
+		String title;
+		int year;
 		
-		int yearIndex = film.lastIndexOf(' ');
-		String title = film.substring(0, yearIndex);
-		String yearStr = film.substring(yearIndex+2);	//Nos quitamos el primer paréntesis
-		int year = Integer.parseInt(yearStr.substring(0, yearStr.length()-1));
+		Pattern p = Pattern.compile(".*(\\d{4})");
+		Matcher m = p.matcher(film);
 		
+		if (m.matches()) {
+			int yearIndex = film.lastIndexOf(' ');
+			title = film.substring(0, yearIndex);
+			String yearStr = film.substring(yearIndex+2);						//Nos quitamos el primer paréntesis
+			year = Integer.parseInt(yearStr.substring(0, yearStr.length()-1));
+		}else {
+			title = film;
+			year = 0;
+		}
 		
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, title);
