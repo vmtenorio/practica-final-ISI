@@ -15,7 +15,6 @@ public class ServeHtml {
 	public static String serveHtml(File file, String toInsert){
 		
 		String toReturn = "";
-		
 		try(BufferedReader br = new BufferedReader(new FileReader(file))) {
 		    for(String line; (line = br.readLine()) != null; ) {
 		        toReturn  += line + "\n";
