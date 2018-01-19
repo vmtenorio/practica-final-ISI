@@ -5,6 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Database {
 	
 	static Connection conn;
@@ -39,14 +42,23 @@ public class Database {
 	}
 	
 	public static void insertFilm(String film) {
+		String title;
+		int year;
+		
 		String sql = "INSERT INTO films(title, year) VALUES(?,?)";
-		
-		int yearIndex = film.lastIndexOf(' ');
-		String title = film.substring(0, yearIndex);
-		String yearStr = film.substring(yearIndex+2);	//Nos quitamos el primer paréntesis
-		int year = Integer.parseInt(yearStr.substring(0, yearStr.length()-1));
-		
-		
+
+		Pattern p = Pattern.compile(".*(\\d{4})");
+		Matcher m = p.matcher(film);
+		 		
+		if (m.matches()) {
+			int yearIndex = film.lastIndexOf(' ');
+			title = film.substring(0, yearIndex);
+			String yearStr = film.substring(yearIndex+2);						//Nos quitamos el primer paréntesis
+			year = Integer.parseInt(yearStr.substring(0, yearStr.length()-1));
+		}else {
+			title = film;
+			year = 0;
+		}
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, title);
 			pstmt.setInt(2, year);
