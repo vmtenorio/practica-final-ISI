@@ -24,7 +24,7 @@ public class Database {
 			pstmt.setInt(1, year);
 			ResultSet rs = pstmt.executeQuery();
 	                // Commit after query is executed
-			conn.commit();
+			//conn.commit();
 			while(rs.next()) {
 				films.push(rs.getString("title"));
 			}
@@ -34,7 +34,7 @@ public class Database {
 		return films;
 	}
 	
-	public String selectFilmTitle(String film) {
+	public static String selectFilmTitle(String film) {
 		String sql = "SELECT * FROM films WHERE title=?";
 
 		String result = new String();
@@ -43,11 +43,11 @@ public class Database {
 			pstmt.setString(1, film);
 			ResultSet rs = pstmt.executeQuery();
 	                // Commit after query is executed
-			conn.commit();
+			//conn.commit();
 
 			while (rs.next()) {
 			    // read the result set
-			    result += "film = " + rs.getString("title") + "year: " + rs.getInt("year");
+			    result += "film = " + rs.getString("title") + "  year = " + rs.getInt("year") + "\n";
 			}
 		} catch (SQLException e) {
 		    System.out.println(e.getMessage());
