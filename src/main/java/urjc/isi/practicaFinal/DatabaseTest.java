@@ -23,27 +23,6 @@ public class DatabaseTest {
 	private static Connection connection;
 	
 	
-	/*@Before
-	public void SetUp() throws 
-		ClassNotFoundException, SQLException {
-		//port(Main.getHerokuAssignedPort());
-		
-		
-		
-		// Connect to SQLite sample.db database
-		// connection will be reused by every query in this simplistic example
-		Connection connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
-		
-		// Prepare SQL to create table
-		Statement statement = connection.createStatement();
-		statement.setQueryTimeout(30); // set timeout to 30 sec.
-		statement.executeUpdate("drop table if exists films");
-		statement.executeUpdate("create table films (film string, actor string)");
-		
-		Database db = new Database(connection);
-		
-	}*/
-	
 	@Before
 	public void SetUp() {
 		
@@ -51,13 +30,15 @@ public class DatabaseTest {
 		
 	    try
 	    {
-	      // create a database connection
 	      connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
 	      statement = connection.createStatement();
 	      statement.setQueryTimeout(30);  // set timeout to 30 sec.
 	      db = new Database(connection);
 	      statement.executeUpdate("drop table if exists films");
-	      statement.executeUpdate("create table films (title string, year string)");
+		  statement.executeUpdate("create table films (title text, year int)");
+			
+		  statement.executeUpdate("drop table if exists actors");
+		  statement.executeUpdate("create table actors (name text, surname text)");
 	    }
 	    catch(SQLException e)
 	    {
@@ -67,19 +48,19 @@ public class DatabaseTest {
 	    }
 	}
 	
-	@After      // Tear down - Called after every test method.
+	@After 
 	public void tearDown()
 	{
-          try
-          {
-            if(connection != null)
-              connection.close();
-          }
-          catch(SQLException e)
-          {
+		try
+        {
+			if(connection != null)
+				connection.close();
+        }
+        catch(SQLException e)
+        {
             // connection close failed.
             System.err.println(e);
-          }
+        }
 	}
 	
 	
@@ -113,12 +94,6 @@ public class DatabaseTest {
 		db.insertFilm("Disney's Mouseworks Spaceship");
 		
 		ResultSet rs = statement.executeQuery("select * from films");
-	    /*while(rs.next())
-	    {
-	      // read the result set
-	      System.out.println("title = " + rs.getString("title"));
-	      System.out.println("year = " + rs.getInt("year") + "\n");
-	    }*/
 	    assertEquals("Disney's Mouseworks Spaceship", rs.getString("title"));
 	    assertEquals("0", rs.getString("year"));
 	}
@@ -129,12 +104,6 @@ public class DatabaseTest {
 		db.insertFilm("");
 		
 		ResultSet rs = statement.executeQuery("select * from films");
-	    /*while(rs.next())
-	    {
-	      // read the result set
-	      System.out.println("title = " + rs.getString("title"));
-	      System.out.println("year = " + rs.getInt("year") + "\n");
-	    }*/
 	    assertEquals("", rs.getString("title"));
 	    assertEquals("0", rs.getString("year"));
 	}
@@ -145,12 +114,6 @@ public class DatabaseTest {
 		db.insertFilm("(1999) Disney's Mouseworks Spaceship");
 		
 		ResultSet rs = statement.executeQuery("select * from films");
-	    /*while(rs.next())
-	    {
-	      // read the result set
-	      System.out.println("title = " + rs.getString("title"));
-	      System.out.println("year = " + rs.getInt("year") + "\n");
-	    }*/
 	    assertEquals("(1999) Disney's Mouseworks Spaceship", rs.getString("title"));
 	    assertEquals("0", rs.getString("year"));
 	}
@@ -166,5 +129,67 @@ public class DatabaseTest {
 	    }
 	    fail ("NullPointerException expected");
 	}
+	
+	//Test para insertActor
+	@Test
+	public void test6() throws SQLException {
+			
+		db.insertActor("Feldman, Corey");
+		db.insertActor("Celis, Fernando (I)");
+		db.insertActor("Eggar, Samantha");
+			
+		ResultSet rs = statement.executeQuery("select * from actors");
+
+		rs.next();
+		assertEquals("Corey", rs.getString("name"));
+		assertEquals("Feldman", rs.getString("surname"));
+		rs.next();
+		assertEquals("Fernando (I)", rs.getString("name"));
+		assertEquals("Celis", rs.getString("surname"));
+	}
+	
+	
+	@Test
+	public void test7() throws SQLException {
+		try {
+			db.insertActor("");
+			ResultSet rs = statement.executeQuery("select * from actors");
+	    } catch (ArrayIndexOutOfBoundsException e) {
+	       return;
+	    }
+	    fail ("ArrayIndexOutOfBoundsException expected");
+	}
+	
+	@Test
+	public void test8() throws SQLException {
+		try {
+			db.insertActor(null);
+			ResultSet rs = statement.executeQuery("select * from actors");
+	    } catch (NullPointerException e) {
+	       return;
+	    }
+	    fail ("NullPointerException expected");
+	}
+	
+	
+	//Test para insertActor
+	@Test
+	public void test9() throws SQLException {
+				
+		db.insertActor("Feldman, Corey");
+		db.insertActor("Celis, Fernando (I)");
+		db.insertActor("Eggar, Samantha");
+				
+		ResultSet rs = statement.executeQuery("select * from actors");
+
+		rs.next();
+		assertEquals("Corey", rs.getString("name"));
+		assertEquals("Feldman", rs.getString("surname"));
+		rs.next();
+		assertEquals("Fernando (I)", rs.getString("name"));
+		assertEquals("Celis", rs.getString("surname"));
+	}
+	
+	
 
 }

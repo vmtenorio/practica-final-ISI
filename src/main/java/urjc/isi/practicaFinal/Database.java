@@ -56,7 +56,7 @@ public class Database {
 	}
 	
 	public String selectActor(String param, String actor) {
-		String sql = "SELECT * FROM films WHERE " + param + "=?";
+		String sql = "SELECT * FROM actors WHERE " + param + "=?";
 		
 		String result = new String();
 		
@@ -80,9 +80,9 @@ public class Database {
 		String title;
 		int year;
 		
-		if(film==null) {
+		/*if(film==null) {
 			throw new NullPointerException();
-		}
+		}*/
 		
 		String sql = "INSERT INTO films(title, year) VALUES(?,?)";
 
@@ -106,9 +106,10 @@ public class Database {
     }
 	
 	public void insertActor(String actor) {
-		String sql = "INSERT INTO films(name, surname) VALUES(?,?)";
+		String sql = "INSERT INTO actors(name, surname) VALUES(?,?)";
 	
-		String name = actor.split(",")[1];
+		
+		String name = actor.split(", ")[1];
 		String surname = actor.split(",")[0];
 		
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
