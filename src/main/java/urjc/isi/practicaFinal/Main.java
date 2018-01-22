@@ -222,8 +222,8 @@ public class Main {
   //	get("prueba", (req, resp) ->  {resp.type("text/html");
   // 	ServeHtml.serveHtml("index.html");});	
     	
- 		get("/film/:name", (req,res) -> Queries.filmQuery(graph, req.params(":name"))); 
- 		get("/actor/:name", (req,res) -> Queries.actorQuery(graph, req.params(":name")));
+ 		//get("/film/:name", (req,res) -> Queries.filmQuery(graph, req.params(":name"))); 
+ 		//get("/actor/:name", (req,res) -> Queries.actorQuery(graph, req.params(":name")));
  		get("/:table/:film", Main::doSelect);
  	
     }
