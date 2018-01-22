@@ -51,6 +51,11 @@ public class Main {
     	return ServeHtml.serveHtml(ServeHtml.makeFile("index.html"),"");
     }     
     
+    public static String serveCss(Request req, Response res) {
+		res.type("text/css");
+    	return ServeHtml.serveHtml(ServeHtml.makeFile("css.css"),"");
+    }
+    
     
 	public static void main(String[] args) throws 
 	ClassNotFoundException, SQLException, URISyntaxException {
@@ -154,7 +159,7 @@ public class Main {
 	    });
 
  		get("/", Main::serve);
-    	get("/css.css", (req, res) -> ServeHtml.serveHtml(ServeHtml.makeFile("css.css"),""));
+    	get("/css.css", Main::serveCss);
     	get("/upload_films", (req, res) -> ServeHtml.serveHtml(ServeHtml.makeFile("form.html"), ""));
     	
  		//get("/film/:name", (req,res) -> Queries.filmQuery(graph, req.params(":name"))); 
