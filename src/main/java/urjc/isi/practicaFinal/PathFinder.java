@@ -83,7 +83,6 @@ public class PathFinder {
         return path;
     }
 
-
     public static void main(String[] args) {
         String filename  = args[0];
         String delimiter = args[1];
@@ -98,6 +97,4 @@ public class PathFinder {
             StdOut.println("distance " + pf.distanceTo(t));
         }
     }
-
-
 }
