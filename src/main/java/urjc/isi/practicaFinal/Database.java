@@ -80,6 +80,10 @@ public class Database {
 		String title;
 		int year;
 		
+		if(film==null) {
+			throw new NullPointerException();
+		}
+		
 		String sql = "INSERT INTO films(title, year) VALUES(?,?)";
 
 		Pattern p = Pattern.compile("(.*) \\((\\d{4}).*\\)");
