@@ -46,6 +46,11 @@ public class Main {
      	return DriverManager.getConnection(dbUrl, username, password);
     }
     
+    public static String serve(Request request, Response response) {
+    	response.type("text/html");
+    	return ServeHtml.serveHtml(ServeHtml.makeFile("index.html"),"");
+    }     
+    
     
 	public static void main(String[] args) throws 
 	ClassNotFoundException, SQLException, URISyntaxException {
@@ -66,8 +71,8 @@ public class Main {
  	// PostgreSQL default is to auto-commit (1 transaction / statement execution)
          // Set it to false to improve performance
  	connection.setAutoCommit(false);
-    
-    
+ 	
+ 	
     //connection = DriverManager.getConnection("jdbc:sqlite:sample_graph.db");
     //connection.setAutoCommit(false);
     //get("/upload_films2", upload);
@@ -148,12 +153,9 @@ public class Main {
 		return result;
 	    });
 
- 		get("/", (req, res) -> ServeHtml.serveHtml(ServeHtml.makeFile("index.html"),""));
+ 		get("/", Main::serve);
     	get("/css.css", (req, res) -> ServeHtml.serveHtml(ServeHtml.makeFile("css.css"),""));
     	get("/upload_films", (req, res) -> ServeHtml.serveHtml(ServeHtml.makeFile("form.html"), ""));
-
-  //	get("prueba", (req, resp) ->  {resp.type("text/html");
-  // 	ServeHtml.serveHtml("index.html");});	
     	
  		//get("/film/:name", (req,res) -> Queries.filmQuery(graph, req.params(":name"))); 
  		//get("/actor/:name", (req,res) -> Queries.actorQuery(graph, req.params(":name")));
