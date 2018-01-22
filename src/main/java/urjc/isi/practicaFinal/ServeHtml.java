@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Iterator;
 
 public class ServeHtml {
 	
@@ -30,6 +31,15 @@ public class ServeHtml {
 			toReturn += "FileNotFound";
 		}
 		
+		return toReturn;
+	}
+
+	public static String parseActorHtml(Iterable<String> stringIterator) {
+		String toReturn = "<ul>\n";
+		for(String string : stringIterator) {
+			toReturn += "<li>" + string + "</li>\n"; 
+		}
+		toReturn += "</ul>\n";
 		return toReturn;
 	}
 }
