@@ -17,7 +17,7 @@ public class Database {
 	}
 	
 	//Devuelve las peliculas de un año en forma de iterable	
-	public Iterable<String> selectFilmYear (int year) {
+	public static Iterable<String> selectFilmYear (int year) {
 		String sql = "SELECT * FROM films WHERE year=?";
 		Stack<String> films = new Stack<String>();
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {

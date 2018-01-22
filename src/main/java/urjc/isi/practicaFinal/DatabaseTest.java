@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.Before;
 import org.junit.*;
 import java.util.*;
+import java.lang.Iterable;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -21,12 +22,14 @@ public class DatabaseTest {
 	private static Database db;
 	private static Statement statement;
 	private static Connection connection;
+	private static Iterable<String> result;
 	
 	
 	@Before
 	public void SetUp() {
 		
 		connection = null;
+		result = null;
 		
 	    try
 	    {
@@ -175,19 +178,30 @@ public class DatabaseTest {
 	//Test para insertActor
 	@Test
 	public void test9() throws SQLException {
-				
-		db.insertActor("Feldman, Corey");
-		db.insertActor("Celis, Fernando (I)");
-		db.insertActor("Eggar, Samantha");
-				
-		ResultSet rs = statement.executeQuery("select * from actors");
+		
+		
+		db.insertFilm("Disney's Mouseworks Spaceship (1999)");
+		db.insertFilm("Prueba pelicula (1999)");
+		result = Database.selectFilmYear(1999);
+		
+		ResultSet rs = statement.executeQuery("select * from films");
+	    while(rs.next())
+	    {
+	      // read the result set
+	      System.out.println("title = " + rs.getString("title"));
+	      System.out.println("year = |" + rs.getInt("year") + "|" + "\n");
+	    }
+		
+		
+		System.out.println("PRUEBAv1:");
+		for(String s: result){
+			System.out.println("PRUEBAv2:");
+			System.out.println(s);
+		}
+		
+		Iterator<String> iterable = result.iterator();
 
-		rs.next();
-		assertEquals("Corey", rs.getString("name"));
-		assertEquals("Feldman", rs.getString("surname"));
-		rs.next();
-		assertEquals("Fernando (I)", rs.getString("name"));
-		assertEquals("Celis", rs.getString("surname"));
+		assertEquals("Disney's Mouseworks Spaceship", iterable.next());
 	}
 	
 	
