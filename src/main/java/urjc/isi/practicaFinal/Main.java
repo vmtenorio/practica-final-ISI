@@ -15,6 +15,7 @@ import java.util.StringTokenizer;
 import javax.servlet.MultipartConfigElement;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
@@ -154,9 +155,9 @@ public class Main {
 		return result;
 	    });
 
- 		get("/", (req, res) -> ServeHtml.serveHtml("index.html",""));
-    	get("/css.css", (req, res) -> ServeHtml.serveHtml("css.css",""));
-    	get("/upload_films", (req, res) -> ServeHtml.serveHtml("form.html", ""));
+ 		get("/", (req, res) -> ServeHtml.serveHtml(ServeHtml.makeFile("index.html"),""));
+    	get("/css.css", (req, res) -> ServeHtml.serveHtml(ServeHtml.makeFile("css.css"),""));
+    	get("/upload_films", (req, res) -> ServeHtml.serveHtml(ServeHtml.makeFile("form.html"), ""));
 
   //	get("prueba", (req, resp) ->  {resp.type("text/html");
   // 	ServeHtml.serveHtml("index.html");});	
