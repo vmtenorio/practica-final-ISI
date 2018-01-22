@@ -38,85 +38,23 @@ public class Main {
     //////////////////////////////////////////////////////////////////////////////
     
     private static Connection connection;
+    private static Database db;
+    private static Graph graph;
     
     // Used to illustrate how to route requests to methods instead of
     // using lambda expressions
     public static String doSelect(Request request, Response response) {
-	return select (connection, request.params(":table"), 
+    	return db.select (request.params(":table"), 
 		       request.params(":film"));
     }
-
-    public static String select(Connection conn, String table, String film) {
-	String sql = "SELECT * FROM " + table + " WHERE film=?";
-
-	String result = new String();
-	
-	try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-		pstmt.setString(1, film);
-		ResultSet rs = pstmt.executeQuery();
-                // Commit after query is executed
-		connection.commit();
-
-		while (rs.next()) {
-		    // read the result set
-		    result += "film = " + rs.getString("film") + "\n";
-		    System.out.println("film = "+rs.getString("film") + "\n");
-
-		    result += "actor = " + rs.getString("actor") + "\n";
-		    System.out.println("actor = "+rs.getString("actor")+"\n");
-		}
-	    } catch (SQLException e) {
-	    System.out.println(e.getMessage());
-	}
-	return result;
+    
+    static Connection getConnection () throws URISyntaxException, SQLException {
+    	URI dbUri = new URI(System.getenv("DATABASE_URL"));
+     	String username = dbUri.getUserInfo().split(":")[0];
+     	String password = dbUri.getUserInfo().split(":")[1];
+     	String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + dbUri.getPath();
+     	return DriverManager.getConnection(dbUrl, username, password);
     }
-    
-    
-    public static void insertFilm(Connection conn, String film) {
-		String sql = "INSERT INTO films(title, year) VALUES(?,?)";
-		String title;
-		int year;
-		
-		Pattern p = Pattern.compile(".*(\\d{4})");
-		Matcher m = p.matcher(film);
-		
-		if (m.matches()) {
-			int yearIndex = film.lastIndexOf(' ');
-			title = film.substring(0, yearIndex);
-			String yearStr = film.substring(yearIndex+2);						//Nos quitamos el primer paréntesis
-			year = Integer.parseInt(yearStr.substring(0, yearStr.length()-1));
-		}else {
-			title = film;
-			year = 0;
-		}
-		
-		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setString(1, title);
-			pstmt.setInt(2, year);
-			pstmt.executeUpdate();
-		} catch (SQLException e) {
-		    System.out.println(e.getMessage());
-		}
-    }
-    
-    public static void insertActor(Connection conn, String actor) {
-		String sql = "INSERT INTO films(name, surname) VALUES(?,?)";
-	
-		String name = actor.split(",")[1];
-		String surname = actor.split(",")[0];
-		
-		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setString(1, name);
-			pstmt.setString(2, surname);
-			pstmt.executeUpdate();
-		} catch (SQLException e) {
-		    System.out.println(e.getMessage());
-		}
-    }
-    //////////////////////////////////////////////////////////////////////////////
-    
-    
-    
     
     
 	public static void main(String[] args) throws 
@@ -126,12 +64,14 @@ public class Main {
     
     // This code only works for PostgreSQL in Heroku
  	// Connect to PostgreSQL in Heroku
- 	
-    URI dbUri = new URI(System.getenv("DATABASE_URL"));
- 	String username = dbUri.getUserInfo().split(":")[0];
- 	String password = dbUri.getUserInfo().split(":")[1];
- 	String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + dbUri.getPath();
- 	connection = DriverManager.getConnection(dbUrl, username, password);
+    try {
+    	connection = getConnection();
+    } catch(URISyntaxException e) {
+    	System.err.println("Problem getting dbURI");
+    } catch(SQLException e) {
+    	System.err.println("Problem getting sql connection");
+    }
+    
  	
  	// PostgreSQL default is to auto-commit (1 transaction / statement execution)
          // Set it to false to improve performance
@@ -142,10 +82,13 @@ public class Main {
     //connection.setAutoCommit(false);
     //get("/upload_films2", upload);
     
+ 	// Create data structures
+ 	graph = new Graph();
+ 	db = new Database(connection);
     
     // Retrieves the file uploaded through the /upload_films HTML form
  	// Creates table and stores uploaded file in a two-columns table
-    Graph graph = new Graph();
+    
  	post("/upload", (req, res) -> {
  		req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/tmp"));
  		String result = "File uploaded!";
@@ -178,7 +121,7 @@ public class Main {
 
 			    // First token is the film name(year)
 			    String film = tokenizer.nextToken();
-			    insertFilm(connection, film);
+			    db.insertFilm(film);
 
 
 			    // Now get actors and insert them
@@ -187,7 +130,7 @@ public class Main {
 			    	graph.addEdge(film, actor);
 			    	////
 			    	if (!graph.hasVertex(actor)) {
-			    		insertActor(connection, actor);
+			    		db.insertActor(actor);
 			    	}
 			    	////
 			    }
