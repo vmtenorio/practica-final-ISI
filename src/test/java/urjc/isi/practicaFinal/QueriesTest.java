@@ -63,4 +63,13 @@ public class QueriesTest {
 		db.insertFilm("101 Dalmatians (1996)");
 		assertEquals("", Queries.filmQuery(db, g, film));
 	}
+	
+	@Test (expected=IllegalArgumentException.class)
+	public void testActorNoEncontrado () throws SQLException {
+		String actor = "HOLA, HOLA";
+		String param = "";
+		db = new Database(con);
+		db.insertActor("Sibaldi, Stefano");
+		assertEquals("", Queries.actorQuery(db, g, param, actor));
+	}
 }
