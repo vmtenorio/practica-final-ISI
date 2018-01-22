@@ -23,6 +23,7 @@ public class DatabaseTest {
 	private static Statement statement;
 	private static Connection connection;
 	private static Iterable<String> result;
+	private static String film_complete;
 	
 	
 	@Before
@@ -175,35 +176,111 @@ public class DatabaseTest {
 	}
 	
 	
-	//Test para insertActor
+	//Test para selectFilmYear
 	@Test
 	public void test9() throws SQLException {
 		
 		
 		db.insertFilm("Disney's Mouseworks Spaceship (1999)");
-		db.insertFilm("Prueba pelicula (1999)");
+		db.insertFilm("Dr. Goldfoot and the Bikini Machine (1999)");
 		result = Database.selectFilmYear(1999);
 		
 		ResultSet rs = statement.executeQuery("select * from films");
-	    while(rs.next())
+	    /*while(rs.next())
 	    {
 	      // read the result set
 	      System.out.println("title = " + rs.getString("title"));
 	      System.out.println("year = |" + rs.getInt("year") + "|" + "\n");
-	    }
+	    }*/
 		
 		
-		System.out.println("PRUEBAv1:");
+		/*System.out.println("PRUEBAv1:");
 		for(String s: result){
 			System.out.println("PRUEBAv2:");
 			System.out.println(s);
-		}
+		}*/
 		
 		Iterator<String> iterable = result.iterator();
 
+		assertEquals("Dr. Goldfoot and the Bikini Machine", iterable.next());
 		assertEquals("Disney's Mouseworks Spaceship", iterable.next());
 	}
 	
+	@Test
+	public void test10() throws SQLException {
+		try {
+			db.insertFilm("");
+			result = Database.selectFilmYear(1999);
+		
+			ResultSet rs = statement.executeQuery("select * from films");
+			Iterator<String> iterable = result.iterator();
+
+			assertEquals("", iterable.next());
+	    } catch (NoSuchElementException e) {
+	        return;
+	    }
+	    fail ("NoSuchElementException expected");
+	}
 	
+	@Test
+	public void test11() throws SQLException {
+		try {
+			db.insertFilm(null);
+			result = Database.selectFilmYear(1999);
+			ResultSet rs = statement.executeQuery("select * from actors");
+	    } catch (NullPointerException e) {
+	        return;
+	    }
+	    fail ("NullPointerException expected");
+	}
+	
+	
+	//Test para selectFilmTitle
+	@Test
+	public void test12() throws SQLException {
+			
+			
+		db.insertFilm("Disney's Mouseworks Spaceship (1999)");
+		db.insertFilm("Dr. Goldfoot and the Bikini Machine (1965)");
+		db.insertFilm("Doll's House, A (1973 I)");
+		film_complete = Database.selectFilmTitle("Dr. Goldfoot and the Bikini Machine");
+			
+		//ResultSet rs = statement.executeQuery("select * from films");
+	    /*while(rs.next())
+	    {
+	      // read the result set
+	      System.out.println("title = " + rs.getString("title"));
+	      System.out.println("year = |" + rs.getInt("year") + "|" + "\n");
+	    }*/
+		
+
+		assertEquals("film = Dr. Goldfoot and the Bikini Machine  year = 1965\n", film_complete);
+	}
+	
+	
+	@Test
+	public void test13() throws SQLException {
+		
+		db.insertFilm("");
+		film_complete = Database.selectFilmTitle("Dr. Goldfoot and the Bikini Machine");
+	
+		assertEquals("", film_complete);
+	}
+	
+	@Test
+	public void test14() throws SQLException {
+		try {
+			db.insertFilm(null);
+			film_complete = Database.selectFilmTitle("Dr. Goldfoot and the Bikini Machine");
+		
+			assertEquals("", film_complete);
+		} catch (NullPointerException e) {
+	        return;
+	    }
+	    fail ("NullPointerException expected");
+	}
+	
+	
+	//Test para selectActor
 
 }
