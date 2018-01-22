@@ -2,30 +2,22 @@ package urjc.isi.practicaFinal;
 
 public class Queries {
 	
-	public static String filmQuery (Graph g, String film) {
-		String result = new String();
-		result = "Actors who appeared in the film " + film + ":\n";
-		if (!g.hasVertex(film)) {
-			result = "Film not found!";
+	public static Iterable<String> query (Database db, Graph g, String table, String object) {
+		
+		if(db.select(table, object) == "") {
+			throw new IllegalArgumentException(object + " not found!");
 		} else {
-			for(String s: g.adjacentTo(film)) {
-				result += s + "\n";
-			}
+			return g.adjacentTo(object);
 		}
-		System.out.println(result);
-		return result;
 	}
 	
-	public static String actorQuery (Graph g, String actor) {
-		String result = new String();
-		result = "Films where the actor " + actor + " appeared:\n";
-		if (!g.hasVertex(actor)) {
-			result = "Actor no encontrado!";
-		} else {
-			for(String s: g.adjacentTo(actor)) {
-				result += s + "\n";
-			}
-		}
-		return result;
+	public static Iterable<String> distanceQuery (Graph g, String object1, String object2) {
+
+		PathFinder pf = new PathFinder(g, object1);
+		return pf.pathTo(object2);
+	}
+	
+	public static Iterable<String> yearQuery (Database db, int year) {
+		return db.selectFilmYear(year);
 	}
 }

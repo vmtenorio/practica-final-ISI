@@ -16,6 +16,24 @@ public class Database {
 		this.conn = conn;
 	}
 	
+	//Devuelve las peliculas de un año en forma de iterable	
+	public Iterable<String> selectFilmYear (int year) {
+		String sql = "SELECT * FROM films WHERE year=?";
+		Stack<String> films = new Stack<String>();
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setInt(1, year);
+			ResultSet rs = pstmt.executeQuery();
+	                // Commit after query is executed
+			conn.commit();
+			while(rs.next()) {
+				films.push(rs.getString("title"));
+			}
+		} catch (SQLException e) {
+		    System.out.println(e.getMessage());
+		}
+		return films;
+	}
+	
 	public String select(String table, String film) {
 		String sql = "SELECT * FROM " + table + " WHERE film=?";
 
@@ -41,13 +59,13 @@ public class Database {
 		return result;
 	}
 	
-	public static void insertFilm(String film) {
+	public void insertFilm(String film) {
 		String title;
 		int year;
 		
 		String sql = "INSERT INTO films(title, year) VALUES(?,?)";
 
-		Pattern p = Pattern.compile(".*(\\d{4})");
+		Pattern p = Pattern.compile(".*\\(\\d{4}\\)");
 		Matcher m = p.matcher(film);
 		 		
 		if (m.matches()) {
@@ -68,7 +86,7 @@ public class Database {
 		}
     }
 	
-	public static void insertActor(String actor) {
+	public void insertActor(String actor) {
 		String sql = "INSERT INTO films(name, surname) VALUES(?,?)";
 	
 		String name = actor.split(",")[1];
