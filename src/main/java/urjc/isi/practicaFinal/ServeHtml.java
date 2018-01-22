@@ -13,22 +13,30 @@ public class ServeHtml {
     	return new File("htmlCss/" + fileName);
     }
 	
-	public static String serveHtml(File file, String toInsert){
-		
+	public static String readInsert(BufferedReader br, String toInsert) {
 		String toReturn = "";
-		try(BufferedReader br = new BufferedReader(new FileReader(file))) {
+		try{
 		    for(String line; (line = br.readLine()) != null; ) {
-		        toReturn  += line + "\n";
+		    	toReturn  += line + "\n";
 		        if (line == "<!-- insertarqui -->") {
 		        	toReturn += toInsert;
 		        }
 		    }
+		}catch (IOException e){
+			System.out.println("IOException");
+			toReturn += "IOException";
+		}
+		return toReturn;
+	}
+	
+	public static String serveHtml(File file, String toInsert){
+		
+		String toReturn = "";
+		try{
+			toReturn += readInsert(new BufferedReader(new FileReader(file)),toInsert);
 		}catch (FileNotFoundException e){
 			toReturn += "File: " + "/htmlCss/" + file.getName() + " NotFound";
 			System.out.println(toReturn);
-		}catch (IOException e){
-			System.out.println("IO");
-			toReturn += "FileNotFound";
 		}
 		
 		return toReturn;

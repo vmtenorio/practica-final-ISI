@@ -2,8 +2,10 @@ package urjc.isi.practicaFinal;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
@@ -21,10 +23,6 @@ public class ServeHtmlTest {
 	String l1;
 	String l2;
 	ArrayList<String> testString;
-	
-	@Mock FileReader FR;
-	
-	@Mock BufferedReader BR;
 	
 	@Before
 	public void setUp() {
@@ -46,17 +44,24 @@ public class ServeHtmlTest {
 	}
 	
 	@Test
-	public void testLoop(){
-		File fileTest = mock(File.class);
-		String expectedReturn = l1 + l2 + toInsert;
-		
+	public void testreadInsert(){
+		BufferedReader br = mock(BufferedReader.class);
+		String expectedReturn = l1 + "\n" + l2 + "\n" + toInsert;
 		try {
-			when(BR.readLine()).thenReturn(l1).thenReturn(l2);
+			when(br.readLine()).thenReturn(l1).thenReturn(l2).thenReturn(null);
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
 		
-		assertEquals(expectedReturn, ServeHtml.serveHtml(fileTest, expectedReturn));	
+		assertEquals(expectedReturn, ServeHtml.readInsert(br, toInsert));	
+	}
+	
+	@Test
+	public void testIOExceptionRead() throws IOException {
+		String expectedReturn = "IOException";
+		BufferedReader br= mock(BufferedReader.class);
+		when(br.readLine()).thenThrow(IOException.class);
+		assertEquals(expectedReturn, ServeHtml.readInsert(br, ""));	
 	}
 		
 	@Test
