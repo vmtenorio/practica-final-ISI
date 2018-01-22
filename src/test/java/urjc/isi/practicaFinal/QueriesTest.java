@@ -1,22 +1,27 @@
 package urjc.isi.practicaFinal;
 
+import static org.junit.Assert.*;
+
 import org.junit.Before;
 import org.junit.Test;
 
 public class QueriesTest {
 	
-	private static Queries query;
+	private static Database db;
 	Graph g;
-	String actor;
+	
 	
 	@Before
 	public void setUp() {
-		query = new Queries();
+		db = new Database(null);
+		g = new Graph();
 	}
 	
 	@Test (expected=IllegalArgumentException.class)
 	public void testObjetoNoEncontrado () {
-		query.actorQuery(g, actor);
+		String actor = null;
+		String actors;
+		query(db, g, actors, actor);
 	}
-
+	
 }
