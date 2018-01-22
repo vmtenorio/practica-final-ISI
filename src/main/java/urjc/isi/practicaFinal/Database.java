@@ -34,8 +34,8 @@ public class Database {
 		return films;
 	}
 	
-	public String select(String table, String film) {
-		String sql = "SELECT * FROM " + table + " WHERE film=?";
+	public String selectFilmTitle(String film) {
+		String sql = "SELECT * FROM films WHERE title=?";
 
 		String result = new String();
 		
@@ -47,13 +47,30 @@ public class Database {
 
 			while (rs.next()) {
 			    // read the result set
-			    result += "film = " + rs.getString("film") + "\n";
-			    System.out.println("film = "+rs.getString("film") + "\n");
-
-			    result += "actor = " + rs.getString("actor") + "\n";
-			    System.out.println("actor = "+rs.getString("actor")+"\n");
+			    result += "film = " + rs.getString("title") + "year: " + rs.getInt("year");
 			}
-		    } catch (SQLException e) {
+		} catch (SQLException e) {
+		    System.out.println(e.getMessage());
+		}
+		return result;
+	}
+	
+	public String selectActor(String param, String actor) {
+		String sql = "SELECT * FROM films WHERE " + param + "=?";
+		
+		String result = new String();
+		
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setString(1, actor);
+			ResultSet rs = pstmt.executeQuery();
+	                // Commit after query is executed
+			conn.commit();
+
+			while (rs.next()) {
+			    // read the result set
+			    result += "name = " + rs.getString("name") + "surname: " + rs.getInt("surname");
+			}
+		} catch (SQLException e) {
 		    System.out.println(e.getMessage());
 		}
 		return result;
@@ -65,14 +82,12 @@ public class Database {
 		
 		String sql = "INSERT INTO films(title, year) VALUES(?,?)";
 
-		Pattern p = Pattern.compile(".*\\(\\d{4}\\)");
+		Pattern p = Pattern.compile("(.*) \\((\\d{4}).*\\)");
 		Matcher m = p.matcher(film);
 		 		
-		if (m.matches()) {
-			int yearIndex = film.lastIndexOf(' ');
-			title = film.substring(0, yearIndex);
-			String yearStr = film.substring(yearIndex+2);						//Nos quitamos el primer paréntesis
-			year = Integer.parseInt(yearStr.substring(0, yearStr.length()-1));
+		if (m.find()) {
+			title = m.group(1);
+			year = Integer.parseInt(m.group(2));
 		}else {
 			title = film;
 			year = 0;

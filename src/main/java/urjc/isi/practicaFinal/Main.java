@@ -37,13 +37,6 @@ public class Main {
     private static Database db;
     private static Graph graph;
     
-    // Used to illustrate how to route requests to methods instead of
-    // using lambda expressions
-    public static String doSelect(Request request, Response response) {
-    	return db.select (request.params(":table"), 
-		       request.params(":film"));
-    }
-    
     static Connection getConnection () throws URISyntaxException, SQLException {
     	URI dbUri = new URI(System.getenv("DATABASE_URL"));
      	String username = dbUri.getUserInfo().split(":")[0];
@@ -163,7 +156,6 @@ public class Main {
     	
  		//get("/film/:name", (req,res) -> Queries.filmQuery(graph, req.params(":name"))); 
  		//get("/actor/:name", (req,res) -> Queries.actorQuery(graph, req.params(":name")));
- 		get("/:table/:film", Main::doSelect);
  	
     }
 

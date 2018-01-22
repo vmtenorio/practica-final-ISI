@@ -2,12 +2,21 @@ package urjc.isi.practicaFinal;
 
 public class Queries {
 	
-	public static Iterable<String> query (Database db, Graph g, String table, String object) {
+	public static Iterable<String> filmQuery (Database db, Graph g, String film) {
 		
-		if(db.select(table, object) == "") {
-			throw new IllegalArgumentException(object + " not found!");
+		if(db.selectFilmTitle(film) == "") {
+			throw new IllegalArgumentException("Film " + film + " not found!");
 		} else {
-			return g.adjacentTo(object);
+			return g.adjacentTo(film);
+		}
+	}
+	
+	public static Iterable<String> actorQuery (Database db, Graph g, String param, String actor) {
+		
+		if(db.selectActor(param, actor) == "") {
+			throw new IllegalArgumentException("Actor " + actor + " not found!");
+		} else {
+			return g.adjacentTo(actor);
 		}
 	}
 	
