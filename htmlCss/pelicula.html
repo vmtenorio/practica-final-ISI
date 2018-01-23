@@ -15,18 +15,17 @@
 <div id="container">
 
   <div id="header">
-    <div class="headtitle">NOMBRE PAGINA</div>
+    <div class="headtitle">Práctica Final</div>
   </div>
 
   <div id="menu">
     <ul>
-      <li><a href="LINK POR PONER" title="">Inicio</a></li>
-      <li><a href="LINK POR PONER" title="">Películas</a></li>
-      <li><a href="LINK POR PONER" title="">Actores</a></li>
-      <li><a href="LINK POR PONER" title="">Distancias</a></li>
-      <li><a href="LINK POR PONER" title="">Algunas Queries Interesantes</a></li>
-      <li><a href="LINK POR PONER" title="">Subir Archivo</a></li>
-
+      <li><a href="/" title="Inicio">Inicio</a></li>
+      <li><a href="/buscar_pelicula" title="Buscar Pelicula">Películas</a></li>
+      <li><a href="/buscar_actor" title="Busca Actor">Actores</a></li>
+      <li><a href="/medir_distancia" title="">Distancias</a></li>
+      <li><a href="/queries" title="">Algunas Queries Interesantes</a></li>
+      <li><a href="/upload_films" title="">Subir Archivo</a></li>
     </ul>
   </div>
 
@@ -38,8 +37,20 @@
 
       </br></br>
 
-      <form action='/BuscarPelicula' method='post'>
+      <form action='/buscar_pelicula' method='post'>
   	     Nombre:<br><br>
+         <input type='text' name='nombre'>
+     	   <br>
+       </br></br>
+         <button>Buscar</button>
+      </form>
+
+      <br>
+
+      <h1>Seleccione un año para ver sus películas</h1>
+
+      <form action='/pelicula_fecha' method='post'>
+  	     Año:<br><br>
          <input type='text' name='nombre'>
      	   <br>
        </br></br>

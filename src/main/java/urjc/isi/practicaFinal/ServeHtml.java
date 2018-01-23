@@ -41,6 +41,11 @@ public class ServeHtml {
 		
 		return toReturn;
 	}
+	
+	public static String serveJPEG(File file) {
+//		"image/jpeg"
+		return "";
+	}
 
 	public static String parseActorHtml(Iterable<String> stringIterator) {
 		String toReturn = "<ul>\n";
