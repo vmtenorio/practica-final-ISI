@@ -48,7 +48,7 @@ public class Main {
     
     public static String serve(Request request, Response response, String fileName) {
     	response.type("text/html");
-    	return ServeHtml.serveHtml(ServeHtml.makeFile("fileName"),"");
+    	return ServeHtml.serveHtml(ServeHtml.makeFile(fileName),"");
     }     
     
     public static String serveCss(Request req, Response res) {
