@@ -51,10 +51,6 @@ public class Main {
     	String toInsert = "";
     	response.type("text/html");
     	
-    	if(fileName == "/file_uploaded") {
-    		toInsert = "Archivo subido correctamente";
-    		fileName = "form.html";
-    	}
     	return ServeHtml.serveHtml(ServeHtml.makeFile(fileName),toInsert);
     }     
     
@@ -255,7 +251,6 @@ public class Main {
  		get("/medir_distancia", (req,res) -> serve(req, res, "distancia.html")); 
  		get("/queries", (req,res) -> serve(req, res, "queries.html")); 
  		get("/upload_films", (req,res) -> serve(req, res, "form.html"));
- 		get("/file_uploaded", (req,res) -> serve(req, res, "/file_uploaded"));
  		
  		post("/buscar_pelicula", Main::serveFilm);
  		post("/pelicula_fecha", Main::serveYear);
