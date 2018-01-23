@@ -12,11 +12,11 @@ public class Queries {
 		}
 	}
 	
-	public static Iterable<String> actorQuery (Database db, Graph g, String param, String actor) {
+	public static Iterable<String> actorQuery (Database db, Graph g, String name, String surname) {
 		
-		String dbData = db.selectActor(param, actor);
+		String dbData = db.selectActor(name, surname);
 		if(dbData == "") {
-			throw new IllegalArgumentException("Actor " + actor + " not found!");
+			throw new IllegalArgumentException("Actor " + name + surname + " not found!");
 		} else {
 			return g.adjacentTo(dbData);
 		}

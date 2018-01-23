@@ -76,12 +76,15 @@ public class Main {
     	
     	response.type("text/html");
 		String pelicula = request.queryParams("nombre");
+		System.out.println(pelicula);
     	try {
     		toParse = Queries.filmQuery(db, graph, pelicula);
     		toInsert += ServeHtml.parseIterable(toParse);
     	}catch(IllegalArgumentException e){
     		toInsert = "Pelicula no encontrada";
+    		e.printStackTrace();
 		}
+    	System.out.println(toInsert);
     	return ServeHtml.serveHtml(ServeHtml.makeFile(fileName),toInsert);
     }
     

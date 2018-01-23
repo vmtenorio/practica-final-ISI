@@ -23,6 +23,7 @@ public class ServeHtml {
 		    for(String line; (line = br.readLine()) != null; ) {
 		    	toReturn  += line + "\n";
 		        if (line == "<!-- insertarqui -->") {
+		        	System.out.println("Entra if insertar aqui");
 		        	toReturn += toInsert;
 		        }
 		    }
