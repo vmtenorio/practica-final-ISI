@@ -22,7 +22,8 @@ public class ServeHtml {
 		try{
 		    for(String line; (line = br.readLine()) != null; ) {
 		    	toReturn  += line + "\n";
-		        if (line == "<!-- insertarqui -->") {
+		    	System.out.println(line);
+		        if (line.contains("<!-- insertarqui -->")) {
 		        	System.out.println("Entra if insertar aqui");
 		        	toReturn += toInsert;
 		        }
