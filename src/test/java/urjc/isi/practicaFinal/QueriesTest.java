@@ -72,6 +72,32 @@ public class QueriesTest {
 		Queries.actorQuery(db, g, name, surname);
 	}
 
+	@Test (expected=IllegalArgumentException.class)
+	public void testFilmNull () throws SQLException {
+		db.insertFilm("101 Dalmatians (1996)");
+		db.insertFilm("12 Dogs of Christmas, The (2005)");
+		String film = null;
+		Queries.filmQuery(db, g, film);
+	}
+
+	@Test (expected=IllegalArgumentException.class)
+	public void testNameActorNull() throws SQLException {
+		db.insertActor("Braid, Hilda");
+		db.insertActor("Hicks, Adam");
+		String name = null;
+		String surname = "Braid";
+		Queries.actorQuery(db, g, name, surname);
+	}
+
+	@Test (expected=IllegalArgumentException.class)
+	public void testSurnameActorNull() throws SQLException {
+		db.insertActor("Braid, Hilda");
+		db.insertActor("Hicks, Adam");
+		String name = "Hilda";
+		String surname = null;
+		Queries.actorQuery(db, g, name, surname);
+	}
+
 	@Test
 	public void testFilmHappyPath () throws SQLException {
 		db.insertFilm("101 Dalmatians (1996)");
@@ -96,7 +122,7 @@ public class QueriesTest {
 		Iterable<String> it = Queries.actorQuery(db, g, name, surname);
 		assertEquals(it.toString(), "{ " + "101 Dalmatians (1996)" + " }");
 	}
-	
+
 	@Test (expected=IllegalArgumentException.class)
 	public void testFilmNoEncontradaEnGrafo () throws SQLException {
 		db.insertFilm("101 Dalmatians (1996)");
@@ -104,7 +130,7 @@ public class QueriesTest {
 		String film = "101 Dalmatians (1996)";
 		Queries.filmQuery(db, g, film);
 	}
-	
+
 	@Test (expected=IllegalArgumentException.class)
 	public void testActorNoEncontradoEnGrafo () throws SQLException {
 		db.insertActor("Braid, Hilda");
@@ -113,7 +139,7 @@ public class QueriesTest {
 		String surname = "Braid";
 		Queries.actorQuery(db, g, name, surname);
 	}
-	
+
 	@Test (expected=IllegalArgumentException.class)
 	public void testActorChangeName () throws SQLException {
 		db.insertActor("Braid, Hilda");
@@ -122,7 +148,7 @@ public class QueriesTest {
 		String surname = "Hilda";
 		Queries.actorQuery(db, g, name, surname);
 	}
-	
+
 	@Test (expected=IllegalArgumentException.class)
 	public void testFilmWithYear () throws SQLException {
 		db.insertFilm("12 Dogs of Christmas, The (2005)");
