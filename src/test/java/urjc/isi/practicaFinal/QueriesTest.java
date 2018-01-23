@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.junit.After;
@@ -67,10 +66,10 @@ public class QueriesTest {
 
 	@Test (expected=IllegalArgumentException.class)
 	public void testActorNoEncontrado () throws SQLException {
-		String actor = "HOLA, HOLA";
-		String param = "";
+		String name = "Hilda";
+		String surname = "Braid";
 		db.insertActor("Sibaldi, Stefano");
-		Queries.actorQuery(db, g, param, actor);
+		Queries.actorQuery(db, g, name, surname);
 	}
 
 	@Test
@@ -110,8 +109,8 @@ public class QueriesTest {
 	public void testActorNoEncontradoEnGrafo () throws SQLException {
 		db.insertActor("Braid, Hilda");
 		db.insertActor("Hicks, Adam");
-		String actor = "Hilda";
-		String param = "name";
-		Queries.actorQuery(db, g, param, actor);
+		String name = "Hilda";
+		String surname = "Braid";
+		Queries.actorQuery(db, g, name, surname);
 	}
 }
