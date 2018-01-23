@@ -68,11 +68,86 @@ public class Main {
     	try {
 			return ServeHtml.imageToBytes("header.jpg");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     	return "Fallo al cargar Imagen".getBytes();
     }
+    
+    public static String serveFilm(Request request, Response response) {
+    	String toInsert = "<br><h1>Su pelicula contiene los siguientes actores: </h1></br>";
+    	String fileName = "pelicula.html";
+    	Iterable<String> toParse;
+    	
+    	response.type("text/html");
+		String pelicula = request.queryParams("nombre");
+    	try {
+    		toParse = Queries.filmQuery(db, graph, pelicula);
+    		toInsert += ServeHtml.parseIterable(toParse);
+    	}catch(IllegalArgumentException e){
+    		toInsert = "Pelicula no encontrada";
+		}
+    	return ServeHtml.serveHtml(ServeHtml.makeFile(fileName),toInsert);
+    }
+    
+    public static String serveYear(Request request, Response response) {
+    	String toInsert;
+    	String fileName = "pelicula.html";
+    	String year = "";
+    	Iterable<String> toParse;
+    	
+    	year = request.queryParams("fecha");    	
+    	response.type("text/html");
+    	toInsert = "<h1>Las peliculas del año " + year + "son:</h1>";
+    	try {
+    		toParse = Queries.yearQuery(db, Integer.valueOf(year));
+    		toInsert += ServeHtml.parseIterable(toParse);
+    	}catch(IllegalArgumentException e){
+    		toInsert = "No existen peliculas para ese año";
+		}
+    	return ServeHtml.serveHtml(ServeHtml.makeFile(fileName),toInsert);
+    }
+    
+    public static String serveActor(Request request, Response response) {
+     	String toInsert;
+    	String fileName = "actor.html";
+    	String name, surname;
+    	Iterable<String> toParse;
+    	
+    	name = request.queryParams("nombre");
+		surname = request.queryParams("apellidos");
+		response.type("text/html");
+    	toInsert = "<h1>El actor/actriz: " + name + " " + surname + " sale en:</h1>";
+    	try {
+    		toParse = Queries.actorQuery(db, graph, name, surname);
+    		toInsert += ServeHtml.parseIterable(toParse);
+    	}catch(IllegalArgumentException e){
+    		toInsert = "No existen entradas para ese actor";
+		}
+    	
+    	return ServeHtml.serveHtml(ServeHtml.makeFile(fileName),toInsert);
+    }
+    
+    public static String serveDistance(Request request, Response response) {
+    	String toInsert;
+    	String fileName = "actor.html";
+    	String at1, at2;
+    	Iterable<String> toParse;
+    	
+    	at1 = request.queryParams("at1");
+		at2 = request.queryParams("at2");
+		response.type("text/html");
+		toInsert = "<h1>La distancia entre " + at1 + " y " + at2 + "es de:";
+		try {
+    		PathFinder pf = Queries.distanceQuery(graph, at1);
+    		toInsert += pf.distanceTo(at2) + "</h1></br>";
+    		toInsert += ServeHtml.parseIterable(pf.pathTo(at2));
+		}catch(IllegalArgumentException e){
+    		toInsert = "No existen esos nodos, o no ha usado el formato adecuado";
+		}
+		
+    	return ServeHtml.serveHtml(ServeHtml.makeFile(fileName),toInsert);
+    }
+    
     
 	public static void main(String[] args) throws 
 	ClassNotFoundException, SQLException, URISyntaxException {
@@ -97,7 +172,6 @@ public class Main {
  	
     //connection = DriverManager.getConnection("jdbc:sqlite:sample_graph.db");
     //connection.setAutoCommit(false);
-    //get("/upload_films2", upload);
     
  	// Create data structures
  	graph = new Graph();
@@ -112,8 +186,6 @@ public class Main {
  		try (InputStream input = req.raw().getPart("uploaded_films_file").getInputStream()) { 
  			// getPart needs to use the same name "uploaded_films_file" used in the form
  			
- 			
- 			////
  			// Prepare SQL to create table
  			Statement statement = connection.createStatement();
 
@@ -184,15 +256,13 @@ public class Main {
  		get("/medir_distancia", (req,res) -> serve(req, res, "distancia.html")); 
  		get("/queries", (req,res) -> serve(req, res, "queries.html")); 
  		get("/upload_films", (req,res) -> serve(req, res, "form.html"));
- 		get("/file_uploaded", (req,res) -> serve(req, res, "form.html"));
+ 		get("/file_uploaded", (req,res) -> serve(req, res, "/file_uploaded"));
  		
- 		post("/buscar_pelicula", (req,res) -> serve(req, res, "pelicula.html"));
- 		post("/pelicula_fecha", (req,res) -> serve(req, res, "pelicula.html"));
- 		post("/buscar_actor", (req,res) -> serve(req, res, "actor.html")); 
- 		post("/medir_distancia", (req,res) -> serve(req, res, "distancia.html")); 
- 		post("/queries", (req,res) -> serve(req, res, "queries.html")); 
- 		post("/upload_films", (req,res) -> serve(req, res, "form.html")); 
- 		
+ 		post("/buscar_pelicula", Main::serveFilm);
+ 		post("/pelicula_fecha", Main::serveYear);
+ 		post("/buscar_actor", Main::serveActor); 
+ 		post("/medir_distancia", Main::serveDistance); 
+		
  		get("/css.css", Main::serveCss);
  		get("/header.jpg", Main::serveImage);
     	get("/upload_films", (req, res) -> ServeHtml.serveHtml(ServeHtml.makeFile("form.html"), ""));

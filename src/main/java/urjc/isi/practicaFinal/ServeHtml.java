@@ -55,7 +55,7 @@ public class ServeHtml {
 	    return baos.toByteArray();	
 	}
 
-	public static String parseActorHtml(Iterable<String> stringIterator) {
+	public static String parseIterable(Iterable<String> stringIterator) {
 		String toReturn = "<ul>\n";
 		for(String string : stringIterator) {
 			toReturn += "<li>" + string + "</li>\n"; 

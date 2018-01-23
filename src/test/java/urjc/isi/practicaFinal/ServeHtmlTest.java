@@ -68,7 +68,7 @@ public class ServeHtmlTest {
 	public void testServeActor() {
 		String expectedReturn = "<ul>\n" + "<li>" + l1 + "</li>\n<li>" + l2 + "</li>\n<li>"
 								+ toInsert + "</li>\n</ul>\n";
-		assertEquals(expectedReturn, ServeHtml.parseActorHtml(testString));
+		assertEquals(expectedReturn, ServeHtml.parseIterable(testString));
 	}
 	
 	//Para comprobar que no saltan errores
