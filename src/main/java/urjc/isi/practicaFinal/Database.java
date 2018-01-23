@@ -9,14 +9,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Database {
-	
+
 	static Connection conn;
 
 	public Database(Connection conn) {
 		this.conn = conn;
 	}
-	
-	//Devuelve las peliculas de un año en forma de iterable	
+
+	//Devuelve las peliculas de un año en forma de iterable
 	public static Iterable<String> selectFilmYear (int year) {
 		String sql = "SELECT * FROM films WHERE year=?";
 		Stack<String> films = new Stack<String>();
@@ -33,12 +33,12 @@ public class Database {
 		}
 		return films;
 	}
-	
+
 	public static String selectFilmTitle(String film) {
 		String sql = "SELECT * FROM films WHERE title=?";
 
 		String result = new String();
-		
+
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, film);
 			ResultSet rs = pstmt.executeQuery();
@@ -54,16 +54,14 @@ public class Database {
 		}
 		return result;
 	}
-	
-<<<<<<< HEAD
-	public String selectActor(String param, String actor) {
-=======
+
+
 	public static String selectActor(String param, String actor) {
->>>>>>> 3e6cea83858840ec80e29a6ec1462bd9fcf9894d
+
 		String sql = "SELECT * FROM actors WHERE " + param + "=?";
-		
+
 		String result = new String();
-		
+
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, actor);
 			ResultSet rs = pstmt.executeQuery();
@@ -79,16 +77,16 @@ public class Database {
 		}
 		return result;
 	}
-	
+
 	public void insertFilm(String film) {
 		String title;
 		int year;
-		
+
 		String sql = "INSERT INTO actors(title, year) VALUES(?,?)";
 
 		Pattern p = Pattern.compile("(.*) \\((\\d{4}).*\\)");
 		Matcher m = p.matcher(film);
-		 		
+
 		if (m.find()) {
 			title = m.group(1);
 			year = Integer.parseInt(m.group(2));
@@ -104,14 +102,14 @@ public class Database {
 		    System.out.println(e.getMessage());
 		}
     }
-	
+
 	public void insertActor(String actor) {
 		String sql = "INSERT INTO actors(name, surname) VALUES(?,?)";
-	
-		
+
+
 		String name = actor.split(", ")[1];
 		String surname = actor.split(",")[0];
-		
+
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, name);
 			pstmt.setString(2, surname);
