@@ -245,8 +245,7 @@ public class Main {
 	        //input.close();
  		}
  		System.out.println("File Uploaded!");
- 		res.redirect("/file_uploaded");
-		return "Unreacheable";
+		return ServeHtml.serveHtml(ServeHtml.makeFile("form.html"), "<h1>File succesfully updated</h1>");
 	    });
  		
  		
@@ -265,7 +264,6 @@ public class Main {
 		
  		get("/css.css", Main::serveCss);
  		get("/header.jpg", Main::serveImage);
-    	get("/upload_films", (req, res) -> ServeHtml.serveHtml(ServeHtml.makeFile("form.html"), ""));
     	
  		//get("/film/:name", (req,res) -> Queries.filmQuery(graph, req.params(":name"))); 
  		//get("/actor/:name", (req,res) -> Queries.actorQuery(graph, req.params(":name")));
