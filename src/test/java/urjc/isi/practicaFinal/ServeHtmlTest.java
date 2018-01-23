@@ -70,5 +70,12 @@ public class ServeHtmlTest {
 								+ toInsert + "</li>\n</ul>\n";
 		assertEquals(expectedReturn, ServeHtml.parseActorHtml(testString));
 	}
+	
+	//Para comprobar que no saltan errores
+	@Test
+	public void openJPG() throws IOException {
+		byte[] bytes = null;
+		assertNotSame(bytes, ServeHtml.imageToBytes("header.jpg"));
+	}
 
 }

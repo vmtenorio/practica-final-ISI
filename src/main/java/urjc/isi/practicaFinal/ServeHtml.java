@@ -1,11 +1,15 @@
 package urjc.isi.practicaFinal;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Iterator;
+
+import javax.imageio.ImageIO;
 
 public class ServeHtml {
 	
@@ -42,9 +46,13 @@ public class ServeHtml {
 		return toReturn;
 	}
 	
-	public static String serveJPEG(File file) {
-//		"image/jpeg"
-		return "";
+	public static byte[] imageToBytes(String ImageName) throws IOException{
+		BufferedImage image = ImageIO.read(makeFile(ImageName)); 
+		
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	    ImageIO.write(image, "jpg", baos);
+	    
+	    return baos.toByteArray();	
 	}
 
 	public static String parseActorHtml(Iterable<String> stringIterator) {

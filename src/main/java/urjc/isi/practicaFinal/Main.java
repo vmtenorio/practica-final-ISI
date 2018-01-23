@@ -16,6 +16,7 @@ import javax.servlet.MultipartConfigElement;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
@@ -47,8 +48,14 @@ public class Main {
     }
     
     public static String serve(Request request, Response response, String fileName) {
+    	String toInsert = "";
     	response.type("text/html");
-    	return ServeHtml.serveHtml(ServeHtml.makeFile(fileName),"");
+    	
+    	if(fileName == "/file_uploaded") {
+    		toInsert = "Archivo subido correctamente";
+    		fileName = "form.html";
+    	}
+    	return ServeHtml.serveHtml(ServeHtml.makeFile(fileName),toInsert);
     }     
     
     public static String serveCss(Request req, Response res) {
@@ -56,6 +63,16 @@ public class Main {
     	return ServeHtml.serveHtml(ServeHtml.makeFile("css.css"),"");
     }
     
+    public static byte[] serveImage(Request req, Response res) {
+		res.type("image/jpeg");
+    	try {
+			return ServeHtml.imageToBytes("header.jpg");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return "Fallo al cargar Imagen".getBytes();
+    }
     
 	public static void main(String[] args) throws 
 	ClassNotFoundException, SQLException, URISyntaxException {
@@ -156,7 +173,8 @@ public class Main {
 	        //input.close();
  		}
  		System.out.println("File Uploaded!");
-		return result;
+ 		res.redirect("/file_uploaded");
+		return "Unreacheable";
 	    });
  		
  		
@@ -165,7 +183,8 @@ public class Main {
  		get("/buscar_actor", (req,res) -> serve(req, res, "actor.html")); 
  		get("/medir_distancia", (req,res) -> serve(req, res, "distancia.html")); 
  		get("/queries", (req,res) -> serve(req, res, "queries.html")); 
- 		get("/upload_films", (req,res) -> serve(req, res, "form.html")); 
+ 		get("/upload_films", (req,res) -> serve(req, res, "form.html"));
+ 		get("/file_uploaded", (req,res) -> serve(req, res, "form.html"));
  		
  		post("/buscar_pelicula", (req,res) -> serve(req, res, "pelicula.html"));
  		post("/pelicula_fecha", (req,res) -> serve(req, res, "pelicula.html"));
@@ -175,6 +194,7 @@ public class Main {
  		post("/upload_films", (req,res) -> serve(req, res, "form.html")); 
  		
  		get("/css.css", Main::serveCss);
+ 		get("/header.jpg", Main::serveImage);
     	get("/upload_films", (req, res) -> ServeHtml.serveHtml(ServeHtml.makeFile("form.html"), ""));
     	
  		//get("/film/:name", (req,res) -> Queries.filmQuery(graph, req.params(":name"))); 
