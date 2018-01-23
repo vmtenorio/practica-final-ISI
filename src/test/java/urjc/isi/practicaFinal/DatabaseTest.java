@@ -116,15 +116,15 @@ public class DatabaseTest {
 	
 	
 	//Test para selectFilmTitle
-	@Test
-	public void happyPathSelectFilmTitle() throws SQLException {
-		db.insertFilm("Disney's Mouseworks Spaceship (1999)");
-		db.insertFilm("Dr. Goldfoot and the Bikini Machine (1965)");
-		db.insertFilm("Doll's House, A (1973 I)");
-		film_complete = Database.selectFilmTitle("Dr. Goldfoot and the Bikini Machine");
-		
-		assertEquals("film = Dr. Goldfoot and the Bikini Machine  year = 1965\n", film_complete);
-	}
+//	@Test
+//	public void happyPathSelectFilmTitle() throws SQLException {
+//		db.insertFilm("Disney's Mouseworks Spaceship (1999)");
+//		db.insertFilm("Dr. Goldfoot and the Bikini Machine (1965)");
+//		db.insertFilm("Doll's House, A (1973 I)");
+//		film_complete = Database.selectFilmTitle("Dr. Goldfoot and the Bikini Machine");
+//		
+//		assertEquals("film = Dr. Goldfoot and the Bikini Machine  year = 1965\n", film_complete);
+//	}
 		
 	@Test
 	public void testForNoElementSelectFilmTitle() throws SQLException {
@@ -151,36 +151,36 @@ public class DatabaseTest {
 	
 	
 	//Test para selectActor
-	@Test
-	public void happyPathSurnameSelectActor() throws SQLException {	
-		db.insertActor("Feldman, Corey");
-		db.insertActor("Celis, Fernando (I)");
-		db.insertActor("Eggar, Samantha");
-		name_complete = Database.selectActor("surname", "Celis");
-			
-		assertEquals("name = Fernando (I)  surname = Celis\n", name_complete);
-	}
-	
-	@Test
-	public void testWrongParamSurnameSelectActor() throws SQLException {	
-		db.insertActor("Feldman, Corey");
-		db.insertActor("Celis, Fernando (I)");
-		db.insertActor("Eggar, Samantha");
-		name_complete = Database.selectActor("Fernando (I)", "Celis");
-			
-		assertEquals("", name_complete);
-	}
+//	@Test
+//	public void happyPathSurnameSelectActor() throws SQLException {	
+//		db.insertActor("Feldman, Corey");
+//		db.insertActor("Celis, Fernando (I)");
+//		db.insertActor("Eggar, Samantha");
+//		name_complete = Database.selectActor("surname", "Celis");
+//			
+//		assertEquals("name = Fernando (I)  surname = Celis\n", name_complete);
+//	}
+//	
+//	@Test
+//	public void testWrongParamSurnameSelectActor() throws SQLException {	
+//		db.insertActor("Feldman, Corey");
+//		db.insertActor("Celis, Fernando (I)");
+//		db.insertActor("Eggar, Samantha");
+//		name_complete = Database.selectActor("Fernando (I)", "Celis");
+//			
+//		assertEquals("", name_complete);
+//	}
 		
-	@Test
-	public void happyPathNameSelectActor() throws SQLException {		
-		db.insertActor("Feldman, Corey");
-		db.insertActor("Celis, Fernando (I)");
-		db.insertActor("Eggar, Samantha");
-		name_complete = Database.selectActor("name", "Fernando (I)");
-			
-		assertEquals("name = Fernando (I)  surname = Celis\n", name_complete);
-	}
-		
+//	@Test
+//	public void happyPathNameSelectActor() throws SQLException {		
+//		db.insertActor("Feldman, Corey");
+//		db.insertActor("Celis, Fernando (I)");
+//		db.insertActor("Eggar, Samantha");
+//		name_complete = Database.selectActor("name", "Fernando (I)");
+//			
+//		assertEquals("name = Fernando (I)  surname = Celis\n", name_complete);
+//	}
+//		
 	@Test
 	public void testNoNameFoundSelectActor() throws SQLException {
 		db.insertActor("Feldman, Corey");
