@@ -63,7 +63,7 @@ public class QueriesTest {
 	public void testFilmNoEncontrada () throws SQLException {
 		String film = "HOLA		(1111)";
 		db.insertFilm("101 Dalmatians (1996)");
-		assertEquals("", Queries.filmQuery(db, g, film));
+		Queries.filmQuery(db, g, film);
 	}
 	
 	@Test (expected=IllegalArgumentException.class)
@@ -84,5 +84,18 @@ public class QueriesTest {
 		String film = "101 Dalmatians (1996)";
 		Iterable<String> it = Queries.filmQuery(db, g, film);
 		assertEquals(it.toString(), "{ " + "Braid, Hilda" + ", " + "Laurie, Hugh" + " }");
+	}
+	
+	@Test
+	public void testActorHappyPath () throws SQLException {
+		db.insertActor("Braid, Hilda");
+		db.insertActor("Hicks, Adam");
+		g.addEdge("101 Dalmatians (1996)", "Braid, Hilda");
+		g.addEdge("101 Dalmatians (1996)", "Laurie, Hugh");
+		g.addEdge("12 Dogs of Christmas, The (2005)", "Hicks, Adam");
+		String actor = "Braid, Hilda";
+		String param = "name";
+		Iterable<String> it = Queries.actorQuery(db, g, param, actor);
+		assertEquals(it.toString(), "{ " + "101 Dalmatians (1996)" + " }");
 	}
 }
