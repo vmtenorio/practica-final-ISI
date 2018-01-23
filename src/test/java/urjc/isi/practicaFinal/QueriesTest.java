@@ -122,4 +122,12 @@ public class QueriesTest {
 		String surname = "Hilda";
 		Queries.actorQuery(db, g, name, surname);
 	}
+	
+	@Test (expected=IllegalArgumentException.class)
+	public void testFilmWithYear () throws SQLException {
+		db.insertFilm("12 Dogs of Christmas, The (2005)");
+		g.addEdge("12 Dogs of Christmas, The (2005)", "Hicks, Adam");
+		String film = "12 Dogs of Christmas, The (2005)";
+		Queries.filmQuery(db, g, film);
+	}
 }
