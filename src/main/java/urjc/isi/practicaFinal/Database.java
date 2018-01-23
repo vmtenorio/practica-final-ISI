@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import java.sql.Statement;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,6 +14,10 @@ public class Database {
 
 	public Database(Connection conn) {
 		this.conn = conn;
+	}
+	
+	public Statement getStatement() throws SQLException{
+		return conn.createStatement();
 	}
 	
 	//Devuelve las peliculas de un año en forma de iterable	
@@ -44,10 +48,8 @@ public class Database {
 			ResultSet rs = pstmt.executeQuery();
 	                // Commit after query is executed
 			//conn.commit();
-
-			while (rs.next()) {
-			    // read the result set
-			    result += "film = " + rs.getString("title") + "  year = " + rs.getInt("year") + "\n";
+			while(rs.next()) {
+				result += rs.getString("title") + " (" + rs.getInt("year") + ")";
 			}
 		} catch (SQLException e) {
 		    System.out.println(e.getMessage());
@@ -55,20 +57,20 @@ public class Database {
 		return result;
 	}
 	
-	public static String selectActor(String param, String actor) {
-		String sql = "SELECT * FROM actors WHERE " + param + "=?";
+	public static String selectActor(String name, String surname) {
+		String sql = "SELECT * FROM actors WHERE name=? AND surname=?";
 		
 		String result = new String();
 		
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setString(1, actor);
+			pstmt.setString(1, name);
+			pstmt.setString(2, surname);
 			ResultSet rs = pstmt.executeQuery();
 	                // Commit after query is executed
 			//conn.commit();
 
-			while (rs.next()) {
-			    // read the result set
-			    result += "name = " + rs.getString("name") + "  surname = " + rs.getString("surname") + "\n";
+			while(rs.next()) {
+				result += rs.getString("surname") + ", " + rs.getString("name");
 			}
 		} catch (SQLException e) {
 		    System.out.println(e.getMessage());

@@ -4,26 +4,27 @@ public class Queries {
 	
 	public static Iterable<String> filmQuery (Database db, Graph g, String film) {
 		
-		if(db.selectFilmTitle(film) == "") {
+		String dbData = db.selectFilmTitle(film);
+		if(dbData == "") {
 			throw new IllegalArgumentException("Film " + film + " not found!");
 		} else {
-			return g.adjacentTo(film);
+			return g.adjacentTo(dbData);
 		}
 	}
 	
 	public static Iterable<String> actorQuery (Database db, Graph g, String param, String actor) {
 		
-		if(db.selectActor(param, actor) == "") {
+		String dbData = db.selectActor(param, actor);
+		if(dbData == "") {
 			throw new IllegalArgumentException("Actor " + actor + " not found!");
 		} else {
-			return g.adjacentTo(actor);
+			return g.adjacentTo(dbData);
 		}
 	}
 	
-	public static Iterable<String> distanceQuery (Graph g, String object1, String object2) {
+	public static PathFinder distanceQuery (Graph g, String object1) {
 
-		PathFinder pf = new PathFinder(g, object1);
-		return pf.pathTo(object2);
+		return new PathFinder(g, object1);
 	}
 	
 	public static Iterable<String> yearQuery (Database db, int year) {

@@ -19,7 +19,6 @@ public class QueriesTest {
 	Graph g;
 	private static Database db;
 	private static Connection con;
-	private static Statement statement;
 
 	@Before
 	public void setUp() {
@@ -29,8 +28,8 @@ public class QueriesTest {
         {
           // create a database connection
           con = DriverManager.getConnection("jdbc:sqlite:sample.db");
-          Statement statement = con.createStatement();
           db = new Database(con);
+          Statement statement = db.getStatement();
           statement.setQueryTimeout(30);  // set timeout to 30 sec.
           statement.executeUpdate("drop table if exists actors");
           statement.executeUpdate("drop table if exists films");
@@ -81,7 +80,7 @@ public class QueriesTest {
 		g.addEdge("101 Dalmatians (1996)", "Braid, Hilda");
 		g.addEdge("101 Dalmatians (1996)", "Laurie, Hugh");
 		g.addEdge("12 Dogs of Christmas, The (2005)", "Hicks, Adam");
-		String film = "101 Dalmatians (1996)";
+		String film = "101 Dalmatians";
 		Iterable<String> it = Queries.filmQuery(db, g, film);
 		assertEquals(it.toString(), "{ " + "Braid, Hilda" + ", " + "Laurie, Hugh" + " }");
 	}
@@ -93,9 +92,9 @@ public class QueriesTest {
 		g.addEdge("101 Dalmatians (1996)", "Braid, Hilda");
 		g.addEdge("101 Dalmatians (1996)", "Laurie, Hugh");
 		g.addEdge("12 Dogs of Christmas, The (2005)", "Hicks, Adam");
-		String actor = "Braid, Hilda";
-		String param = "name";
-		Iterable<String> it = Queries.actorQuery(db, g, param, actor);
+		String name = "Hilda";
+		String surname = "Braid";
+		Iterable<String> it = Queries.actorQuery(db, g, name, surname);
 		assertEquals(it.toString(), "{ " + "101 Dalmatians (1996)" + " }");
 	}
 	
