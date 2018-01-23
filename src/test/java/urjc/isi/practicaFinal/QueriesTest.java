@@ -71,7 +71,7 @@ public class QueriesTest {
 		String actor = "HOLA, HOLA";
 		String param = "";
 		db.insertActor("Sibaldi, Stefano");
-		assertEquals("", Queries.actorQuery(db, g, param, actor));
+		Queries.actorQuery(db, g, param, actor);
 	}
 
 	@Test
@@ -97,5 +97,13 @@ public class QueriesTest {
 		String param = "name";
 		Iterable<String> it = Queries.actorQuery(db, g, param, actor);
 		assertEquals(it.toString(), "{ " + "101 Dalmatians (1996)" + " }");
+	}
+	
+	@Test (expected=IllegalArgumentException.class)
+	public void testFilmNoEncontradaEnGrafo () throws SQLException {
+		db.insertFilm("101 Dalmatians (1996)");
+		db.insertFilm("12 Dogs of Christmas, The (2005)");
+		String film = "101 Dalmatians (1996)";
+		Queries.filmQuery(db, g, film);
 	}
 }
