@@ -17,14 +17,14 @@ public class Database {
 	}
 	
 	//Devuelve las peliculas de un año en forma de iterable	
-	public Iterable<String> selectFilmYear (int year) {
+	public static Iterable<String> selectFilmYear (int year) {
 		String sql = "SELECT * FROM films WHERE year=?";
 		Stack<String> films = new Stack<String>();
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setInt(1, year);
 			ResultSet rs = pstmt.executeQuery();
 	                // Commit after query is executed
-			conn.commit();
+			//conn.commit();
 			while(rs.next()) {
 				films.push(rs.getString("title"));
 			}
@@ -34,7 +34,7 @@ public class Database {
 		return films;
 	}
 	
-	public String selectFilmTitle(String film) {
+	public static String selectFilmTitle(String film) {
 		String sql = "SELECT * FROM films WHERE title=?";
 
 		String result = new String();
@@ -43,11 +43,11 @@ public class Database {
 			pstmt.setString(1, film);
 			ResultSet rs = pstmt.executeQuery();
 	                // Commit after query is executed
-			conn.commit();
+			//conn.commit();
 
 			while (rs.next()) {
 			    // read the result set
-			    result += "film = " + rs.getString("title") + "year: " + rs.getInt("year");
+			    result += "film = " + rs.getString("title") + "  year = " + rs.getInt("year") + "\n";
 			}
 		} catch (SQLException e) {
 		    System.out.println(e.getMessage());
@@ -55,7 +55,11 @@ public class Database {
 		return result;
 	}
 	
+<<<<<<< HEAD
 	public String selectActor(String param, String actor) {
+=======
+	public static String selectActor(String param, String actor) {
+>>>>>>> 3e6cea83858840ec80e29a6ec1462bd9fcf9894d
 		String sql = "SELECT * FROM actors WHERE " + param + "=?";
 		
 		String result = new String();
@@ -64,11 +68,11 @@ public class Database {
 			pstmt.setString(1, actor);
 			ResultSet rs = pstmt.executeQuery();
 	                // Commit after query is executed
-			conn.commit();
+			//conn.commit();
 
 			while (rs.next()) {
 			    // read the result set
-			    result += "name = " + rs.getString("name") + "surname: " + rs.getInt("surname");
+			    result += "name = " + rs.getString("name") + "  surname = " + rs.getString("surname") + "\n";
 			}
 		} catch (SQLException e) {
 		    System.out.println(e.getMessage());
@@ -102,9 +106,10 @@ public class Database {
     }
 	
 	public void insertActor(String actor) {
-		String sql = "INSERT INTO films(name, surname) VALUES(?,?)";
+		String sql = "INSERT INTO actors(name, surname) VALUES(?,?)";
 	
-		String name = actor.split(",")[1];
+		
+		String name = actor.split(", ")[1];
 		String surname = actor.split(",")[0];
 		
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {

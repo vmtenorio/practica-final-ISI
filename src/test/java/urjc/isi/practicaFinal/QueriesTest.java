@@ -15,12 +15,12 @@ import org.junit.Test;
 import java.lang.Iterable;
 
 public class QueriesTest {
-	
+
 	Graph g;
 	private static Database db;
 	private static Connection con;
 	private static Statement statement;
-	
+
 	@Before
 	public void setUp() {
 		g = new Graph();
@@ -39,12 +39,12 @@ public class QueriesTest {
         }
         catch(SQLException e)
         {
-          // if the error message is "out of memory", 
+          // if the error message is "out of memory",
           // it probably means no database file is found
           System.err.println(e.getMessage());
         }
 	}
-	
+
 	@After
 	public void tearDown() {
 		try
@@ -58,14 +58,14 @@ public class QueriesTest {
           System.err.println(e);
         }
 	}
-	
+
 	@Test (expected=IllegalArgumentException.class)
 	public void testFilmNoEncontrada () throws SQLException {
 		String film = "HOLA		(1111)";
 		db.insertFilm("101 Dalmatians (1996)");
 		Queries.filmQuery(db, g, film);
 	}
-	
+
 	@Test (expected=IllegalArgumentException.class)
 	public void testActorNoEncontrado () throws SQLException {
 		String actor = "HOLA, HOLA";
@@ -73,7 +73,7 @@ public class QueriesTest {
 		db.insertActor("Sibaldi, Stefano");
 		assertEquals("", Queries.actorQuery(db, g, param, actor));
 	}
-	
+
 	@Test
 	public void testFilmHappyPath () throws SQLException {
 		db.insertFilm("101 Dalmatians (1996)");
@@ -85,7 +85,7 @@ public class QueriesTest {
 		Iterable<String> it = Queries.filmQuery(db, g, film);
 		assertEquals(it.toString(), "{ " + "Braid, Hilda" + ", " + "Laurie, Hugh" + " }");
 	}
-	
+
 	@Test
 	public void testActorHappyPath () throws SQLException {
 		db.insertActor("Braid, Hilda");

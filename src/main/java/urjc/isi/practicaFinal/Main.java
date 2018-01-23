@@ -46,6 +46,16 @@ public class Main {
      	return DriverManager.getConnection(dbUrl, username, password);
     }
     
+    public static String serve(Request request, Response response, String fileName) {
+    	response.type("text/html");
+    	return ServeHtml.serveHtml(ServeHtml.makeFile(fileName),"");
+    }     
+    
+    public static String serveCss(Request req, Response res) {
+		res.type("text/css");
+    	return ServeHtml.serveHtml(ServeHtml.makeFile("css.css"),"");
+    }
+    
     
 	public static void main(String[] args) throws 
 	ClassNotFoundException, SQLException, URISyntaxException {
@@ -66,8 +76,8 @@ public class Main {
  	// PostgreSQL default is to auto-commit (1 transaction / statement execution)
          // Set it to false to improve performance
  	connection.setAutoCommit(false);
-    
-    
+ 	
+ 	
     //connection = DriverManager.getConnection("jdbc:sqlite:sample_graph.db");
     //connection.setAutoCommit(false);
     //get("/upload_films2", upload);
@@ -111,8 +121,9 @@ public class Main {
 
 			    // First token is the film name(year)
 			    String film = tokenizer.nextToken();
-			    db.insertFilm(film);
-
+			    if(!graph.hasVertex(film)) {
+			    	db.insertFilm(film);
+			    }
 
 			    // Now get actors and insert them
 			    while (tokenizer.hasMoreTokens()) {
@@ -147,13 +158,24 @@ public class Main {
  		System.out.println("File Uploaded!");
 		return result;
 	    });
-
- 		get("/", (req, res) -> ServeHtml.serveHtml(ServeHtml.makeFile("index.html"),""));
-    	get("/css.css", (req, res) -> ServeHtml.serveHtml(ServeHtml.makeFile("css.css"),""));
+ 		
+ 		
+ 		get("/", (req,res) -> serve(req, res, "index.html")); 
+ 		get("/buscar_pelicula", (req,res) -> serve(req, res, "pelicula.html"));
+ 		get("/buscar_actor", (req,res) -> serve(req, res, "actor.html")); 
+ 		get("/medir_distancia", (req,res) -> serve(req, res, "distancia.html")); 
+ 		get("/queries", (req,res) -> serve(req, res, "queries.html")); 
+ 		get("/upload_films", (req,res) -> serve(req, res, "form.html")); 
+ 		
+ 		post("/buscar_pelicula", (req,res) -> serve(req, res, "pelicula.html"));
+ 		post("/pelicula_fecha", (req,res) -> serve(req, res, "pelicula.html"));
+ 		post("/buscar_actor", (req,res) -> serve(req, res, "actor.html")); 
+ 		post("/medir_distancia", (req,res) -> serve(req, res, "distancia.html")); 
+ 		post("/queries", (req,res) -> serve(req, res, "queries.html")); 
+ 		post("/upload_films", (req,res) -> serve(req, res, "form.html")); 
+ 		
+ 		get("/css.css", Main::serveCss);
     	get("/upload_films", (req, res) -> ServeHtml.serveHtml(ServeHtml.makeFile("form.html"), ""));
-
-  //	get("prueba", (req, resp) ->  {resp.type("text/html");
-  // 	ServeHtml.serveHtml("index.html");});	
     	
  		//get("/film/:name", (req,res) -> Queries.filmQuery(graph, req.params(":name"))); 
  		//get("/actor/:name", (req,res) -> Queries.actorQuery(graph, req.params(":name")));
