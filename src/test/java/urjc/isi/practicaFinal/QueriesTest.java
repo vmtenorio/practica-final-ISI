@@ -113,4 +113,13 @@ public class QueriesTest {
 		String surname = "Braid";
 		Queries.actorQuery(db, g, name, surname);
 	}
+	
+	@Test (expected=IllegalArgumentException.class)
+	public void testActorChangeName () throws SQLException {
+		db.insertActor("Braid, Hilda");
+		g.addEdge("101 Dalmatians (1996)", "Braid, Hilda");
+		String name = "Braid";
+		String surname = "Hilda";
+		Queries.actorQuery(db, g, name, surname);
+	}
 }
