@@ -55,7 +55,7 @@ public class Database {
 		return result;
 	}
 	
-	public String selectActor(String param, String actor) {
+	public static String selectActor(String param, String actor) {
 		String sql = "SELECT * FROM actors WHERE " + param + "=?";
 		
 		String result = new String();
@@ -64,11 +64,11 @@ public class Database {
 			pstmt.setString(1, actor);
 			ResultSet rs = pstmt.executeQuery();
 	                // Commit after query is executed
-			conn.commit();
+			//conn.commit();
 
 			while (rs.next()) {
 			    // read the result set
-			    result += "name = " + rs.getString("name") + "surname: " + rs.getInt("surname");
+			    result += "name = " + rs.getString("name") + "  surname = " + rs.getString("surname") + "\n";
 			}
 		} catch (SQLException e) {
 		    System.out.println(e.getMessage());
@@ -79,10 +79,6 @@ public class Database {
 	public void insertFilm(String film) {
 		String title;
 		int year;
-		
-		/*if(film==null) {
-			throw new NullPointerException();
-		}*/
 		
 		String sql = "INSERT INTO films(title, year) VALUES(?,?)";
 
