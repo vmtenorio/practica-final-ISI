@@ -106,4 +106,13 @@ public class QueriesTest {
 		String film = "101 Dalmatians (1996)";
 		Queries.filmQuery(db, g, film);
 	}
+	
+	@Test (expected=IllegalArgumentException.class)
+	public void testActorNoEncontradoEnGrafo () throws SQLException {
+		db.insertActor("Braid, Hilda");
+		db.insertActor("Hicks, Adam");
+		String actor = "Hilda";
+		String param = "name";
+		Queries.actorQuery(db, g, param, actor);
+	}
 }
