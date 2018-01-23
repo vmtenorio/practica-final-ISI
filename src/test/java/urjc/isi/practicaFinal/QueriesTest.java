@@ -89,6 +89,15 @@ public class QueriesTest {
 		String surname = "Braid";
 		Queries.actorQuery(db, g, name, surname);
 	}
+	
+	@Test (expected=IllegalArgumentException.class)
+	public void testSurnameActorNull() throws SQLException {
+		db.insertActor("Braid, Hilda");
+		db.insertActor("Hicks, Adam");
+		String name = "Hilda";
+		String surname = null;
+		Queries.actorQuery(db, g, name, surname);
+	}
 
 	@Test
 	public void testFilmHappyPath () throws SQLException {
