@@ -56,7 +56,7 @@ public class Database {
 	}
 	
 	public String selectActor(String param, String actor) {
-		String sql = "SELECT * FROM films WHERE " + param + "=?";
+		String sql = "SELECT * FROM actors WHERE " + param + "=?";
 		
 		String result = new String();
 		
@@ -80,7 +80,7 @@ public class Database {
 		String title;
 		int year;
 		
-		String sql = "INSERT INTO films(title, year) VALUES(?,?)";
+		String sql = "INSERT INTO actors(title, year) VALUES(?,?)";
 
 		Pattern p = Pattern.compile("(.*) \\((\\d{4}).*\\)");
 		Matcher m = p.matcher(film);

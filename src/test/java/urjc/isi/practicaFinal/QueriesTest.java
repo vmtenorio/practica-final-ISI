@@ -12,6 +12,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.Iterable;
+
 public class QueriesTest {
 	
 	Graph g;
@@ -28,11 +30,12 @@ public class QueriesTest {
           // create a database connection
           con = DriverManager.getConnection("jdbc:sqlite:sample.db");
           Statement statement = con.createStatement();
+          db = new Database(con);
           statement.setQueryTimeout(30);  // set timeout to 30 sec.
           statement.executeUpdate("drop table if exists actors");
           statement.executeUpdate("drop table if exists films");
           statement.executeUpdate("create table actors (name string, surname string)");
-          statement.executeUpdate("create table films (title string, year integer)");
+          statement.executeUpdate("create table films (title string, year int)");
         }
         catch(SQLException e)
         {
@@ -59,7 +62,6 @@ public class QueriesTest {
 	@Test (expected=IllegalArgumentException.class)
 	public void testFilmNoEncontrada () throws SQLException {
 		String film = "HOLA		(1111)";
-		db = new Database(con);
 		db.insertFilm("101 Dalmatians (1996)");
 		assertEquals("", Queries.filmQuery(db, g, film));
 	}
@@ -68,8 +70,19 @@ public class QueriesTest {
 	public void testActorNoEncontrado () throws SQLException {
 		String actor = "HOLA, HOLA";
 		String param = "";
-		db = new Database(con);
 		db.insertActor("Sibaldi, Stefano");
 		assertEquals("", Queries.actorQuery(db, g, param, actor));
+	}
+	
+	@Test
+	public void testFilmHappyPath () throws SQLException {
+		db.insertFilm("101 Dalmatians (1996)");
+		db.insertFilm("12 Dogs of Christmas, The (2005)");
+		g.addEdge("101 Dalmatians (1996)", "Braid, Hilda");
+		g.addEdge("101 Dalmatians (1996)", "Laurie, Hugh");
+		g.addEdge("12 Dogs of Christmas, The (2005)", "Hicks, Adam");
+		String film = "101 Dalmatians (1996)";
+		Iterable<String> it = Queries.filmQuery(db, g, film);
+		assertEquals(it.toString(), "{ " + "Braid, Hilda" + ", " + "Laurie, Hugh" + " }");
 	}
 }
