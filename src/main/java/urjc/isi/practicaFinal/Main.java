@@ -218,8 +218,7 @@ public class Main {
  		String toInsert = "";
  		req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/tmp"));
  		String result = "File uploaded!";
- 		try (InputStream input = req.raw().getPart("uploaded_films_file").getInputStream()) { 
- 			System.out.println(req.raw().getPart("uploaded_films_file").getName());
+ 		try (InputStream input = req.raw().getPart("uploaded_films_file").getInputStream()) {
  			// getPart needs to use the same name "uploaded_films_file" used in the form
  			
  			// Prepare SQL to create table
@@ -245,19 +244,20 @@ public class Main {
 
 			    // First token is the film name(year)
 			    String film = tokenizer.nextToken();
-			    if(!db.filmIsInDB(film)) {
+			    if(!graph.hasVertex(film)) {
 			    	db.insertFilm(film);
 			    }
 			    
 			    // Now get actors and insert them
 			    while (tokenizer.hasMoreTokens()) {
 			    	String actor = tokenizer.nextToken();
-			    	graph.addEdge(film, actor);
+			    	
 			    	////
-			    	if (!db.actorIsInDB(actor)) {
+			    	if (!graph.hasVertex(actor)) {
 			    		db.insertActor(actor);
 			    	}
 			    	////
+			    	graph.addEdge(film, actor);
 			    }
 			    ////
 			    // Commit only once, after all the inserts are done
