@@ -57,12 +57,7 @@ public class QueriesTest {
         }
 	}
 
-	@Test (expected=NoSuchFieldException.class)
-	public void testFilmNoEncontrada () throws SQLException, NoSuchFieldException {
-		String film = "HOLA		(1111)";
-		db.insertFilm("101 Dalmatians");
-		Queries.filmQuery(db, g, film);
-	}
+	
 
 	@Test (expected=NoSuchFieldException.class)
 	public void testActorNoEncontrado () throws SQLException, NoSuchFieldException {
@@ -98,17 +93,7 @@ public class QueriesTest {
 		Queries.actorQuery(db, g, name, surname);
 	}
 
-	@Test
-	public void testFilmHappyPath () throws SQLException, NoSuchFieldException {
-		db.insertFilm("101 Dalmatians (1996)");
-		db.insertFilm("12 Dogs of Christmas, The (2005)");
-		g.addEdge("101 Dalmatians (1996)", "Braid, Hilda");
-		g.addEdge("101 Dalmatians (1996)", "Laurie, Hugh");
-		g.addEdge("12 Dogs of Christmas, The (2005)", "Hicks, Adam");
-		String film = "101 Dalmatians";
-		Iterable<String> it = Queries.filmQuery(db, g, film);
-		assertEquals(it.toString(), "{ " + "Braid, Hilda" + ", " + "Laurie, Hugh" + " }");
-	}
+	
 
 	@Test
 	public void testActorHappyPath () throws SQLException, NoSuchFieldException {
@@ -173,5 +158,25 @@ public class QueriesTest {
 		Queries.filmQuery(db, g, film);
 	}
 	
+	//Camino [1, 3, 4]
+	@Test (expected=NoSuchFieldException.class)
+	public void testFilmNoEncontrada () throws SQLException, NoSuchFieldException {
+		String film = "HOLA		(1111)";
+		db.insertFilm("101 Dalmatians");
+		Queries.filmQuery(db, g, film);
+	}
+	
+	//Camino [1, 3, 5, 6, 8]
+	@Test
+	public void testFilmHappyPath () throws SQLException, NoSuchFieldException {
+		db.insertFilm("101 Dalmatians (1996)");
+		db.insertFilm("12 Dogs of Christmas, The (2005)");
+		g.addEdge("101 Dalmatians (1996)", "Braid, Hilda");
+		g.addEdge("101 Dalmatians (1996)", "Laurie, Hugh");
+		g.addEdge("12 Dogs of Christmas, The (2005)", "Hicks, Adam");
+		String film = "101 Dalmatians";
+		Iterable<String> it = Queries.filmQuery(db, g, film);
+		assertEquals(it.toString(), "{ " + "Braid, Hilda" + ", " + "Laurie, Hugh" + " }");
+	}
 	
 }
