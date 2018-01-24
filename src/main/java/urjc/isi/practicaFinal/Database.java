@@ -20,6 +20,48 @@ public class Database {
 		return conn.createStatement();
 	}
 	
+	public static boolean filmIsInDB(String film) {
+		
+		String title = Parser.getFilmTitle(film);
+		String sql = "SELECT * FROM films WHERE title=?";
+		
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setString(1, title);
+			ResultSet rs = pstmt.executeQuery();
+			rs.next();
+			if (rs.getString("title") == "") {
+				return false;
+			}else {
+				return true;
+			}
+		} catch (SQLException e) {
+		    System.out.println(e.getMessage());
+		    return false;
+		}
+	}
+	
+	public static boolean actorIsInDB(String actor) {
+		
+		String name = Parser.getActorName(actor);
+		String surname = Parser.getActorSurname(actor);
+		String sql = "SELECT * FROM films WHERE name=? AND surname=?";
+		
+		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+			pstmt.setString(1, name);
+			pstmt.setString(1, surname);
+			ResultSet rs = pstmt.executeQuery();
+			rs.next(); //Solo llamo una vez a next porque con que este devuelve true
+			if (rs.getString("title") == "") {
+				return false;
+			}else {
+				return true;
+			}
+		} catch (SQLException e) {
+		    System.out.println(e.getMessage());
+		    return false;
+		}
+	}
+	
 	//Devuelve las peliculas de un año en forma de iterable	
 	public static Iterable<String> selectFilmYear (int year) {
 		String sql = "SELECT * FROM films WHERE year=?";
@@ -83,14 +125,11 @@ public class Database {
 		int year;
 		
 		String sql = "INSERT INTO films(title, year) VALUES(?,?)";
-
-		Pattern p = Pattern.compile("(.*) \\((\\d{4}).*\\)");
-		Matcher m = p.matcher(film);
 		 		
-		if (m.find()) {
-			title = m.group(1);
-			year = Integer.parseInt(m.group(2));
-		}else {
+		try {
+			title = Parser.getFilmTitle(film);
+			year = Parser.getFilmYear(film);
+		} catch (IllegalArgumentException e) {
 			title = film;
 			year = 0;
 		}
@@ -106,9 +145,8 @@ public class Database {
 	public void insertActor(String actor) {
 		String sql = "INSERT INTO actors(name, surname) VALUES(?,?)";
 	
-		
-		String name = actor.split(", ")[1];
-		String surname = actor.split(",")[0];
+		String name = Parser.getActorName(actor);
+		String surname = Parser.getActorSurname(actor);
 		
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, name);
