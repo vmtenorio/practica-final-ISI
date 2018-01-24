@@ -167,10 +167,6 @@ public class Main {
  	// PostgreSQL default is to auto-commit (1 transaction / statement execution)
          // Set it to false to improve performance
  	connection.setAutoCommit(false);
- 	
- 	
-    //connection = DriverManager.getConnection("jdbc:sqlite:sample_graph.db");
-    //connection.setAutoCommit(false);
     
  	// Create data structures
  	graph = new Graph();
@@ -203,7 +199,6 @@ public class Main {
 
  			String s;
  			while ((s = br.readLine()) != null) {
- 				System.out.println(s);
 
 			    // Tokenize the film name and then the actors, separated by "/"
 			    StringTokenizer tokenizer = new StringTokenizer(s, "/");
@@ -231,18 +226,6 @@ public class Main {
 			    ////
 			}
 
- 	        // print out graph
- 	        //StdOut.println(graph);
-
- 	        // print out graph again by iterating over vertices and edges
- 	        /*for (String v : graph.vertices()) {
- 	            StdOut.print(v + ": ");
- 	            for (String w : graph.adjacentTo(v)) {
- 	                StdOut.print(w + " ");
- 	            }
- 	            StdOut.println();
- 	        }*/
-	        //input.close();
  		}
  		System.out.println("File Uploaded!");
 		return ServeHtml.serveHtml(ServeHtml.makeFile("form.html"), "<h1>File succesfully updated</h1>");
@@ -264,8 +247,6 @@ public class Main {
  		get("/css.css", Main::serveCss);
  		get("/header.jpg", Main::serveImage);
     	
- 		//get("/film/:name", (req,res) -> Queries.filmQuery(graph, req.params(":name"))); 
- 		//get("/actor/:name", (req,res) -> Queries.actorQuery(graph, req.params(":name")));
  	
     }
 
