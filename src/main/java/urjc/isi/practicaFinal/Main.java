@@ -82,6 +82,7 @@ public class Main {
  		req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/tmp"));
  		String result = "File uploaded!";
  		try (InputStream input = req.raw().getPart("uploaded_films_file").getInputStream()) { 
+ 			System.out.println(req.raw().getPart("uploaded_films_file").getName());
  			// getPart needs to use the same name "uploaded_films_file" used in the form
  			
  			
