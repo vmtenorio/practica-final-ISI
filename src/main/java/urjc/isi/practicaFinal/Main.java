@@ -80,9 +80,18 @@ public class Main {
     	try {
     		toParse = Queries.filmQuery(db, graph, pelicula);
     		toInsert += ServeHtml.parseIterable(toParse);
-    	}catch(IllegalArgumentException e){
+    	}catch(NoSuchFieldException e){
     		toInsert = "Pelicula no encontrada";
     		e.printStackTrace();
+		}catch(IllegalArgumentException e) {
+			graph = new Graph("resources/movies.txt", "/");
+			try{
+				toParse = Queries.filmQuery(db, graph, pelicula);
+				toInsert += ServeHtml.parseIterable(toParse);
+			}catch(Exception e2){
+	    		toInsert = "Pelicula no encontrada";
+	    		e.printStackTrace();
+			}
 		}
     	System.out.println(toInsert);
     	return ServeHtml.serveHtml(ServeHtml.makeFile(fileName),toInsert);
@@ -119,8 +128,18 @@ public class Main {
     	try {
     		toParse = Queries.actorQuery(db, graph, name, surname);
     		toInsert += ServeHtml.parseIterable(toParse);
-    	}catch(IllegalArgumentException e){
-    		toInsert = "No existen entradas para ese actor";
+    	}catch(NoSuchFieldException e){
+    		toInsert = "Actor no encontrado";
+    		e.printStackTrace();
+		}catch(IllegalArgumentException e) {
+			graph = new Graph("resources/movies.txt", "/");
+			try{
+				toParse = Queries.actorQuery(db, graph, name, surname);
+				toInsert += ServeHtml.parseIterable(toParse);
+			}catch(Exception e2){
+	    		toInsert = "Actor no encontrado";
+	    		e.printStackTrace();
+			}
 		}
     	
     	return ServeHtml.serveHtml(ServeHtml.makeFile(fileName),toInsert);
@@ -137,11 +156,22 @@ public class Main {
 		response.type("text/html");
 		toInsert = "<h1>La distancia entre " + at1 + " y " + at2 + "es de:";
 		try {
-    		PathFinder pf = Queries.distanceQuery(graph, at1);
+			PathFinder pf = Queries.distanceQuery(graph, at1);
     		toInsert += pf.distanceTo(at2) + "</h1></br>";
     		toInsert += ServeHtml.parseIterable(pf.pathTo(at2));
-		}catch(IllegalArgumentException e){
+    	}catch(NoSuchFieldException e){
     		toInsert = "No existen esos nodos, o no ha usado el formato adecuado";
+    		e.printStackTrace();
+		}catch(IllegalArgumentException e) {
+			graph = new Graph("resources/movies.txt", "/");
+			try{
+				PathFinder pf = Queries.distanceQuery(graph, at1);
+	    		toInsert += pf.distanceTo(at2) + "</h1></br>";
+	    		toInsert += ServeHtml.parseIterable(pf.pathTo(at2));
+			}catch(Exception e2){
+				toInsert = "No existen esos nodos, o no ha usado el formato adecuado";
+	    		e.printStackTrace();
+			}	
 		}
 		
     	return ServeHtml.serveHtml(ServeHtml.makeFile(fileName),toInsert);
@@ -176,7 +206,6 @@ public class Main {
  	// Creates table and stores uploaded file in a two-columns table
     
  	post("/upload", (req, res) -> {
- 		System.out.println("\n\n LLega1 \n\n");
  		req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/tmp"));
  		String result = "File uploaded!";
  		try (InputStream input = req.raw().getPart("uploaded_films_file").getInputStream()) { 
@@ -190,7 +219,6 @@ public class Main {
  			statement.executeUpdate("drop table if exists films");
  			statement.executeUpdate("create table films (title text, year int)");
 
- 	 		System.out.println("\n\n LLega2 \n\n");
  			statement.executeUpdate("drop table if exists actors");
  			statement.executeUpdate("create table actors (name text, surname text)");
  			/////
@@ -199,7 +227,6 @@ public class Main {
  			InputStreamReader isr = new InputStreamReader(input);
  			BufferedReader br = new BufferedReader(isr);
 
- 	 		System.out.println("\n\n LLega3 \n\n");
  			String s;
  			while ((s = br.readLine()) != null) {
 
@@ -211,8 +238,7 @@ public class Main {
 			    if(!graph.hasVertex(film)) {
 			    	db.insertFilm(film);
 			    }
-
-		 		System.out.println("\n\n LLega6 \n\n");
+			    
 			    // Now get actors and insert them
 			    while (tokenizer.hasMoreTokens()) {
 			    	String actor = tokenizer.nextToken();
@@ -231,7 +257,6 @@ public class Main {
 			}
 
  		}
- 		System.out.println("\n\n LLega5 \n\n");
  		System.out.println("File Uploaded!");
 		return ServeHtml.serveHtml(ServeHtml.makeFile("form.html"), "<h1>File succesfully updated</h1>");
 	    });
