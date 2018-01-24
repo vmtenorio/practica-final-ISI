@@ -69,6 +69,16 @@ public class Main {
     	return "Fallo al cargar Imagen".getBytes();
     }
     
+    public static byte[] serveFavicon(Request req, Response res) {
+		res.type("image/png");
+    	try {
+			return ServeHtml.imageToBytes("favicon.png");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	return "Fallo al cargar Imagen".getBytes();
+    }
+    
     public static String serveFilm(Request request, Response response) {
     	String toInsert = "<br><h1>Su pelicula contiene los siguientes actores: </h1></br>";
     	String fileName = "pelicula.html";
@@ -150,7 +160,7 @@ public class Main {
     
     public static String serveDistance(Request request, Response response) {
     	String toInsert;
-    	String fileName = "actor.html";
+    	String fileName = "distancia.html";
     	String at1, at2;
     	Iterable<String> toParse;
     	
@@ -268,7 +278,7 @@ public class Main {
  			System.out.println("File Uploaded!");
  			toInsert = "<h1>File succesfully updated</h1>";
  		}catch (Exception e) {
- 			toInsert = e.toString();
+ 			toInsert = "Error al subir, consultar terminal para más información";
  			e.printStackTrace();
  		}
  		
@@ -290,7 +300,9 @@ public class Main {
 		
  		get("/css.css", Main::serveCss);
  		get("/header.jpg", Main::serveImage);
-    	
+ 		get("/favicon.png", Main::serveFavicon);
+ 		
+ 		
  	
     }
 
