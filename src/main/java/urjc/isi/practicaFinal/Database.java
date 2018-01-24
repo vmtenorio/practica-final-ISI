@@ -97,6 +97,9 @@ public class Database {
 	}
 	
 	public static String selectFilmTitle(String film) {
+		if (film == null) {
+			throw new NullPointerException("Film es null!");
+		}
 		String sql = "SELECT * FROM films WHERE title=?";
 
 		String result = new String();
@@ -116,6 +119,9 @@ public class Database {
 	}
 	
 	public static String selectActor(String name, String surname) {
+		if (name == null || surname == null) {
+			throw new NullPointerException("Name and surname can't be null");
+		}
 		String sql = "SELECT * FROM actors WHERE name=? AND surname=?";
 		
 		String result = new String();
