@@ -67,41 +67,6 @@ public class DatabaseTest {
             System.err.println(e);
         }
 	}
-		
-	//Test para selectFilmTitle
-	@Test
-	public void happyPathSelectFilmTitle() throws SQLException {
-		db.insertFilm("Disney's Mouseworks Spaceship (1999)");
-		db.insertFilm("Dr. Goldfoot and the Bikini Machine (1965)");
-		db.insertFilm("Doll's House, A (1973 I)");
-		film_complete = Database.selectFilmTitle("Dr. Goldfoot and the Bikini Machine");
-		
-		assertEquals("Dr. Goldfoot and the Bikini Machine (1965)", film_complete);
-	}
-		
-	@Test
-	public void testForNoElementSelectFilmTitle() throws SQLException {
-			
-		db.insertFilm("");
-		film_complete = Database.selectFilmTitle("Dr. Goldfoot and the Bikini Machine");
-		
-		assertEquals("", film_complete);
-	}
-		
-	@Test
-	public void testForNullElementSelectFilmTitle() throws SQLException {
-		try {
-			db.insertFilm(null);
-			film_complete = Database.selectFilmTitle("Dr. Goldfoot and the Bikini Machine");
-			
-			assertEquals("", film_complete);
-		} catch (NullPointerException e) {
-		     return;
-		}
-		fail ("NullPointerException expected");
-	}	
-	
-	
 	
 	//Test para selectActor
 	@Test
@@ -334,60 +299,110 @@ public class DatabaseTest {
 		assertTrue(db.actorIsInDB(actor));
 	}
 	
-		/*
-		 * Tests para selectFilmYear
-		 */
+	/*
+	 * Tests para selectFilmYear
+	 */
 		
-		// Camino [1 2 4 6 8] [6 7 6] [7 6 8]
-		@Test
-		public void happyPathSelectFilmYear() throws SQLException {
-			db.insertFilm("Disney's Mouseworks Spaceship (1999)");
-			db.insertFilm("Dr. Goldfoot and the Bikini Machine (1999)");
-			result = Database.selectFilmYear(1999);
+	// Camino [1 2 4 6 8] [6 7 6] [7 6 8]
+	@Test
+	public void happyPathSelectFilmYear() throws SQLException {
+		db.insertFilm("Disney's Mouseworks Spaceship (1999)");
+		db.insertFilm("Dr. Goldfoot and the Bikini Machine (1999)");
+		result = Database.selectFilmYear(1999);
 				
-			ResultSet rs = statement.executeQuery("select * from films");
-			Iterator<String> iterable = result.iterator();
-
-			assertEquals("Dr. Goldfoot and the Bikini Machine", iterable.next());
-			assertEquals("Disney's Mouseworks Spaceship", iterable.next());
-		}
-		
-		// Camino para [7 6 7]
-		@Test
-		public void SelectFilmYearTwice() throws SQLException {
-			db.insertFilm("Disney's Mouseworks Spaceship (1999)");
-			db.insertFilm("Disney's Mouseworks Spaceship (1999)");
-			result = Database.selectFilmYear(1999);
-				
-			ResultSet rs = statement.executeQuery("select * from films");
-			Iterator<String> iterable = result.iterator();
-
-			assertEquals("Disney's Mouseworks Spaceship", iterable.next());
-			assertEquals("Disney's Mouseworks Spaceship", iterable.next());
-		}
-		
-		// Camino [1 2 4 6]
-		@Test(expected=NullPointerException.class)
-		public void testForNullElementSelectFilmYear() throws SQLException {
-			db.insertFilm(null);
-			result = Database.selectFilmYear(1999);
-			ResultSet rs = statement.executeQuery("select * from actors");
-		}
-		
-		@Test
-		public void testForNoElementSelectFilmYear() throws SQLException {
-			try {
-				db.insertFilm("");
-				result = Database.selectFilmYear(1999);
-				
-				ResultSet rs = statement.executeQuery("select * from films");
-				Iterator<String> iterable = result.iterator();
-
-				assertEquals("", iterable.next());
-			 } catch (NoSuchElementException e) {
-			    return;
-			 }
-			 fail ("NoSuchElementException expected");
-		}
+		ResultSet rs = statement.executeQuery("select * from films");
+		Iterator<String> iterable = result.iterator();
 			
+		assertEquals("Dr. Goldfoot and the Bikini Machine", iterable.next());
+		assertEquals("Disney's Mouseworks Spaceship", iterable.next());
+	}
+	
+	// Camino para [7 6 7]
+	@Test
+	public void SelectFilmYearTwice() throws SQLException {
+		db.insertFilm("Disney's Mouseworks Spaceship (1999)");
+		db.insertFilm("Disney's Mouseworks Spaceship (1999)");
+		result = Database.selectFilmYear(1999);
+				
+		ResultSet rs = statement.executeQuery("select * from films");
+		Iterator<String> iterable = result.iterator();
+		
+		assertEquals("Disney's Mouseworks Spaceship", iterable.next());
+		assertEquals("Disney's Mouseworks Spaceship", iterable.next());
+	}
+		
+	// Camino [1 2 4 6]
+	@Test(expected=NullPointerException.class)
+	public void testForNullElementSelectFilmYear() throws SQLException {
+		db.insertFilm(null);
+		result = Database.selectFilmYear(1999);
+		ResultSet rs = statement.executeQuery("select * from actors");
+	}
+		
+	@Test
+	public void testForNoElementSelectFilmYear() throws SQLException {
+		try {
+			db.insertFilm("");
+			result = Database.selectFilmYear(1999);
+				
+			ResultSet rs = statement.executeQuery("select * from films");
+			Iterator<String> iterable = result.iterator();
+
+			assertEquals("", iterable.next());
+		 } catch (NoSuchElementException e) {
+		    return;
+		 }
+		 fail ("NoSuchElementException expected");
+	}
+	
+	/*
+	 * Test para SelectFilmTitle 
+	 */
+	
+	// Camino [1 2 4 6 8] [6 7 6] [7 6 8]
+	@Test
+	public void happyPathSelectFilmTitle() throws SQLException {
+		db.insertFilm("Disney's Mouseworks Spaceship (1999)");
+		db.insertFilm("Dr. Goldfoot and the Bikini Machine (1965)");
+		db.insertFilm("Doll's House, A (1973 I)");
+		film_complete = Database.selectFilmTitle("Dr. Goldfoot and the Bikini Machine");
+		
+		assertEquals("Dr. Goldfoot and the Bikini Machine (1965)", film_complete);
+	}
+	
+	// Camino para [7 6 7]
+	@Test
+	public void SelectFilmTitleTwice() throws SQLException {
+		db.insertFilm("Disney's Mouseworks Spaceship (1999)");
+		db.insertFilm("Disney's Mouseworks Spaceship (1999)");
+		String resultFilm = Database.selectFilmTitle("Disney's Mouseworks Spaceship");
+		String expectedReturn = "Disney's Mouseworks Spaceship (1999)";
+		
+		assertEquals(expectedReturn + expectedReturn, resultFilm);
+	}
+	
+	// Camino [1 2 4 6]		
+	@Test
+	public void testForNoElementSelectFilmTitle() throws SQLException {
+			
+		db.insertFilm("");
+		film_complete = Database.selectFilmTitle("Dr. Goldfoot and the Bikini Machine");
+		
+		assertEquals("", film_complete);
+	}
+			
+	@Test
+	public void testForNullElementSelectFilmTitle() throws SQLException {
+		try {
+			db.insertFilm(null);
+			film_complete = Database.selectFilmTitle("Dr. Goldfoot and the Bikini Machine");
+			
+			assertEquals("", film_complete);
+		} catch (NullPointerException e) {
+		     return;
+		}
+		fail ("NullPointerException expected");
+	}	
+		
+	
 }
