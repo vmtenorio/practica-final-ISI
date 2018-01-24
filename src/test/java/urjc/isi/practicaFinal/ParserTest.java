@@ -20,4 +20,11 @@ public class ParserTest {
 		String film = "101 Dalmatians";
 		Parser.getFilmTitle(film);
 	}
+	
+	// Camino [1, 2, 4, 6, 8]
+	@Test 
+	public void testHappyPathGetFilm() {
+		String film = "101 Dalmatians (2005)";
+		assertEquals(Parser.getFilmTitle(film), "101 Dalmatians");
+	}
 }
