@@ -44,16 +44,6 @@ public class ServeHtmlTest {
 	}
 	
 	@Test
-	public void testHtmlLinea() {
-		String nameFile = "prueba.html";
-		String expectedString = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n" +
-		"\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n" + 
-		"<!-- insertarqui -->\n";
-		
-		assertEquals(expectedString, ServeHtml.serveHtml(ServeHtml.makeFile(nameFile), ""));
-	}
-	
-	@Test
 	public void testreadInsert(){
 		BufferedReader br = mock(BufferedReader.class);
 		String expectedReturn = l1 + "\n" + l2 + "\n" + toInsert;
