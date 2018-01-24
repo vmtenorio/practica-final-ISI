@@ -275,10 +275,10 @@ public class DatabaseTest {
 		try {
 			db.insertActor("");
 			ResultSet rs = statement.executeQuery("select * from actors");
-	    } catch (ArrayIndexOutOfBoundsException e) {
+	    } catch (IllegalArgumentException e) {
 	       return;
 	    }
-	    fail ("ArrayIndexOutOfBoundsException expected");
+	    fail ("IllegalArgumentException expected");
 	}
 	
 	@Test

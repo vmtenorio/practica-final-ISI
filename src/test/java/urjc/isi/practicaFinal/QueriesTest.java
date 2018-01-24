@@ -60,7 +60,7 @@ public class QueriesTest {
 	@Test (expected=NoSuchFieldException.class)
 	public void testFilmNoEncontrada () throws SQLException, NoSuchFieldException {
 		String film = "HOLA		(1111)";
-		db.insertFilm("101 Dalmatians (1996)");
+		db.insertFilm("101 Dalmatians");
 		Queries.filmQuery(db, g, film);
 	}
 
@@ -72,7 +72,7 @@ public class QueriesTest {
 		Queries.actorQuery(db, g, name, surname);
 	}
 
-	@Test (expected=NullPointerException.class)
+	@Test (expected=NoSuchFieldException.class)
 	public void testFilmNull () throws SQLException, NoSuchFieldException {
 		db.insertFilm("101 Dalmatians (1996)");
 		db.insertFilm("12 Dogs of Christmas, The (2005)");
@@ -80,7 +80,7 @@ public class QueriesTest {
 		Queries.filmQuery(db, g, film);
 	}
 
-	@Test (expected=NullPointerException.class)
+	@Test (expected=NoSuchFieldException.class)
 	public void testNameActorNull() throws SQLException, NoSuchFieldException {
 		db.insertActor("Braid, Hilda");
 		db.insertActor("Hicks, Adam");
@@ -89,7 +89,7 @@ public class QueriesTest {
 		Queries.actorQuery(db, g, name, surname);
 	}
 
-	@Test (expected=NullPointerException.class)
+	@Test (expected=NoSuchFieldException.class)
 	public void testSurnameActorNull() throws SQLException, NoSuchFieldException {
 		db.insertActor("Braid, Hilda");
 		db.insertActor("Hicks, Adam");
@@ -127,7 +127,7 @@ public class QueriesTest {
 	public void testFilmNoEncontradaEnGrafo () throws SQLException, NoSuchFieldException {
 		db.insertFilm("101 Dalmatians (1996)");
 		db.insertFilm("12 Dogs of Christmas, The (2005)");
-		String film = "101 Dalmatians (1996)";
+		String film = "101 Dalmatians";
 		Queries.filmQuery(db, g, film);
 	}
 
