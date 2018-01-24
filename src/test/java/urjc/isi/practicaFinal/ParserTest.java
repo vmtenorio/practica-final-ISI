@@ -13,5 +13,11 @@ public class ParserTest {
 		String film = null;
 		Parser.getFilmTitle(film);
 	}
-
+	
+	// Camino [1, 2, 4, 5]
+	@Test (expected=IllegalArgumentException.class)
+	public void testFilmIlegalArgument() {
+		String film = "101 Dalmatians";
+		Parser.getFilmTitle(film);
+	}
 }
