@@ -36,4 +36,12 @@ public class ParserTest {
 		String film = "101 Dalmatians (2005)";
 		assertEquals(Parser.getFilmYear(film), 2005);
 	}
+	
+	// GRAFO getActorName
+	// Camino [1, 2, 4, 6, 8]
+	@Test 
+	public void testHappyPathGetActorName() {
+		String actor = "Braid, Hilda";
+		assertEquals(Parser.getActorName(actor), "Hilda");
+	}
 }
