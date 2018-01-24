@@ -156,7 +156,7 @@ public class Main {
 		response.type("text/html");
 		toInsert = "<h1>La distancia entre " + at1 + " y " + at2 + "es de:";
 		try {
-			PathFinder pf = Queries.distanceQuery(graph, at1);
+			PathFinder pf = Queries.distanceQuery(db, graph, at1, at2);
     		toInsert += pf.distanceTo(at2) + "</h1></br>";
     		toInsert += ServeHtml.parseIterable(pf.pathTo(at2));
     	}catch(NoSuchFieldException e){
@@ -165,7 +165,7 @@ public class Main {
 		}catch(IllegalArgumentException e) {
 			graph = new Graph("resources/movies.txt", "/");
 			try{
-				PathFinder pf = Queries.distanceQuery(graph, at1);
+				PathFinder pf = Queries.distanceQuery(db, graph, at1, at2);
 	    		toInsert += pf.distanceTo(at2) + "</h1></br>";
 	    		toInsert += ServeHtml.parseIterable(pf.pathTo(at2));
 			}catch(Exception e2){
