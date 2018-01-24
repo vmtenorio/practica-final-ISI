@@ -30,8 +30,13 @@ public class PathFinderTest {
 	}
 	
 	@Test (expected=NullPointerException.class)
-	public void testPathFinderNull () {
+	public void testPathFinderNullString () {
 		pf = new PathFinder(g, null);
+	}
+	
+	@Test (expected=NullPointerException.class)
+	public void testPathFinderNullGraph () {
+		pf = new PathFinder(null, "ATL");
 	}
 
 }
