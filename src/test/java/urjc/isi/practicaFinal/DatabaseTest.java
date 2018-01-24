@@ -307,5 +307,22 @@ public class DatabaseTest {
 		String actor = "Feldman, Corey";
 		assertTrue(db.actorIsInDB(actor));
 	}
+	
+	@Test
+	public void testFilmIsNotInDB() throws SQLException {
+		db.insertFilm("Disney's Mouseworks Spaceship (1999)");
+		db.insertFilm("Dr. Goldfoot and the Bikini Machine (1965)");
+		String film = "ASDF (1965)";
+		assertFalse(db.filmIsInDB(film));
+	}
+	
+	@Test
+	public void testActorIsNotInDB() throws SQLException {
+		db.insertActor("Feldman, Corey");
+		db.insertActor("Celis, Fernando (I)");
+		String actor = "Feldman, Asdf";
+		assertFalse(db.actorIsInDB(actor));
+	}
+	
 
 }

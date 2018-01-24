@@ -22,25 +22,23 @@ public class Database {
 	
 	public static boolean filmIsInDB(String film) {
 		
-		String title = Parser.getFilmTitle(film);
+		String title = Parser.getFilmTitle(film);		
 		String sql = "SELECT * FROM films WHERE title=?";
-		boolean toReturn;
+
+		String result = new String();
 		
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, title);
 			ResultSet rs = pstmt.executeQuery();
-			rs.next();
-			if (rs.getString("title").equals("")) {
-				toReturn = false;
-			}else {
-				toReturn = true;
+	                // Commit after query is executed
+			//conn.commit();
+			while(rs.next()) {
+				result += rs.getString("title") + " (" + rs.getInt("year") + ")";
 			}
-			while(rs.next());
 		} catch (SQLException e) {
 		    System.out.println(e.getMessage());
-		    toReturn = false;
 		}
-		return toReturn;
+		return !result.equals("");
 	}
 	
 	public static boolean actorIsInDB(String actor) {
@@ -48,24 +46,23 @@ public class Database {
 		String name = Parser.getActorName(actor);
 		String surname = Parser.getActorSurname(actor);
 		String sql = "SELECT * FROM actors WHERE name=? AND surname=?";
-		boolean toReturn;
+		
+		String result = new String();
 		
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, name);
 			pstmt.setString(2, surname);
 			ResultSet rs = pstmt.executeQuery();
-			rs.next(); //Solo llamo una vez a next porque con que este devuelve true
-			if (rs.getString("name").equals("")) {
-				toReturn = false;
-			}else {
-				toReturn = true;
+	                // Commit after query is executed
+			//conn.commit();
+
+			while(rs.next()) {
+				result += rs.getString("surname") + ", " + rs.getString("name");
 			}
-			while(rs.next());
 		} catch (SQLException e) {
 		    System.out.println(e.getMessage());
-		    toReturn = false;
 		}
-		return toReturn;
+		return !result.equals("");
 	}
 	
 	//Devuelve las peliculas de un año en forma de iterable	
