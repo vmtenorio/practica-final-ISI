@@ -265,6 +265,8 @@ public class Main {
 			    ////
 			}
 
+ 		}catch (Exception e) {
+ 			e.printStackTrace();
  		}
  		System.out.println("File Uploaded!");
 		return ServeHtml.serveHtml(ServeHtml.makeFile("form.html"), "<h1>File succesfully updated</h1>");
