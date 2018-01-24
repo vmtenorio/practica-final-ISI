@@ -47,6 +47,12 @@ public class GraphTest {
 		assertEquals("Número de vértices del grafo", g.V(), 10);
 		assertEquals("Numero de edges del grafo", g.E(), 16);
 	}
+	
+	@Test
+	public void testaddVertex() {
+		g = new Graph("resources/routes.txt", " ");
+		g.addVertex("A");
+	}
 
 }
 
