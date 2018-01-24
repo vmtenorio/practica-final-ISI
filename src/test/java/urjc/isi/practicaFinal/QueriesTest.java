@@ -144,6 +144,7 @@ public class QueriesTest {
 	
 	//Caminos: Grafo Queries
 	
+	//filmQuery
 	//Camino [1, 2]
 	@Test (expected=SQLException.class)
 	public void testFilmSQLException () throws SQLException, NoSuchFieldException {
@@ -179,4 +180,19 @@ public class QueriesTest {
 		assertEquals(it.toString(), "{ " + "Braid, Hilda" + ", " + "Laurie, Hugh" + " }");
 	}
 	
+	//actorQuery
+	//Camino [1, 2]
+	@Test (expected=SQLException.class)
+	public void testActorSQLException () throws SQLException, NoSuchFieldException {
+		con = DriverManager.getConnection(null);
+        db = new Database(con);
+        Statement statement = db.getStatement();
+        statement.setQueryTimeout(30);  // set timeout to 30 sec.
+        statement.executeUpdate("drop table if exists actors");
+        g.addEdge("101 Dalmatians (1996)", "Braid, Hilda");
+        String name = "Hilda";
+		String surname = "Braid";
+		db.insertActor("Braid, Hilda");
+		Queries.actorQuery(db, g, name, surname);
+	}
 }
