@@ -215,6 +215,7 @@ public class Main {
  	// Creates table and stores uploaded file in a two-columns table
     
  	post("/upload", (req, res) -> {
+ 		String toInsert = "";
  		req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/tmp"));
  		String result = "File uploaded!";
  		try (InputStream input = req.raw().getPart("uploaded_films_file").getInputStream()) { 
@@ -264,12 +265,14 @@ public class Main {
 			    connection.commit();
 			    ////
 			}
-
+ 			System.out.println("File Uploaded!");
+ 			toInsert = "<h1>File succesfully updated</h1>";
  		}catch (Exception e) {
+ 			toInsert = e.toString();
  			e.printStackTrace();
  		}
- 		System.out.println("File Uploaded!");
-		return ServeHtml.serveHtml(ServeHtml.makeFile("form.html"), "<h1>File succesfully updated</h1>");
+ 		
+		return ServeHtml.serveHtml(ServeHtml.makeFile("form.html"), toInsert);
 	    });
  		
  		
