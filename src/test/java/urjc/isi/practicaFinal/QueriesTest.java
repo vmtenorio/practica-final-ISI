@@ -57,20 +57,9 @@ public class QueriesTest {
         }
 	}
 
-	@Test (expected=NoSuchFieldException.class)
-	public void testFilmNoEncontrada () throws SQLException, NoSuchFieldException {
-		String film = "HOLA		(1111)";
-		db.insertFilm("101 Dalmatians");
-		Queries.filmQuery(db, g, film);
-	}
+	
 
-	@Test (expected=NoSuchFieldException.class)
-	public void testActorNoEncontrado () throws SQLException, NoSuchFieldException {
-		String name = "Hilda";
-		String surname = "Braid";
-		db.insertActor("Sibaldi, Stefano");
-		Queries.actorQuery(db, g, name, surname);
-	}
+	
 
 	@Test (expected=NoSuchFieldException.class)
 	public void testFilmNull () throws SQLException, NoSuchFieldException {
@@ -98,30 +87,9 @@ public class QueriesTest {
 		Queries.actorQuery(db, g, name, surname);
 	}
 
-	@Test
-	public void testFilmHappyPath () throws SQLException, NoSuchFieldException {
-		db.insertFilm("101 Dalmatians (1996)");
-		db.insertFilm("12 Dogs of Christmas, The (2005)");
-		g.addEdge("101 Dalmatians (1996)", "Braid, Hilda");
-		g.addEdge("101 Dalmatians (1996)", "Laurie, Hugh");
-		g.addEdge("12 Dogs of Christmas, The (2005)", "Hicks, Adam");
-		String film = "101 Dalmatians";
-		Iterable<String> it = Queries.filmQuery(db, g, film);
-		assertEquals(it.toString(), "{ " + "Braid, Hilda" + ", " + "Laurie, Hugh" + " }");
-	}
+	
 
-	@Test
-	public void testActorHappyPath () throws SQLException, NoSuchFieldException {
-		db.insertActor("Braid, Hilda");
-		db.insertActor("Hicks, Adam");
-		g.addEdge("101 Dalmatians (1996)", "Braid, Hilda");
-		g.addEdge("101 Dalmatians (1996)", "Laurie, Hugh");
-		g.addEdge("12 Dogs of Christmas, The (2005)", "Hicks, Adam");
-		String name = "Hilda";
-		String surname = "Braid";
-		Iterable<String> it = Queries.actorQuery(db, g, name, surname);
-		assertEquals(it.toString(), "{ " + "101 Dalmatians (1996)" + " }");
-	}
+	
 
 	@Test (expected=IllegalArgumentException.class)
 	public void testFilmNoEncontradaEnGrafo () throws SQLException, NoSuchFieldException {
@@ -156,4 +124,83 @@ public class QueriesTest {
 		String film = "12 Dogs of Christmas, The (2005)";
 		Queries.filmQuery(db, g, film);
 	}
+	
+	//Caminos: Grafo Queries
+	
+	//filmQuery
+	//Camino [1, 2]
+	@Test (expected=SQLException.class)
+	public void testFilmSQLException () throws SQLException, NoSuchFieldException {
+		con = DriverManager.getConnection(null);
+        db = new Database(con);
+        Statement statement = db.getStatement();
+        statement.setQueryTimeout(30);  // set timeout to 30 sec.
+        statement.executeUpdate("drop table if exists actors");
+		db.insertFilm("12 Dogs of Christmas, The (2005)");
+		g.addEdge("12 Dogs of Christmas, The (2005)", "Hicks, Adam");
+		String film = "12 Dogs of Christmas, The (2005)";
+		Queries.filmQuery(db, g, film);
+	}
+	
+	//Camino [1, 3, 4]
+	@Test (expected=NoSuchFieldException.class)
+	public void testFilmNoEncontrada () throws SQLException, NoSuchFieldException {
+		String film = "HOLA		(1111)";
+		db.insertFilm("101 Dalmatians");
+		Queries.filmQuery(db, g, film);
+	}
+	
+	//Camino [1, 3, 5, 6, 8]
+	@Test
+	public void testFilmHappyPath () throws SQLException, NoSuchFieldException {
+		db.insertFilm("101 Dalmatians (1996)");
+		db.insertFilm("12 Dogs of Christmas, The (2005)");
+		g.addEdge("101 Dalmatians (1996)", "Braid, Hilda");
+		g.addEdge("101 Dalmatians (1996)", "Laurie, Hugh");
+		g.addEdge("12 Dogs of Christmas, The (2005)", "Hicks, Adam");
+		String film = "101 Dalmatians";
+		Iterable<String> it = Queries.filmQuery(db, g, film);
+		assertEquals(it.toString(), "{ " + "Braid, Hilda" + ", " + "Laurie, Hugh" + " }");
+	}
+	
+	//actorQuery
+	//Camino [1, 2]
+	@Test (expected=SQLException.class)
+	public void testActorSQLException () throws SQLException, NoSuchFieldException {
+		con = DriverManager.getConnection(null);
+        db = new Database(con);
+        Statement statement = db.getStatement();
+        statement.setQueryTimeout(30);  // set timeout to 30 sec.
+        statement.executeUpdate("drop table if exists actors");
+        g.addEdge("101 Dalmatians (1996)", "Braid, Hilda");
+        String name = "Hilda";
+		String surname = "Braid";
+		db.insertActor("Braid, Hilda");
+		Queries.actorQuery(db, g, name, surname);
+	}
+	
+	//Camino [1, 3, 4]
+	@Test (expected=NoSuchFieldException.class)
+	public void testActorNoEncontrado () throws SQLException, NoSuchFieldException {
+		String name = "Hilda";
+		String surname = "Braid";
+		db.insertActor("Sibaldi, Stefano");
+		Queries.actorQuery(db, g, name, surname);
+	}
+	
+	//Camino [1, 3, 5, 6, 8]
+	@Test
+	public void testActorHappyPath () throws SQLException, NoSuchFieldException {
+		db.insertActor("Braid, Hilda");
+		db.insertActor("Hicks, Adam");
+		g.addEdge("101 Dalmatians (1996)", "Braid, Hilda");
+		g.addEdge("101 Dalmatians (1996)", "Laurie, Hugh");
+		g.addEdge("12 Dogs of Christmas, The (2005)", "Hicks, Adam");
+		String name = "Hilda";
+		String surname = "Braid";
+		Iterable<String> it = Queries.actorQuery(db, g, name, surname);
+		assertEquals(it.toString(), "{ " + "101 Dalmatians (1996)" + " }");
+	}
+	
+	
 }
