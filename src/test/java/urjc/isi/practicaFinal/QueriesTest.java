@@ -57,10 +57,6 @@ public class QueriesTest {
         }
 	}
 
-	
-
-	
-
 	@Test (expected=NoSuchFieldException.class)
 	public void testFilmNull () throws SQLException, NoSuchFieldException {
 		db.insertFilm("101 Dalmatians (1996)");
@@ -86,10 +82,6 @@ public class QueriesTest {
 		String surname = null;
 		Queries.actorQuery(db, g, name, surname);
 	}
-
-	
-
-	
 
 	@Test (expected=IllegalArgumentException.class)
 	public void testFilmNoEncontradaEnGrafo () throws SQLException, NoSuchFieldException {
@@ -124,6 +116,8 @@ public class QueriesTest {
 		String film = "12 Dogs of Christmas, The (2005)";
 		Queries.filmQuery(db, g, film);
 	}
+	
+	
 	
 	//Caminos: Grafo Queries
 	
@@ -163,6 +157,7 @@ public class QueriesTest {
 		assertEquals(it.toString(), "{ " + "Braid, Hilda" + ", " + "Laurie, Hugh" + " }");
 	}
 	
+	
 	//actorQuery
 	//Camino [1, 2]
 	@Test (expected=SQLException.class)
@@ -200,6 +195,43 @@ public class QueriesTest {
 		String surname = "Braid";
 		Iterable<String> it = Queries.actorQuery(db, g, name, surname);
 		assertEquals(it.toString(), "{ " + "101 Dalmatians (1996)" + " }");
+	}
+	
+	
+	//distanceQuery
+	//Camino [1, 2, 3]
+	@Test (expected=SQLException.class)
+	public void testDistanceSQLException () throws SQLException, NoSuchFieldException {
+		con = DriverManager.getConnection(null);
+        db = new Database(con);
+        Statement statement = db.getStatement();
+        statement.setQueryTimeout(30);  // set timeout to 30 sec.
+        statement.executeUpdate("drop table if exists actors");
+        db.insertActor("Braid, Hilda");
+		db.insertActor("Hicks, Adam");
+		db.insertActor("Laurie, Hugh");
+		g.addEdge("101 Dalmatians (1996)", "Braid, Hilda");
+		g.addEdge("101 Dalmatians (1996)", "Laurie, Hugh");
+		g.addEdge("12 Dogs of Christmas, The (2005)", "Hicks, Adam");
+		g.addEdge("12 Dogs of Christmas, The (2005)", "Braid, Hilda");
+		String object1 = "Laurie, Hugh";
+		String object2 = "Hicks, Adam";
+		assertEquals(Queries.distanceQuery (db, g, object1, object2).distanceTo(object2), 4);
+	}
+	
+	//Camino [1, 2, 4, 6]
+	@Test
+	public void testDistanceHappyPath () throws SQLException, NoSuchFieldException {
+		db.insertActor("Braid, Hilda");
+		db.insertActor("Hicks, Adam");
+		db.insertActor("Laurie, Hugh");
+		g.addEdge("101 Dalmatians (1996)", "Braid, Hilda");
+		g.addEdge("101 Dalmatians (1996)", "Laurie, Hugh");
+		g.addEdge("12 Dogs of Christmas, The (2005)", "Hicks, Adam");
+		g.addEdge("12 Dogs of Christmas, The (2005)", "Braid, Hilda");
+		String object1 = "Laurie, Hugh";
+		String object2 = "Hicks, Adam";
+		assertEquals(Queries.distanceQuery (db, g, object1, object2).distanceTo(object2), 4);
 	}
 	
 	
