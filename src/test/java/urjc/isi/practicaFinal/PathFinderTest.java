@@ -49,4 +49,11 @@ public class PathFinderTest {
 		pf = new PathFinder(g, "JFK");
 		assertEquals("Calcula mal el camino", pf.pathTo("DFW").toString(), "JFK ORD DFW ");
 	}
+	
+	// Camino: [9,10,9]
+	@Test 
+	public void testPathFinderNotIf() {
+		pf = new PathFinder(g, "JFK");
+		assertEquals("Calcula mal el camino", pf.pathTo("ORD").toString(), "JFK ORD ");
+	}	
 }
