@@ -24,20 +24,23 @@ public class Database {
 		
 		String title = Parser.getFilmTitle(film);
 		String sql = "SELECT * FROM films WHERE title=?";
+		boolean toReturn;
 		
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, title);
 			ResultSet rs = pstmt.executeQuery();
 			rs.next();
 			if (rs.getString("title").equals("")) {
-				return false;
+				toReturn = false;
 			}else {
-				return true;
+				toReturn = true;
 			}
+			while(rs.next());
 		} catch (SQLException e) {
 		    System.out.println(e.getMessage());
-		    return false;
+		    toReturn = false;
 		}
+		return toReturn;
 	}
 	
 	public static boolean actorIsInDB(String actor) {
@@ -45,21 +48,24 @@ public class Database {
 		String name = Parser.getActorName(actor);
 		String surname = Parser.getActorSurname(actor);
 		String sql = "SELECT * FROM films WHERE name=? AND surname=?";
+		boolean toReturn;
 		
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, name);
-			pstmt.setString(1, surname);
+			pstmt.setString(2, surname);
 			ResultSet rs = pstmt.executeQuery();
 			rs.next(); //Solo llamo una vez a next porque con que este devuelve true
-			if (rs.getString("title").equals("")) {
-				return false;
+			if (rs.getString("name").equals("")) {
+				toReturn = false;
 			}else {
-				return true;
+				toReturn = true;
 			}
+			while(rs.next());
 		} catch (SQLException e) {
 		    System.out.println(e.getMessage());
-		    return false;
+		    toReturn = false;
 		}
+		return toReturn;
 	}
 	
 	//Devuelve las peliculas de un año en forma de iterable	
