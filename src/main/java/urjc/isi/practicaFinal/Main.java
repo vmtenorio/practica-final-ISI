@@ -80,9 +80,18 @@ public class Main {
     	try {
     		toParse = Queries.filmQuery(db, graph, pelicula);
     		toInsert += ServeHtml.parseIterable(toParse);
-    	}catch(IllegalArgumentException e){
+    	}catch(NoSuchFieldException e){
     		toInsert = "Pelicula no encontrada";
     		e.printStackTrace();
+		}catch(IllegalArgumentException e) {
+			graph = new Graph("resources/movies.txt", "/");
+			try{
+				toParse = Queries.filmQuery(db, graph, pelicula);
+				toInsert += ServeHtml.parseIterable(toParse);
+			}catch(Exception e2){
+	    		toInsert = "Pelicula no encontrada";
+	    		e.printStackTrace();
+			}
 		}
     	System.out.println(toInsert);
     	return ServeHtml.serveHtml(ServeHtml.makeFile(fileName),toInsert);
@@ -119,8 +128,18 @@ public class Main {
     	try {
     		toParse = Queries.actorQuery(db, graph, name, surname);
     		toInsert += ServeHtml.parseIterable(toParse);
-    	}catch(IllegalArgumentException e){
-    		toInsert = "No existen entradas para ese actor";
+    	}catch(NoSuchFieldException e){
+    		toInsert = "Actor no encontrado";
+    		e.printStackTrace();
+		}catch(IllegalArgumentException e) {
+			graph = new Graph("resources/movies.txt", "/");
+			try{
+				toParse = Queries.actorQuery(db, graph, name, surname);
+				toInsert += ServeHtml.parseIterable(toParse);
+			}catch(Exception e2){
+	    		toInsert = "Actor no encontrado";
+	    		e.printStackTrace();
+			}
 		}
     	
     	return ServeHtml.serveHtml(ServeHtml.makeFile(fileName),toInsert);
@@ -137,11 +156,22 @@ public class Main {
 		response.type("text/html");
 		toInsert = "<h1>La distancia entre " + at1 + " y " + at2 + "es de:";
 		try {
-    		PathFinder pf = Queries.distanceQuery(graph, at1);
+			PathFinder pf = Queries.distanceQuery(graph, at1);
     		toInsert += pf.distanceTo(at2) + "</h1></br>";
     		toInsert += ServeHtml.parseIterable(pf.pathTo(at2));
-		}catch(IllegalArgumentException e){
+    	}catch(NoSuchFieldException e){
     		toInsert = "No existen esos nodos, o no ha usado el formato adecuado";
+    		e.printStackTrace();
+		}catch(IllegalArgumentException e) {
+			graph = new Graph("resources/movies.txt", "/");
+			try{
+				PathFinder pf = Queries.distanceQuery(graph, at1);
+	    		toInsert += pf.distanceTo(at2) + "</h1></br>";
+	    		toInsert += ServeHtml.parseIterable(pf.pathTo(at2));
+			}catch(Exception e2){
+				toInsert = "No existen esos nodos, o no ha usado el formato adecuado";
+	    		e.printStackTrace();
+			}	
 		}
 		
     	return ServeHtml.serveHtml(ServeHtml.makeFile(fileName),toInsert);
@@ -167,10 +197,6 @@ public class Main {
  	// PostgreSQL default is to auto-commit (1 transaction / statement execution)
          // Set it to false to improve performance
  	connection.setAutoCommit(false);
- 	
- 	
-    //connection = DriverManager.getConnection("jdbc:sqlite:sample_graph.db");
-    //connection.setAutoCommit(false);
     
  	// Create data structures
  	graph = new Graph();
@@ -192,7 +218,7 @@ public class Main {
  			// This code only works for PostgreSQL
  			statement.executeUpdate("drop table if exists films");
  			statement.executeUpdate("create table films (title text, year int)");
- 			
+
  			statement.executeUpdate("drop table if exists actors");
  			statement.executeUpdate("create table actors (name text, surname text)");
  			/////
@@ -203,7 +229,6 @@ public class Main {
 
  			String s;
  			while ((s = br.readLine()) != null) {
- 				System.out.println(s);
 
 			    // Tokenize the film name and then the actors, separated by "/"
 			    StringTokenizer tokenizer = new StringTokenizer(s, "/");
@@ -213,7 +238,7 @@ public class Main {
 			    if(!graph.hasVertex(film)) {
 			    	db.insertFilm(film);
 			    }
-
+			    
 			    // Now get actors and insert them
 			    while (tokenizer.hasMoreTokens()) {
 			    	String actor = tokenizer.nextToken();
@@ -231,18 +256,6 @@ public class Main {
 			    ////
 			}
 
- 	        // print out graph
- 	        //StdOut.println(graph);
-
- 	        // print out graph again by iterating over vertices and edges
- 	        /*for (String v : graph.vertices()) {
- 	            StdOut.print(v + ": ");
- 	            for (String w : graph.adjacentTo(v)) {
- 	                StdOut.print(w + " ");
- 	            }
- 	            StdOut.println();
- 	        }*/
-	        //input.close();
  		}
  		System.out.println("File Uploaded!");
 		return ServeHtml.serveHtml(ServeHtml.makeFile("form.html"), "<h1>File succesfully updated</h1>");
@@ -264,8 +277,6 @@ public class Main {
  		get("/css.css", Main::serveCss);
  		get("/header.jpg", Main::serveImage);
     	
- 		//get("/film/:name", (req,res) -> Queries.filmQuery(graph, req.params(":name"))); 
- 		//get("/actor/:name", (req,res) -> Queries.actorQuery(graph, req.params(":name")));
  	
     }
 
