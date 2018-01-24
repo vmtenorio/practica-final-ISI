@@ -176,6 +176,7 @@ public class Main {
  	// Creates table and stores uploaded file in a two-columns table
     
  	post("/upload", (req, res) -> {
+ 		System.out.println("\n\n LLega1 \n\n");
  		req.attribute("org.eclipse.jetty.multipartConfig", new MultipartConfigElement("/tmp"));
  		String result = "File uploaded!";
  		try (InputStream input = req.raw().getPart("uploaded_films_file").getInputStream()) { 
@@ -188,7 +189,8 @@ public class Main {
  			// This code only works for PostgreSQL
  			statement.executeUpdate("drop table if exists films");
  			statement.executeUpdate("create table films (title text, year int)");
- 			
+
+ 	 		System.out.println("\n\n LLega2 \n\n");
  			statement.executeUpdate("drop table if exists actors");
  			statement.executeUpdate("create table actors (name text, surname text)");
  			/////
@@ -197,6 +199,7 @@ public class Main {
  			InputStreamReader isr = new InputStreamReader(input);
  			BufferedReader br = new BufferedReader(isr);
 
+ 	 		System.out.println("\n\n LLega3 \n\n");
  			String s;
  			while ((s = br.readLine()) != null) {
 
@@ -209,6 +212,7 @@ public class Main {
 			    	db.insertFilm(film);
 			    }
 
+		 		System.out.println("\n\n LLega6 \n\n");
 			    // Now get actors and insert them
 			    while (tokenizer.hasMoreTokens()) {
 			    	String actor = tokenizer.nextToken();
@@ -227,6 +231,7 @@ public class Main {
 			}
 
  		}
+ 		System.out.println("\n\n LLega5 \n\n");
  		System.out.println("File Uploaded!");
 		return ServeHtml.serveHtml(ServeHtml.makeFile("form.html"), "<h1>File succesfully updated</h1>");
 	    });
