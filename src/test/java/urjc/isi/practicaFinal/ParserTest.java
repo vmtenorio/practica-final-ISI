@@ -55,8 +55,8 @@ public class ParserTest {
 	// Camino [1, 2, 3]
 	@Test (expected=NullPointerException.class)
 	public void testNullActorName() {
-		String film = null;
-		Parser.getActorName(film);
+		String actor = null;
+		Parser.getActorName(actor);
 	}
 	
 	// Camino [1, 2, 4, 5]
@@ -77,8 +77,8 @@ public class ParserTest {
 	// Camino [1, 2, 3]
 	@Test (expected=NullPointerException.class)
 	public void testNullActorSurname() {
-		String film = null;
-		Parser.getActorSurname(film);
+		String actor = null;
+		Parser.getActorSurname(actor);
 	}
 	
 	// Camino [1, 2, 4, 5]
