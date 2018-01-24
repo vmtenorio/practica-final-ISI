@@ -22,9 +22,12 @@ public class Queries {
 		}
 	}
 	
-	public static PathFinder distanceQuery (Graph g, String object1) {
-
-		return new PathFinder(g, object1);
+	public static PathFinder distanceQuery (Database db, Graph g, String object1, String object2) throws NoSuchFieldException {
+		if (db.filmIsInDB(object1) && db.filmIsInDB(object2)) {
+			return new PathFinder(g, object1);
+		} else {
+			throw new NoSuchFieldException("Objects not found!");
+		}
 	}
 	
 	public static Iterable<String> yearQuery (Database db, int year) {

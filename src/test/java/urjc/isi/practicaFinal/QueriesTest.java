@@ -57,31 +57,31 @@ public class QueriesTest {
         }
 	}
 
-	@Test (expected=IllegalArgumentException.class)
-	public void testFilmNoEncontrada () throws SQLException {
+	@Test (expected=NoSuchFieldException.class)
+	public void testFilmNoEncontrada () throws SQLException, NoSuchFieldException {
 		String film = "HOLA		(1111)";
 		db.insertFilm("101 Dalmatians (1996)");
 		Queries.filmQuery(db, g, film);
 	}
 
-	@Test (expected=IllegalArgumentException.class)
-	public void testActorNoEncontrado () throws SQLException {
+	@Test (expected=NoSuchFieldException.class)
+	public void testActorNoEncontrado () throws SQLException, NoSuchFieldException {
 		String name = "Hilda";
 		String surname = "Braid";
 		db.insertActor("Sibaldi, Stefano");
 		Queries.actorQuery(db, g, name, surname);
 	}
 
-	@Test (expected=IllegalArgumentException.class)
-	public void testFilmNull () throws SQLException {
+	@Test (expected=NullPointerException.class)
+	public void testFilmNull () throws SQLException, NoSuchFieldException {
 		db.insertFilm("101 Dalmatians (1996)");
 		db.insertFilm("12 Dogs of Christmas, The (2005)");
 		String film = null;
 		Queries.filmQuery(db, g, film);
 	}
 
-	@Test (expected=IllegalArgumentException.class)
-	public void testNameActorNull() throws SQLException {
+	@Test (expected=NullPointerException.class)
+	public void testNameActorNull() throws SQLException, NoSuchFieldException {
 		db.insertActor("Braid, Hilda");
 		db.insertActor("Hicks, Adam");
 		String name = null;
@@ -89,8 +89,8 @@ public class QueriesTest {
 		Queries.actorQuery(db, g, name, surname);
 	}
 
-	@Test (expected=IllegalArgumentException.class)
-	public void testSurnameActorNull() throws SQLException {
+	@Test (expected=NullPointerException.class)
+	public void testSurnameActorNull() throws SQLException, NoSuchFieldException {
 		db.insertActor("Braid, Hilda");
 		db.insertActor("Hicks, Adam");
 		String name = "Hilda";
@@ -99,7 +99,7 @@ public class QueriesTest {
 	}
 
 	@Test
-	public void testFilmHappyPath () throws SQLException {
+	public void testFilmHappyPath () throws SQLException, NoSuchFieldException {
 		db.insertFilm("101 Dalmatians (1996)");
 		db.insertFilm("12 Dogs of Christmas, The (2005)");
 		g.addEdge("101 Dalmatians (1996)", "Braid, Hilda");
@@ -111,7 +111,7 @@ public class QueriesTest {
 	}
 
 	@Test
-	public void testActorHappyPath () throws SQLException {
+	public void testActorHappyPath () throws SQLException, NoSuchFieldException {
 		db.insertActor("Braid, Hilda");
 		db.insertActor("Hicks, Adam");
 		g.addEdge("101 Dalmatians (1996)", "Braid, Hilda");
@@ -124,7 +124,7 @@ public class QueriesTest {
 	}
 
 	@Test (expected=IllegalArgumentException.class)
-	public void testFilmNoEncontradaEnGrafo () throws SQLException {
+	public void testFilmNoEncontradaEnGrafo () throws SQLException, NoSuchFieldException {
 		db.insertFilm("101 Dalmatians (1996)");
 		db.insertFilm("12 Dogs of Christmas, The (2005)");
 		String film = "101 Dalmatians (1996)";
@@ -132,7 +132,7 @@ public class QueriesTest {
 	}
 
 	@Test (expected=IllegalArgumentException.class)
-	public void testActorNoEncontradoEnGrafo () throws SQLException {
+	public void testActorNoEncontradoEnGrafo () throws SQLException, NoSuchFieldException {
 		db.insertActor("Braid, Hilda");
 		db.insertActor("Hicks, Adam");
 		String name = "Hilda";
@@ -140,8 +140,8 @@ public class QueriesTest {
 		Queries.actorQuery(db, g, name, surname);
 	}
 
-	@Test (expected=IllegalArgumentException.class)
-	public void testActorChangeName () throws SQLException {
+	@Test (expected=NoSuchFieldException.class)
+	public void testActorChangeName () throws SQLException, NoSuchFieldException {
 		db.insertActor("Braid, Hilda");
 		g.addEdge("101 Dalmatians (1996)", "Braid, Hilda");
 		String name = "Braid";
@@ -149,8 +149,8 @@ public class QueriesTest {
 		Queries.actorQuery(db, g, name, surname);
 	}
 
-	@Test (expected=IllegalArgumentException.class)
-	public void testFilmWithYear () throws SQLException {
+	@Test (expected=NoSuchFieldException.class)
+	public void testFilmWithYear () throws SQLException, NoSuchFieldException {
 		db.insertFilm("12 Dogs of Christmas, The (2005)");
 		g.addEdge("12 Dogs of Christmas, The (2005)", "Hicks, Adam");
 		String film = "12 Dogs of Christmas, The (2005)";
