@@ -324,5 +324,12 @@ public class DatabaseTest {
 		assertFalse(db.actorIsInDB(actor));
 	}
 	
+	// Camino [1,2]
+	@Test (expected=NullPointerException.class)
+	public void testFilmNullIsInDB() throws SQLException {
+		db.filmIsInDB(null);
+		
+	}
+	
 
 }

@@ -42,6 +42,7 @@ public class Database {
 			}
 		} catch (SQLException e) {
 		    System.out.println(e.getMessage());
+		    result = "";
 		}
 		return !result.equals("");
 	}
@@ -72,6 +73,7 @@ public class Database {
 			}
 		} catch (SQLException e) {
 		    System.out.println(e.getMessage());
+		    result = "";
 		}
 		return !result.equals("");
 	}
