@@ -47,7 +47,7 @@ public class Database {
 		
 		String name = Parser.getActorName(actor);
 		String surname = Parser.getActorSurname(actor);
-		String sql = "SELECT * FROM films WHERE name=? AND surname=?";
+		String sql = "SELECT * FROM actors WHERE name=? AND surname=?";
 		boolean toReturn;
 		
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {

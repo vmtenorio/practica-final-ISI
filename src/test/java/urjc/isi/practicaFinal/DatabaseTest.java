@@ -291,5 +291,21 @@ public class DatabaseTest {
 	    }
 	    fail ("NullPointerException expected");
 	}
+	
+	@Test
+	public void testFilmIsInDB() throws SQLException {
+		db.insertFilm("Disney's Mouseworks Spaceship (1999)");
+		db.insertFilm("Dr. Goldfoot and the Bikini Machine (1965)");
+		String film = "Dr. Goldfoot and the Bikini Machine (1965)";
+		assertTrue(db.filmIsInDB(film));
+	}
+	
+	@Test
+	public void testActorIsInDB() throws SQLException {
+		db.insertActor("Feldman, Corey");
+		db.insertActor("Celis, Fernando (I)");
+		String actor = "Feldman, Corey";
+		assertTrue(db.actorIsInDB(actor));
+	}
 
 }
