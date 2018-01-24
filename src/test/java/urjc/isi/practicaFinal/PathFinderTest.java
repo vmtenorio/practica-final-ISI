@@ -29,9 +29,24 @@ public class PathFinderTest {
 		assertEquals("Camino a un obejeto que no esta en el grafo", pf.pathTo("ASDF").toString(), "");
 	}
 	
+	//CAMINOS GRAFO: PATHFINDER
+	
+	// Camino: [1,2]
 	@Test (expected=NullPointerException.class)
-	public void testPathFinderNull () {
+	public void testPathFinderNullString () {
 		pf = new PathFinder(g, null);
 	}
+	
+	// Camino: [1,2]
+	@Test (expected=NullPointerException.class)
+	public void testPathFinderNullGraph () {
+		pf = new PathFinder(null, "ATL");
+	}
 
+	// Camino: [9,10,11,13,15,9]
+	@Test 
+	public void testPathFinderFor () {
+		pf = new PathFinder(g, "JFK");
+		assertEquals("Calcula mal el camino", pf.pathTo("DFW").toString(), "JFK ORD DFW ");
+	}
 }
