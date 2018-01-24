@@ -44,4 +44,12 @@ public class ParserTest {
 		String actor = "Braid, Hilda";
 		assertEquals(Parser.getActorName(actor), "Hilda");
 	}
+	
+	// GRAFO getActorSurname
+	// Camino [1, 2, 4, 6, 8]
+	@Test 
+	public void testHappyPathGetActorSurname() {
+		String actor = "Braid, Hilda";
+		assertEquals(Parser.getActorSurname(actor), "Braid");
+	}
 }
