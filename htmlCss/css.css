@@ -132,6 +132,15 @@ h3
 	color:           #94C258;
 }
 
+h4
+{
+	margin:          0;
+	font-weight:     normal;
+	color:           #000;
+	font-size:       2em;
+	font-family:Times;
+}
+
 #footer
 {
 	margin:          0 auto;
