@@ -67,51 +67,7 @@ public class DatabaseTest {
             System.err.println(e);
         }
 	}
-	
-	//Test para selectActor
-	@Test
-	public void happyPathSelectActor() throws SQLException {	
-		db.insertActor("Feldman, Corey");
-		db.insertActor("Celis, Fernando (I)");
-		db.insertActor("Eggar, Samantha");
-		name_complete = Database.selectActor("Fernando (I)", "Celis");
-			
-		assertEquals("Celis, Fernando (I)", name_complete);
-	}
-	
-	@Test
-	public void testWrongParamOrderSelectActor() throws SQLException {	
-		db.insertActor("Feldman, Corey");
-		db.insertActor("Celis, Fernando (I)");
-		db.insertActor("Eggar, Samantha");
-		name_complete = Database.selectActor("Celis","Fernando (I)");
-			
-		assertEquals("", name_complete);
-	}
-		
-	@Test
-	public void testNoNameFoundSelectActor() throws SQLException {
-		db.insertActor("Feldman, Corey");
-		name_complete = Database.selectActor("surname", "Celis");
-		
-		assertEquals("", name_complete);
-	}
-		
-	@Test
-	public void testForNullElementSelectActor() throws SQLException {
-				
-		try {
-			db.insertActor(null);
-			name_complete = Database.selectActor("surname", "Celis");
-			assertEquals("", name_complete);
-		} catch (NullPointerException e) {
-		    return;
-		}
-		fail ("NullPointerException expected");
-	}
-	
-	
-	
+
 	//Test para insertFilm
 	@Test
 	public void happyPathInsertFilm() throws SQLException {
@@ -390,19 +346,51 @@ public class DatabaseTest {
 		
 		assertEquals("", film_complete);
 	}
-			
-	@Test
+	
+	// Camino [1 5]
+	@Test(expected=NullPointerException.class)
 	public void testForNullElementSelectFilmTitle() throws SQLException {
-		try {
-			db.insertFilm(null);
-			film_complete = Database.selectFilmTitle("Dr. Goldfoot and the Bikini Machine");
-			
-			assertEquals("", film_complete);
-		} catch (NullPointerException e) {
-		     return;
-		}
-		fail ("NullPointerException expected");
+		db.insertFilm("Citizen Kane(1941)");
+		film_complete = Database.selectFilmTitle(null);
 	}	
 		
+	/*
+	Test para selectActor
+	 */
 	
+	@Test
+	public void happyPathSelectActor() throws SQLException {	
+		db.insertActor("Feldman, Corey");
+		db.insertActor("Celis, Fernando (I)");
+		db.insertActor("Eggar, Samantha");
+		name_complete = Database.selectActor("Fernando (I)", "Celis");
+			
+		assertEquals("Celis, Fernando (I)", name_complete);
+	}
+		
+	@Test
+	public void testWrongParamOrderSelectActor() throws SQLException {	
+		db.insertActor("Feldman, Corey");
+		db.insertActor("Celis, Fernando (I)");
+		db.insertActor("Eggar, Samantha");
+		name_complete = Database.selectActor("Celis","Fernando (I)");
+			
+		assertEquals("", name_complete);
+	}
+			
+	@Test
+	public void testNoNameFoundSelectActor() throws SQLException {
+		db.insertActor("Feldman, Corey");
+		name_complete = Database.selectActor("surname", "Celis");
+		
+		assertEquals("", name_complete);
+	}
+		
+	//Camino [1 5]
+	@Test(expected=NullPointerException.class)
+	public void testForNullElementSelectActor() throws SQLException {		
+		db.insertActor("Feldman, Corey");
+		name_complete = db.selectActor(null, null);
+	}
+			
 }
