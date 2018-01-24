@@ -293,27 +293,11 @@ public class DatabaseTest {
 	}
 	
 	@Test
-	public void testFilmIsInDB() throws SQLException {
-		db.insertFilm("Disney's Mouseworks Spaceship (1999)");
-		db.insertFilm("Dr. Goldfoot and the Bikini Machine (1965)");
-		String film = "Dr. Goldfoot and the Bikini Machine (1965)";
-		assertTrue(db.filmIsInDB(film));
-	}
-	
-	@Test
 	public void testActorIsInDB() throws SQLException {
 		db.insertActor("Feldman, Corey");
 		db.insertActor("Celis, Fernando (I)");
 		String actor = "Feldman, Corey";
 		assertTrue(db.actorIsInDB(actor));
-	}
-	
-	@Test
-	public void testFilmIsNotInDB() throws SQLException {
-		db.insertFilm("Disney's Mouseworks Spaceship (1999)");
-		db.insertFilm("Dr. Goldfoot and the Bikini Machine (1965)");
-		String film = "ASDF (1965)";
-		assertFalse(db.filmIsInDB(film));
 	}
 	
 	@Test
@@ -329,6 +313,40 @@ public class DatabaseTest {
 	public void testFilmNullIsInDB() throws SQLException {
 		db.filmIsInDB(null);
 		
+	}
+	
+	// Camino [1,4,5,7,8,9], [8,9,8], [9,8,10]
+	@Test
+	public void testFilmIsInDB() throws SQLException {
+		db.insertFilm("Disney's Mouseworks Spaceship (1999)");
+		db.insertFilm("Dr. Goldfoot and the Bikini Machine (1965)");
+		String film = "Dr. Goldfoot and the Bikini Machine (1965)";
+		assertTrue(db.filmIsInDB(film));
+	}
+	
+	@Test
+	public void testFilmIsNotInDB() throws SQLException {
+		db.insertFilm("Disney's Mouseworks Spaceship (1999)");
+		db.insertFilm("Dr. Goldfoot and the Bikini Machine (1965)");
+		String film = "ASDF (1965)";
+		assertFalse(db.filmIsInDB(film));
+	}
+	
+	// Camino [1,3,5,7,8,9]
+	@Test
+	public void testFilmIncorrectName() throws SQLException {
+		db.insertFilm("Disney's Mouseworks Spaceship");
+		String film = "Disney's Mouseworks Spaceship";
+		assertTrue(db.filmIsInDB(film));
+	}
+	
+	//Camino [9,8,9]
+	@Test
+	public void testFilmTwoTimes() throws SQLException {
+		db.insertFilm("Dr. Goldfoot and the Bikini Machine (1965)");
+		db.insertFilm("Dr. Goldfoot and the Bikini Machine (1965)");
+		String film = "Dr. Goldfoot and the Bikini Machine (1965)";
+		assertTrue(db.filmIsInDB(film));
 	}
 	
 
