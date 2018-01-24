@@ -22,7 +22,12 @@ public class Database {
 	
 	public static boolean filmIsInDB(String film) {
 		
-		String title = Parser.getFilmTitle(film);		
+		String title;
+		try {
+			title = Parser.getFilmTitle(film);
+		} catch (IllegalArgumentException e) {
+			title = film;
+		}
 		String sql = "SELECT * FROM films WHERE title=?";
 
 		String result = new String();
@@ -43,8 +48,14 @@ public class Database {
 	
 	public static boolean actorIsInDB(String actor) {
 		
-		String name = Parser.getActorName(actor);
-		String surname = Parser.getActorSurname(actor);
+		String name, surname;
+		try {
+			name = Parser.getActorName(actor);
+			surname = Parser.getActorSurname(actor);
+		}catch (IllegalArgumentException e) {
+			name = actor;
+			surname = "";
+		}
 		String sql = "SELECT * FROM actors WHERE name=? AND surname=?";
 		
 		String result = new String();
@@ -115,7 +126,13 @@ public class Database {
 			//conn.commit();
 
 			while(rs.next()) {
-				result += rs.getString("surname") + ", " + rs.getString("name");
+				String surnameDb = rs.getString("surname");
+				String nameDb = rs.getString("name");
+				if(surname.equals("")) {
+					result += nameDb;
+				}else {
+					result += surnameDb + ", " + nameDb;
+				}
 			}
 		} catch (SQLException e) {
 		    System.out.println(e.getMessage());
@@ -146,11 +163,15 @@ public class Database {
     }
 	
 	public void insertActor(String actor) {
+		String name, surname;
 		String sql = "INSERT INTO actors(name, surname) VALUES(?,?)";
-	
-		String name = Parser.getActorName(actor);
-		String surname = Parser.getActorSurname(actor);
-		
+		try {
+			name = Parser.getActorName(actor);
+			surname = Parser.getActorSurname(actor);
+		}catch (IllegalArgumentException e) {
+			name = actor;
+			surname = "";
+		}
 		try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
 			pstmt.setString(1, name);
 			pstmt.setString(2, surname);

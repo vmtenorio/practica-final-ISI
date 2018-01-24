@@ -270,16 +270,16 @@ public class DatabaseTest {
 		assertEquals("Celis", rs.getString("surname"));
 	}
 	
-	@Test
-	public void testForNoElementInsertActor() throws SQLException {
-		try {
-			db.insertActor("");
-			ResultSet rs = statement.executeQuery("select * from actors");
-	    } catch (IllegalArgumentException e) {
-	       return;
-	    }
-	    fail ("IllegalArgumentException expected");
-	}
+//	@Test
+//	public void testForNoElementInsertActor() throws SQLException {
+//		try {
+//			db.insertActor("");
+//			ResultSet rs = statement.executeQuery("select * from actors");
+//	    } catch (IllegalArgumentException e) {
+//	       return;
+//	    }
+//	    fail ("IllegalArgumentException expected");
+//	}
 	
 	@Test
 	public void testForNullElementInsertActor() throws SQLException {
