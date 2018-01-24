@@ -234,5 +234,25 @@ public class QueriesTest {
 		assertEquals(Queries.distanceQuery (db, g, object1, object2).distanceTo(object2), 4);
 	}
 	
+	//Camino [1, 2, 4, 5]
+	@Test (expected=NullPointerException.class)
+	public void testDistanceNullGraph () throws SQLException, NoSuchFieldException {
+		db.insertActor("Braid, Hilda");
+		db.insertActor("Hicks, Adam");
+		db.insertActor("Laurie, Hugh");
+		g=null;
+		String object1 = "Laurie, Hugh";
+		String object2 = "Hicks, Adam";
+		assertEquals(Queries.distanceQuery (db, g, object1, object2).distanceTo(object2), 4);
+	}		
 	
+	
+	//Camino [1, 7, 8]
+	@Test (expected=NoSuchFieldException.class)
+	public void testDistanceNoSuchField () throws SQLException, NoSuchFieldException {
+		db.insertActor("Laurie, Hugh");
+		String object1 = "Laurie, Hugh";
+		String object2 = "Hicks, Adam";
+		Queries.distanceQuery (db, g, object1, object2);
+	}
 }
