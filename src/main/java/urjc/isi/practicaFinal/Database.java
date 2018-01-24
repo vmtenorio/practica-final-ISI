@@ -29,7 +29,7 @@ public class Database {
 			pstmt.setString(1, title);
 			ResultSet rs = pstmt.executeQuery();
 			rs.next();
-			if (rs.getString("title") == "") {
+			if (rs.getString("title").equals("")) {
 				return false;
 			}else {
 				return true;
@@ -51,7 +51,7 @@ public class Database {
 			pstmt.setString(1, surname);
 			ResultSet rs = pstmt.executeQuery();
 			rs.next(); //Solo llamo una vez a next porque con que este devuelve true
-			if (rs.getString("title") == "") {
+			if (rs.getString("title").equals("")) {
 				return false;
 			}else {
 				return true;
