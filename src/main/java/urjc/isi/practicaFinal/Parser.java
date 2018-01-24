@@ -18,7 +18,7 @@ public class Parser {
 		if (m.matches()) {
 			return m.group(1);
 		} else {
-			throw new IllegalArgumentException("La película no tiene el formato Título (año)");
+			throw new IllegalArgumentException("La película no tiene el formato Título (año). Es " + film);
 		}
 	}
 	
@@ -35,7 +35,7 @@ public class Parser {
 		if (m.matches()) {
 			return Integer.parseInt(m.group(2));
 		} else {
-			throw new IllegalArgumentException("La película no tiene el formato Título (año)");
+			throw new IllegalArgumentException("La película no tiene el formato Título (año). Es " + film);
 		}
 	}
 	
@@ -51,7 +51,7 @@ public class Parser {
 		if (m.matches()) {
 			return m.group(2);
 		} else {
-			throw new IllegalArgumentException("El actor no tiene el formato Apellido, Nombre");
+			throw new IllegalArgumentException("El actor no tiene el formato Apellido, Nombre. Es " + actor);
 		}
 	}
 	
@@ -67,7 +67,7 @@ public class Parser {
 		if (m.matches()) {
 			return m.group(1);
 		} else {
-			throw new IllegalArgumentException("El actor no tiene el formato Apellido, Nombre");
+			throw new IllegalArgumentException("El actor no tiene el formato Apellido, Nombre. Es " + actor);
 		}
 	}
 
