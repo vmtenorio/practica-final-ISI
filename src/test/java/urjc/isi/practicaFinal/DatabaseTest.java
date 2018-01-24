@@ -67,54 +67,7 @@ public class DatabaseTest {
             System.err.println(e);
         }
 	}
-	
-	
-	
-	
-	//Tests para selectFilmYear
-	@Test
-	public void happyPathSelectFilmYear() throws SQLException {
-		db.insertFilm("Disney's Mouseworks Spaceship (1999)");
-		db.insertFilm("Dr. Goldfoot and the Bikini Machine (1999)");
-		result = Database.selectFilmYear(1999);
-			
-		ResultSet rs = statement.executeQuery("select * from films");
-		Iterator<String> iterable = result.iterator();
-
-		assertEquals("Dr. Goldfoot and the Bikini Machine", iterable.next());
-		assertEquals("Disney's Mouseworks Spaceship", iterable.next());
-	}
 		
-	@Test
-	public void testForNoElementSelectFilmYear() throws SQLException {
-		try {
-			db.insertFilm("");
-			result = Database.selectFilmYear(1999);
-			
-			ResultSet rs = statement.executeQuery("select * from films");
-			Iterator<String> iterable = result.iterator();
-
-			assertEquals("", iterable.next());
-		 } catch (NoSuchElementException e) {
-		    return;
-		 }
-		 fail ("NoSuchElementException expected");
-	}
-		
-	@Test
-	public void testForNullElementSelectFilmYear() throws SQLException {
-		try {
-			db.insertFilm(null);
-			result = Database.selectFilmYear(1999);
-			ResultSet rs = statement.executeQuery("select * from actors");
-		} catch (NullPointerException e) {
-		    return;
-		}
-		fail ("NullPointerException expected");
-		}
-	
-	
-	
 	//Test para selectFilmTitle
 	@Test
 	public void happyPathSelectFilmTitle() throws SQLException {
@@ -250,8 +203,6 @@ public class DatabaseTest {
 	    fail ("NullPointerException expected");
 	}
 	
-	
-	
 	//Test para insertActor
 	@Test
 	public void happyPathInsertActor() throws SQLException {
@@ -291,6 +242,10 @@ public class DatabaseTest {
 	    }
 	    fail ("NullPointerException expected");
 	}
+	
+	/*
+	 * Test para Film is in
+	 */
 	
 	// Camino [1,2]
 	@Test (expected=NullPointerException.class)
@@ -332,48 +287,107 @@ public class DatabaseTest {
 		String film = "Dr. Goldfoot and the Bikini Machine (1965)";
 		assertTrue(db.filmIsInDB(film));
 	}
-	///
+	
+	/*
+	 * Test para ActorIsIn
+	 */
 	
 	// Camino [1,2]
-		@Test (expected=NullPointerException.class)
-		public void testActorNullIsInDB() throws SQLException {
-			db.actorIsInDB(null);
+	@Test (expected=NullPointerException.class)
+	public void testActorNullIsInDB() throws SQLException {
+		db.actorIsInDB(null);
+		
+	}
+	
+	// Camino [1,4,5,7,8,9], [8,9,8], [9,8,10]
+	@Test
+	public void testActorIsInDB() throws SQLException {
+		db.insertActor("Feldman, Corey");
+		db.insertActor("Celis, Fernando (I)");
+		String actor = "Feldman, Corey";
+		assertTrue(db.actorIsInDB(actor));
+	}
+		
+
+	@Test
+	public void testActorIsNotInDB() throws SQLException {
+		db.insertActor("Feldman, Corey");
+		db.insertActor("Celis, Fernando (I)");
+		String actor = "Feldman, Asdf";
+		assertFalse(db.actorIsInDB(actor));
+	}
+	
+	// Camino [1,3,5,7,8,9]
+	@Test
+	public void testActorIncorrectName() throws SQLException {
+		db.insertActor("Pepe Perez");
+		String actor = "Pepe Perez";
+		assertTrue(db.actorIsInDB(actor));
+	}
+	
+	//Camino [9,8,9]
+	@Test
+	public void testActorTwoTimes() throws SQLException {
+		db.insertActor("Perez, Pepe");
+		db.insertActor("Perez, Pepe");
+		String actor = "Perez, Pepe";
+		assertTrue(db.actorIsInDB(actor));
+	}
+	
+		/*
+		 * Tests para selectFilmYear
+		 */
+		
+		// Camino [1 2 4 6 8] [6 7 6] [7 6 8]
+		@Test
+		public void happyPathSelectFilmYear() throws SQLException {
+			db.insertFilm("Disney's Mouseworks Spaceship (1999)");
+			db.insertFilm("Dr. Goldfoot and the Bikini Machine (1999)");
+			result = Database.selectFilmYear(1999);
+				
+			ResultSet rs = statement.executeQuery("select * from films");
+			Iterator<String> iterable = result.iterator();
+
+			assertEquals("Dr. Goldfoot and the Bikini Machine", iterable.next());
+			assertEquals("Disney's Mouseworks Spaceship", iterable.next());
+		}
+		
+		// Camino para [7 6 7]
+		@Test
+		public void SelectFilmYearTwice() throws SQLException {
+			db.insertFilm("Disney's Mouseworks Spaceship (1999)");
+			db.insertFilm("Disney's Mouseworks Spaceship (1999)");
+			result = Database.selectFilmYear(1999);
+				
+			ResultSet rs = statement.executeQuery("select * from films");
+			Iterator<String> iterable = result.iterator();
+
+			assertEquals("Disney's Mouseworks Spaceship", iterable.next());
+			assertEquals("Disney's Mouseworks Spaceship", iterable.next());
+		}
+		
+		// Camino [1 2 4 6]
+		@Test(expected=NullPointerException.class)
+		public void testForNullElementSelectFilmYear() throws SQLException {
+			db.insertFilm(null);
+			result = Database.selectFilmYear(1999);
+			ResultSet rs = statement.executeQuery("select * from actors");
+		}
+		
+		@Test
+		public void testForNoElementSelectFilmYear() throws SQLException {
+			try {
+				db.insertFilm("");
+				result = Database.selectFilmYear(1999);
+				
+				ResultSet rs = statement.executeQuery("select * from films");
+				Iterator<String> iterable = result.iterator();
+
+				assertEquals("", iterable.next());
+			 } catch (NoSuchElementException e) {
+			    return;
+			 }
+			 fail ("NoSuchElementException expected");
+		}
 			
-		}
-		
-		// Camino [1,4,5,7,8,9], [8,9,8], [9,8,10]
-		@Test
-		public void testActorIsInDB() throws SQLException {
-			db.insertActor("Feldman, Corey");
-			db.insertActor("Celis, Fernando (I)");
-			String actor = "Feldman, Corey";
-			assertTrue(db.actorIsInDB(actor));
-		}
-		
-
-		@Test
-		public void testActorIsNotInDB() throws SQLException {
-			db.insertActor("Feldman, Corey");
-			db.insertActor("Celis, Fernando (I)");
-			String actor = "Feldman, Asdf";
-			assertFalse(db.actorIsInDB(actor));
-		}
-		
-		// Camino [1,3,5,7,8,9]
-		@Test
-		public void testActorIncorrectName() throws SQLException {
-			db.insertActor("Pepe Perez");
-			String actor = "Pepe Perez";
-			assertTrue(db.actorIsInDB(actor));
-		}
-		
-		//Camino [9,8,9]
-		@Test
-		public void testActorTwoTimes() throws SQLException {
-			db.insertActor("Perez, Pepe");
-			db.insertActor("Perez, Pepe");
-			String actor = "Perez, Pepe";
-			assertTrue(db.actorIsInDB(actor));
-		}
-
 }
