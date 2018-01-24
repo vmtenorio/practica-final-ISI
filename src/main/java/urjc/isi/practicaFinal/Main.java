@@ -105,7 +105,7 @@ public class Main {
     	
     	year = request.queryParams("fecha");    	
     	response.type("text/html");
-    	toInsert = "<h1>Las peliculas del año " + year + "son:</h1>";
+    	toInsert = "<h1>Las peliculas del año " + year + " son:</h1>";
     	try {
     		toParse = Queries.yearQuery(db, Integer.valueOf(year));
     		toInsert += ServeHtml.parseIterable(toParse);
@@ -125,10 +125,12 @@ public class Main {
 		surname = request.queryParams("apellidos");
 		response.type("text/html");
     	toInsert = "<h1>El actor/actriz: " + name + " " + surname + " sale en:</h1>";
+    	System.out.println(name + " " + surname);
     	try {
     		toParse = Queries.actorQuery(db, graph, name, surname);
     		toInsert += ServeHtml.parseIterable(toParse);
     	}catch(NoSuchFieldException e){
+    		System.out.println("Entra 1");
     		toInsert = "Actor no encontrado";
     		e.printStackTrace();
 		}catch(IllegalArgumentException e) {
@@ -137,6 +139,7 @@ public class Main {
 				toParse = Queries.actorQuery(db, graph, name, surname);
 				toInsert += ServeHtml.parseIterable(toParse);
 			}catch(Exception e2){
+	    		System.out.println("Entra 2");
 	    		toInsert = "Actor no encontrado";
 	    		e.printStackTrace();
 			}
@@ -154,21 +157,27 @@ public class Main {
     	at1 = request.queryParams("at1");
 		at2 = request.queryParams("at2");
 		response.type("text/html");
+		System.out.println("Llega internal error \n\n");
 		toInsert = "<h1>La distancia entre " + at1 + " y " + at2 + "es de:";
 		try {
+			System.out.println("Llega internal error 2\n\n");
 			PathFinder pf = Queries.distanceQuery(db, graph, at1, at2);
     		toInsert += pf.distanceTo(at2) + "</h1></br>";
     		toInsert += ServeHtml.parseIterable(pf.pathTo(at2));
     	}catch(NoSuchFieldException e){
+    		System.out.println("Llega internal error 3\n\n");
     		toInsert = "No existen esos nodos, o no ha usado el formato adecuado";
     		e.printStackTrace();
 		}catch(IllegalArgumentException e) {
+			System.out.println("Llega internal error 4\n\n");
 			graph = new Graph("resources/movies.txt", "/");
 			try{
+				System.out.println("Llega internal error 5\n\n");
 				PathFinder pf = Queries.distanceQuery(db, graph, at1, at2);
 	    		toInsert += pf.distanceTo(at2) + "</h1></br>";
 	    		toInsert += ServeHtml.parseIterable(pf.pathTo(at2));
 			}catch(Exception e2){
+				System.out.println("Llega internal error 6\n\n");
 				toInsert = "No existen esos nodos, o no ha usado el formato adecuado";
 	    		e.printStackTrace();
 			}	
@@ -235,7 +244,7 @@ public class Main {
 
 			    // First token is the film name(year)
 			    String film = tokenizer.nextToken();
-			    if(!graph.hasVertex(film)) {
+			    if(!db.filmIsInDB(film)) {
 			    	db.insertFilm(film);
 			    }
 			    
@@ -244,7 +253,7 @@ public class Main {
 			    	String actor = tokenizer.nextToken();
 			    	graph.addEdge(film, actor);
 			    	////
-			    	if (!graph.hasVertex(actor)) {
+			    	if (!db.actorIsInDB(actor)) {
 			    		db.insertActor(actor);
 			    	}
 			    	////
