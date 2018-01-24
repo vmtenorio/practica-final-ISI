@@ -156,4 +156,22 @@ public class QueriesTest {
 		String film = "12 Dogs of Christmas, The (2005)";
 		Queries.filmQuery(db, g, film);
 	}
+	
+	//Caminos: Grafo Queries
+	
+	//Camino [1, 2]
+	@Test (expected=SQLException.class)
+	public void testFilmSQLException () throws SQLException, NoSuchFieldException {
+		con = DriverManager.getConnection(null);
+        db = new Database(con);
+        Statement statement = db.getStatement();
+        statement.setQueryTimeout(30);  // set timeout to 30 sec.
+        statement.executeUpdate("drop table if exists actors");
+		db.insertFilm("12 Dogs of Christmas, The (2005)");
+		g.addEdge("12 Dogs of Christmas, The (2005)", "Hicks, Adam");
+		String film = "12 Dogs of Christmas, The (2005)";
+		Queries.filmQuery(db, g, film);
+	}
+	
+	
 }
