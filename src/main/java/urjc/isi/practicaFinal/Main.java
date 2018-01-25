@@ -140,7 +140,6 @@ public class Main {
     		toParse = Queries.actorQuery(db, graph, name, surname);
     		toInsert += ServeHtml.parseIterable(toParse);
     	}catch(NoSuchFieldException e){
-    		System.out.println("Entra 1");
     		toInsert = "Actor no encontrado";
     		e.printStackTrace();
 		}catch(IllegalArgumentException e) {
@@ -149,7 +148,6 @@ public class Main {
 				toParse = Queries.actorQuery(db, graph, name, surname);
 				toInsert += ServeHtml.parseIterable(toParse);
 			}catch(Exception e2){
-	    		System.out.println("Entra 2");
 	    		toInsert = "Actor no encontrado";
 	    		e.printStackTrace();
 			}
