@@ -68,104 +68,8 @@ public class DatabaseTest {
         }
 	}
 
-	//Test para insertFilm
-	@Test
-	public void happyPathInsertFilm() throws SQLException {
-		db.insertFilm("Disney's Mouseworks Spaceship (1999)");
-		db.insertFilm("Dr. Goldfoot and the Bikini Machine (1965)");
-		db.insertFilm("Doll's House, A (1973 I)");
-		
-		ResultSet rs = statement.executeQuery("select * from films");
-
-	    rs.next();
-	    assertEquals("Disney's Mouseworks Spaceship", rs.getString("title"));
-	    assertEquals("1999", rs.getString("year"));
-	    rs.next();
-	    assertEquals("Dr. Goldfoot and the Bikini Machine", rs.getString("title"));
-	    assertEquals("1965", rs.getString("year"));
-	}
-	
-	@Test
-	public void testNoYearInsertFilm() throws SQLException {
-		db.insertFilm("Disney's Mouseworks Spaceship");
-		
-		ResultSet rs = statement.executeQuery("select * from films");
-	    assertEquals("Disney's Mouseworks Spaceship", rs.getString("title"));
-	    assertEquals("0", rs.getString("year"));
-	}
-	
-	@Test
-	public void testForNoElementInsertFilm() throws SQLException {
-		db.insertFilm("");
-		
-		ResultSet rs = statement.executeQuery("select * from films");
-	    assertEquals("", rs.getString("title"));
-	    assertEquals("0", rs.getString("year"));
-	}
-	
-	@Test
-	public void testYearAtBegginingInsertFilm() throws SQLException {
-		db.insertFilm("(1999) Disney's Mouseworks Spaceship");
-		
-		ResultSet rs = statement.executeQuery("select * from films");
-	    assertEquals("(1999) Disney's Mouseworks Spaceship", rs.getString("title"));
-	    assertEquals("0", rs.getString("year"));
-	}
-	
-	@Test
-	public void testForNullElementInsertFilm() throws SQLException {
-		
-	    try {
-	    	db.insertFilm(null);
-			ResultSet rs = statement.executeQuery("select * from films");
-	    } catch (NullPointerException e) {
-	       return;
-	    }
-	    fail ("NullPointerException expected");
-	}
-	
-	//Test para insertActor
-	@Test
-	public void happyPathInsertActor() throws SQLException {
-			
-		db.insertActor("Feldman, Corey");
-		db.insertActor("Celis, Fernando (I)");
-		db.insertActor("Eggar, Samantha");
-			
-		ResultSet rs = statement.executeQuery("select * from actors");
-
-		rs.next();
-		assertEquals("Corey", rs.getString("name"));
-		assertEquals("Feldman", rs.getString("surname"));
-		rs.next();
-		assertEquals("Fernando (I)", rs.getString("name"));
-		assertEquals("Celis", rs.getString("surname"));
-	}
-	
-//	@Test
-//	public void testForNoElementInsertActor() throws SQLException {
-//		try {
-//			db.insertActor("");
-//			ResultSet rs = statement.executeQuery("select * from actors");
-//	    } catch (IllegalArgumentException e) {
-//	       return;
-//	    }
-//	    fail ("IllegalArgumentException expected");
-//	}
-	
-	@Test
-	public void testForNullElementInsertActor() throws SQLException {
-		try {
-			db.insertActor(null);
-			ResultSet rs = statement.executeQuery("select * from actors");
-	    } catch (NullPointerException e) {
-	       return;
-	    }
-	    fail ("NullPointerException expected");
-	}
-	
 	/*
-	 * Test para Film is in
+	 * Test para FilmIsIn
 	 */
 	
 	// Camino [1,2]
@@ -358,7 +262,10 @@ public class DatabaseTest {
 	Test para selectActor
 	 */
 	
-	@Test
+	
+	// Camino [1 2 4 6 7 8 10 11 6 12] Este camino no es principal pero engloba varios,
+	// Los que pasan por el nodo 10 pero solo dan una vuelta al bucle
+	@Test 
 	public void happyPathSelectActor() throws SQLException {	
 		db.insertActor("Feldman, Corey");
 		db.insertActor("Celis, Fernando (I)");
@@ -367,22 +274,34 @@ public class DatabaseTest {
 			
 		assertEquals("Celis, Fernando (I)", name_complete);
 	}
-		
-	@Test
-	public void testWrongParamOrderSelectActor() throws SQLException {	
-		db.insertActor("Feldman, Corey");
+	
+	// Camino [1 2 4 6 7 8 10 11 6 7 8 10 11 6 12] Este camino no es principal 
+	// pero engloba varios los que pasan por el nodo 10 pero que dan dos vueltas al búcle
+	@Test 
+	public void twoLoopsSelectActor() throws SQLException {	
+		db.insertActor("Celis, Fernando (I)");
 		db.insertActor("Celis, Fernando (I)");
 		db.insertActor("Eggar, Samantha");
-		name_complete = Database.selectActor("Celis","Fernando (I)");
+		name_complete = Database.selectActor("Fernando (I)", "Celis");
 			
-		assertEquals("", name_complete);
+		assertEquals("Celis, Fernando (I)"+"Celis, Fernando (I)", name_complete);
 	}
-			
+	
+	//Camino Principal [1 2 4 6 7 8 9 11] [6 7 8 9 11 6] [7 8 9 11 6 12]
 	@Test
 	public void testNoNameFoundSelectActor() throws SQLException {
 		db.insertActor("Feldman, Corey");
 		name_complete = Database.selectActor("surname", "Celis");
 		
+		assertEquals("", name_complete);
+	}
+	
+	@Test
+	public void testWrongParamOrderSelectActor() throws SQLException {	
+		db.insertActor("Feldman, Corey");
+		db.insertActor("Celis, Fernando (I)");
+		name_complete = Database.selectActor("Celis","Fernando (I)");
+			
 		assertEquals("", name_complete);
 	}
 		
@@ -392,5 +311,108 @@ public class DatabaseTest {
 		db.insertActor("Feldman, Corey");
 		name_complete = db.selectActor(null, null);
 	}
+
+	/*
+	 * Test para InsertFilm
+	 */
+
+	@Test
+	public void happyPathInsertFilm() throws SQLException {
+		db.insertFilm("Disney's Mouseworks Spaceship (1999)");
+		db.insertFilm("Dr. Goldfoot and the Bikini Machine (1965)");
+		db.insertFilm("Doll's House, A (1973 I)");
+		
+		ResultSet rs = statement.executeQuery("select * from films");
+
+	    rs.next();
+	    assertEquals("Disney's Mouseworks Spaceship", rs.getString("title"));
+	    assertEquals("1999", rs.getString("year"));
+	    rs.next();
+	    assertEquals("Dr. Goldfoot and the Bikini Machine", rs.getString("title"));
+	    assertEquals("1965", rs.getString("year"));
+	}
+	
+	@Test
+	public void testNoYearInsertFilm() throws SQLException {
+		db.insertFilm("Disney's Mouseworks Spaceship");
+		
+		ResultSet rs = statement.executeQuery("select * from films");
+	    assertEquals("Disney's Mouseworks Spaceship", rs.getString("title"));
+	    assertEquals("0", rs.getString("year"));
+	}
+	
+	@Test
+	public void testForNoElementInsertFilm() throws SQLException {
+		db.insertFilm("");
+		
+		ResultSet rs = statement.executeQuery("select * from films");
+	    assertEquals("", rs.getString("title"));
+	    assertEquals("0", rs.getString("year"));
+	}
+	
+	@Test
+	public void testYearAtBegginingInsertFilm() throws SQLException {
+		db.insertFilm("(1999) Disney's Mouseworks Spaceship");
+		
+		ResultSet rs = statement.executeQuery("select * from films");
+	    assertEquals("(1999) Disney's Mouseworks Spaceship", rs.getString("title"));
+	    assertEquals("0", rs.getString("year"));
+	}
+	
+	@Test
+	public void testForNullElementInsertFilm() throws SQLException {
+		
+	    try {
+	    	db.insertFilm(null);
+			ResultSet rs = statement.executeQuery("select * from films");
+	    } catch (NullPointerException e) {
+	       return;
+	    }
+	    fail ("NullPointerException expected");
+	}
+	
+	/*
+	 * Test para insertActor
+	 */
+	
+	@Test
+	public void happyPathInsertActor() throws SQLException {
+				
+		db.insertActor("Feldman, Corey");
+		db.insertActor("Celis, Fernando (I)");
+		db.insertActor("Eggar, Samantha");
+				
+		ResultSet rs = statement.executeQuery("select * from actors");
+		
+		rs.next();
+		assertEquals("Corey", rs.getString("name"));
+		assertEquals("Feldman", rs.getString("surname"));
+		rs.next();
+		assertEquals("Fernando (I)", rs.getString("name"));
+		assertEquals("Celis", rs.getString("surname"));
+	}
+	
+//	@Test
+//	public void testForNoElementInsertActor() throws SQLException {
+//		try {
+//			db.insertActor("");
+//			ResultSet rs = statement.executeQuery("select * from actors");
+//	    } catch (IllegalArgumentException e) {
+//	       return;
+//	    }
+//	    fail ("IllegalArgumentException expected");
+//	}
+		
+	@Test
+	public void testForNullElementInsertActor() throws SQLException {
+		try {
+			db.insertActor(null);
+			ResultSet rs = statement.executeQuery("select * from actors");
+	    } catch (NullPointerException e) {
+	       return;
+	    }
+	    fail ("NullPointerException expected");
+	}
 			
+	
 }
