@@ -56,83 +56,16 @@ public class QueriesTest {
           System.err.println(e);
         }
 	}
-
-	@Test (expected=NoSuchFieldException.class)
-	public void testFilmNull () throws SQLException, NoSuchFieldException {
-		db.insertFilm("101 Dalmatians (1996)");
-		db.insertFilm("12 Dogs of Christmas, The (2005)");
-		String film = null;
-		Queries.filmQuery(db, g, film);
-	}
-
-	@Test (expected=NoSuchFieldException.class)
-	public void testNameActorNull() throws SQLException, NoSuchFieldException {
-		db.insertActor("Braid, Hilda");
-		db.insertActor("Hicks, Adam");
-		String name = null;
-		String surname = "Braid";
-		Queries.actorQuery(db, g, name, surname);
-	}
-
-	@Test (expected=NoSuchFieldException.class)
-	public void testSurnameActorNull() throws SQLException, NoSuchFieldException {
-		db.insertActor("Braid, Hilda");
-		db.insertActor("Hicks, Adam");
-		String name = "Hilda";
-		String surname = null;
-		Queries.actorQuery(db, g, name, surname);
-	}
-
-	@Test (expected=IllegalArgumentException.class)
-	public void testFilmNoEncontradaEnGrafo () throws SQLException, NoSuchFieldException {
-		db.insertFilm("101 Dalmatians (1996)");
-		db.insertFilm("12 Dogs of Christmas, The (2005)");
-		String film = "101 Dalmatians";
-		Queries.filmQuery(db, g, film);
-	}
-
-	@Test (expected=IllegalArgumentException.class)
-	public void testActorNoEncontradoEnGrafo () throws SQLException, NoSuchFieldException {
-		db.insertActor("Braid, Hilda");
-		db.insertActor("Hicks, Adam");
-		String name = "Hilda";
-		String surname = "Braid";
-		Queries.actorQuery(db, g, name, surname);
-	}
-
-	@Test (expected=NoSuchFieldException.class)
-	public void testActorChangeName () throws SQLException, NoSuchFieldException {
-		db.insertActor("Braid, Hilda");
-		g.addEdge("101 Dalmatians (1996)", "Braid, Hilda");
-		String name = "Braid";
-		String surname = "Hilda";
-		Queries.actorQuery(db, g, name, surname);
-	}
-
-	@Test (expected=NoSuchFieldException.class)
-	public void testFilmWithYear () throws SQLException, NoSuchFieldException {
-		db.insertFilm("12 Dogs of Christmas, The (2005)");
-		g.addEdge("12 Dogs of Christmas, The (2005)", "Hicks, Adam");
-		String film = "12 Dogs of Christmas, The (2005)";
-		Queries.filmQuery(db, g, film);
-	}
-	
-	
 	
 	//Caminos: Grafo Queries
 	
 	//filmQuery
-	//Camino [1, 2]
-	@Test (expected=SQLException.class)
-	public void testFilmSQLException () throws SQLException, NoSuchFieldException {
-		con = DriverManager.getConnection(null);
-        db = new Database(con);
-        Statement statement = db.getStatement();
-        statement.setQueryTimeout(30);  // set timeout to 30 sec.
-        statement.executeUpdate("drop table if exists actors");
+	
+	@Test (expected=NullPointerException.class)
+	public void testFilmNull () throws SQLException, NoSuchFieldException {
+		db.insertFilm("101 Dalmatians (1996)");
 		db.insertFilm("12 Dogs of Christmas, The (2005)");
-		g.addEdge("12 Dogs of Christmas, The (2005)", "Hicks, Adam");
-		String film = "12 Dogs of Christmas, The (2005)";
+		String film = null;
 		Queries.filmQuery(db, g, film);
 	}
 	
@@ -159,18 +92,22 @@ public class QueriesTest {
 	
 	
 	//actorQuery
-	//Camino [1, 2]
-	@Test (expected=SQLException.class)
-	public void testActorSQLException () throws SQLException, NoSuchFieldException {
-		con = DriverManager.getConnection(null);
-        db = new Database(con);
-        Statement statement = db.getStatement();
-        statement.setQueryTimeout(30);  // set timeout to 30 sec.
-        statement.executeUpdate("drop table if exists actors");
-        g.addEdge("101 Dalmatians (1996)", "Braid, Hilda");
-        String name = "Hilda";
-		String surname = "Braid";
+	
+	@Test (expected=NullPointerException.class)
+	public void testNameActorNull() throws SQLException, NoSuchFieldException {
 		db.insertActor("Braid, Hilda");
+		db.insertActor("Hicks, Adam");
+		String name = null;
+		String surname = "Braid";
+		Queries.actorQuery(db, g, name, surname);
+	}
+	
+	@Test (expected=NullPointerException.class)
+	public void testSurnameActorNull() throws SQLException, NoSuchFieldException {
+		db.insertActor("Braid, Hilda");
+		db.insertActor("Hicks, Adam");
+		String name = "Hilda";
+		String surname = null;
 		Queries.actorQuery(db, g, name, surname);
 	}
 	
@@ -199,26 +136,7 @@ public class QueriesTest {
 	
 	
 	//distanceQuery
-	//Camino [1, 2, 3]
-	@Test (expected=SQLException.class)
-	public void testDistanceSQLException () throws SQLException, NoSuchFieldException {
-		con = DriverManager.getConnection(null);
-        db = new Database(con);
-        Statement statement = db.getStatement();
-        statement.setQueryTimeout(30);  // set timeout to 30 sec.
-        statement.executeUpdate("drop table if exists actors");
-        db.insertActor("Braid, Hilda");
-		db.insertActor("Hicks, Adam");
-		db.insertActor("Laurie, Hugh");
-		g.addEdge("101 Dalmatians (1996)", "Braid, Hilda");
-		g.addEdge("101 Dalmatians (1996)", "Laurie, Hugh");
-		g.addEdge("12 Dogs of Christmas, The (2005)", "Hicks, Adam");
-		g.addEdge("12 Dogs of Christmas, The (2005)", "Braid, Hilda");
-		String object1 = "Laurie, Hugh";
-		String object2 = "Hicks, Adam";
-		assertEquals(Queries.distanceQuery (db, g, object1, object2).distanceTo(object2), 4);
-	}
-	
+
 	//Camino [1, 2, 4, 6]
 	@Test
 	public void testDistanceHappyPath () throws SQLException, NoSuchFieldException {
@@ -257,19 +175,6 @@ public class QueriesTest {
 	
 	
 	//yearQuery
-	//Camino [1, 2]
-	@Test (expected=SQLException.class)
-	public void testYearSQLException () throws SQLException, NoSuchFieldException {
-		con = DriverManager.getConnection(null);
-        db = new Database(con);
-        Statement statement = db.getStatement();
-        statement.setQueryTimeout(30);  // set timeout to 30 sec.
-        statement.executeUpdate("drop table if exists actors");
-		db.insertFilm("12 Dogs of Christmas, The (2005)");
-		//g.addEdge("12 Dogs of Christmas, The (2005)", "Hicks, Adam");
-		int year = 2005;
-		Queries.yearQuery(db, year);
-	}
 	
 	//Camino [1, 3]
 	@Test 

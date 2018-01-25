@@ -27,7 +27,7 @@ public class ServeHtml {
 		        }
 		    }
 		}catch (IOException e){
-			System.out.println("IOException");
+			e.printStackTrace();
 			toReturn += "IOException";
 		}
 		return toReturn;

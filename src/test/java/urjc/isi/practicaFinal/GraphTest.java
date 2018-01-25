@@ -50,8 +50,9 @@ public class GraphTest {
 	
 	@Test
 	public void testaddVertex() {
-		g = new Graph("resources/routes.txt", " ");
+		int prevVertN = g.V();
 		g.addVertex("A");
+		assertEquals(g.V(), prevVertN);
 	}
 
 }
