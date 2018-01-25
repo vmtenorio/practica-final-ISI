@@ -167,19 +167,19 @@ public class Main {
     	at1 = request.queryParams("at1");
 		at2 = request.queryParams("at2");
 		response.type("text/html");
-		System.out.println("Llega internal error \n\n");
 		toInsert = "<h1>La distancia entre " + at1 + " y " + at2 + "es de:";
 		try {
-			System.out.println("Llega internal error 2\n\n");
 			PathFinder pf = Queries.distanceQuery(db, graph, at1, at2);
-    		toInsert += pf.distanceTo(at2) + "</h1></br>";
-    		toInsert += ServeHtml.parseIterable(pf.pathTo(at2));
+			if (pf.distanceTo(at2) == Integer.MAX_VALUE) {
+				toInsert += "No existe camino entre los actores especificados";
+			} else {
+				toInsert += pf.distanceTo(at2) + "</h1></br>";
+    			toInsert += ServeHtml.parseIterable(pf.pathTo(at2));
+			}
     	}catch(NoSuchFieldException e){
-    		System.out.println("Llega internal error 3\n\n");
     		toInsert = "No existen esos nodos, o no ha usado el formato adecuado";
     		e.printStackTrace();
 		}catch(IllegalArgumentException e) {
-			System.out.println("Llega internal error 4\n\n");
 			graph = new Graph("resources/movies.txt", "/");
 			try{
 				System.out.println("Llega internal error 5\n\n");
