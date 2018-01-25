@@ -77,5 +77,11 @@ public class ServeHtmlTest {
 		byte[] bytes = null;
 		assertNotSame(bytes, ServeHtml.imageToBytes("header.jpg"));
 	}
+	
+	@Test
+	public void testServeHtml() {
+		String result = ServeHtml.serveHtml(ServeHtml.makeFile("prueba.html"), "");
+		assertEquals("Esto es una prueba.\n", result);
+	}
 
 }
