@@ -136,7 +136,7 @@ public class Database {
 			while(rs.next()) {
 				String surnameDb = rs.getString("surname");
 				String nameDb = rs.getString("name");
-				if(surname.equals("")) {
+				if(surnameDb.equals("")) {
 					result += nameDb;
 				}else {
 					result += surnameDb + ", " + nameDb;
